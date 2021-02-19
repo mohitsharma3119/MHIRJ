@@ -20,6 +20,11 @@ import Button from '@material-ui/core/Button';
 import TableChartSharpIcon from '@material-ui/icons/TableChartSharp';
 import AssessmentSharpIcon from '@material-ui/icons/AssessmentSharp';
 import mhirjLogoColored from './mhirjLogoColored.svg';
+import ListSubheader from '@material-ui/core/ListSubheader';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse';
+import TocSharpIcon from '@material-ui/icons/TocSharp';
 import {
   BrowserRouter as Router,
   Switch,
@@ -30,9 +35,14 @@ import Home from './Components/Home';
 import MDC from './Components/MDC';
 import PM from './Components/PM';
 import Corr from './Components/Corr';
+import Graphs from './Components/Graphs';
+import Analysis from './Components/Analysis';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import TimelineSharpIcon from '@material-ui/icons/TimelineSharp';
+import Rawdata from './Components/Rawdata';
+import TrendingUpSharpIcon from '@material-ui/icons/TrendingUpSharp';
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const theme = createMuiTheme({
     palette: {
@@ -112,7 +122,7 @@ const useStyles = makeStyles((theme) => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
-    backgroundColor: "#92A0AD",
+    backgroundColor: "#c5d3e0",
     
     
   },
@@ -122,11 +132,11 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: 'hidden',
-    width: theme.spacing(7) + 1,
+    width: theme.spacing(9) + 1,
     [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9) + 1,
+      width: theme.spacing(8) + 1,
     },
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#c5d3e0",
    
   },
   toolbar: {
@@ -136,14 +146,14 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
-    
-  backgroundColor: "#f3f2f1",
+    height: "78px",
+    backgroundColor: "#f3f2f1",
     
     
   },
   content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
+    flexGrow: -1,
+   padding: theme.spacing(0),
     
   },
   tabContent: {
@@ -155,13 +165,17 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     paddingRight: "10px",
     width: "30px",
-    height: "30px",
+    height: "50px",
     color:"#001c3e",
   
   },
   typography: {
     useNextVariants: true,
     color: "#272727", 
+    
+  },
+  nested: {
+    paddingLeft: theme.spacing(3),
   },
 }));
 
@@ -172,6 +186,7 @@ export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [page, setPage] = React.useState("main");
+  const [openMDC, setOpenMDC] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -183,7 +198,10 @@ export default function MiniDrawer() {
     
     setPage(page);
 
-  }
+  };
+  const handleClick = () => {
+    setOpenMDC(!openMDC);
+  };
   return (
 
     <div className={classes.root}>
@@ -208,7 +226,8 @@ export default function MiniDrawer() {
           >
             <MenuIcon />
           </IconButton>
-          <img src={mhirjLogoColored} style={{ height: 53, width: 150 }} />
+          <img src={mhirjLogoColored} style={{ height: 78, width: 150 }} />
+          <typography style={{color:"#001c3e", fontSize:"24px", fontFamily:"Times New Roman"}}>MDC Trend Analysis Tool</typography>
 
         </Toolbar>
       </AppBar>
@@ -243,21 +262,78 @@ export default function MiniDrawer() {
                 </Button>
               </Link>
             </ListItem> 
+          
+            
+            <ListItem button onClick={handleClick} disablePadding>
+            <ListItemIcon>
+               <TableChartSharpIcon style={{ color:"#001c3e"}} />
+            </ListItemIcon>
+            <Button variant="contained" color="#001c3e">
+            <typography>MDC</typography> 
+            {openMDC ? <ExpandLess /> : <ExpandMore />}
+            </Button>
+            </ListItem>
+           
+
+
+            <Collapse in={openMDC} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+            <Link to="/rawdata" style={{ textDecoration: 'none'}}> 
+              <ListItem button className={classes.nested}>
+                <ListItemIcon>
+                  <TocSharpIcon style={{ color:"#001c3e"}} />
+                </ListItemIcon>
+                <ListItemText primary="Raw Data"  style={{color:"#001c3e"}}/>
+              </ListItem>
+              </Link>
+            </List>
+
+            <List component="div" disablePadding>
+            <Link to="/graphs" style={{ textDecoration: 'none'}}>
+              <ListItem button className={classes.nested}>
+                <ListItemIcon>
+                  <TimelineSharpIcon style={{ color:"#001c3e"}} />
+                </ListItemIcon>
+                <ListItemText primary="Graphs" style={{color:"#001c3e"}}/>
+              </ListItem>
+            </Link>
+            </List>
+
+
+            <List component="div" disablePadding>
+            <Link to="/analysis" style={{ textDecoration: 'none'}}>
+              <ListItem button className={classes.nested}>
+                <ListItemIcon>
+                  <TrendingUpSharpIcon style={{ color:"#001c3e"}} />
+                </ListItemIcon>
+                <ListItemText primary="Analysis" style={{color:"#001c3e"}}/>
+              </ListItem>
+              </Link>
+            </List>
+          </Collapse>
+
             
             
-              <ListItem>
+          
+            
+            
+              {/* <ListItem>
               <Link to="/mdc" style={{ textDecoration: 'none' }}>
                 <ListItemIcon>
                 <TableChartSharpIcon style={{ color:"#001c3e"}} />
                 </ListItemIcon>
-                <Button variant="contained" color="#001c3e">
+                <Button variant="contained" color="#001c3e" open={open} onClick={handleClick}>
                  MDC Messages
                 </Button>
-                </Link>
+                <ListItem>
                 </ListItem>
+                </Link>
+                </ListItem> */}
+
+                
             
             
-              <ListItem>
+              {/* <ListItem>
               <Link to="/pm" style={{ textDecoration: 'none' }}>
                 <ListItemIcon>
                 <TableChartSharpIcon style={{ color:"#001c3e"}}/>
@@ -266,86 +342,43 @@ export default function MiniDrawer() {
                 PM Messages
                 </Button>
                 </Link>
-                </ListItem>
+                </ListItem> */}
             
             
-              <ListItem>
+              <ListItem >
               <Link to="/corr" style={{ textDecoration: 'none' }}>
                 <ListItemIcon>
                 <AssessmentSharpIcon style={{ color:"#001c3e"}}/>
                 </ListItemIcon>
                 <Button variant="contained" color="#d8e4f0">
-                Correlation
+                <typography>Correlation</typography>
                 </Button>
                 </Link>
                 </ListItem>
           
-          
-          {/* <ListItem button onClick={() =>handleOnClick("MDC")}>
-            <ListItemIcon>
-              <TableChartSharpIcon />
-            </ListItemIcon>
-            <ListItemText primary="MDC Messages" />
-          </ListItem>
-          <ListItem button onClick={() => handleOnClick("PM")}>
-            <ListItemIcon>
-              <TableChartSharpIcon />
-            </ListItemIcon>
-            <ListItemText primary="PM Messages" />
-          </ListItem>
-        <ListItem button onClick={() =>handleOnClick("Corr")}>
-            <ListItemIcon>
-              <AssessmentSharpIcon />
-            </ListItemIcon>
-            <ListItemText primary="Coorelation" />
-          </ListItem> */}
         </List>
         <Divider />
         
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        {/* {
-          page=="main" && (
-            <Typography paragraph>
-              This is the main page
-            </Typography>
-          )
-        }
-        {
-          page=="MDC" && (
-            <Typography paragraph>
-              This is the MDC page
-            </Typography>
-          )
-        }
-        {
-          page=="PM" && (
-            <Typography paragraph>
-              This is the PM page
-            </Typography>
-          )
-        }
-        {
-          page=="Corr" && (
-            <Typography paragraph>
-              This is the Correlation page
-            </Typography>
-          )
-        }
-        <Typography paragraph>
-          
-        </Typography> */}
+        
         <Switch>
           <Route exact path="/">
             <Home />
           </Route>
-          <Route path="/mdc">
-            <MDC />
+          <Route path="/rawdata">
+            <Rawdata />
           </Route>
-          <Route path="/pm">
+          <Route path="/graphs">
+            <Graphs />
+          </Route>
+          <Route path="/analysis">
+            <Analysis />
+          </Route>
+          {/* <Route path="/pm">
             <PM />
-          </Route>
+          </Route> */}
           <Route path="/corr">
             <Corr />
           </Route>
