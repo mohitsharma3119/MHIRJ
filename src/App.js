@@ -36,10 +36,11 @@ import MDC from './Components/MDC';
 import PM from './Components/PM';
 import Corr from './Components/Corr';
 import Graphs from './Components/Graphs';
-import Analysis from './Components/Analysis';
+import Analysis from './Components/MdcMessages/GenerateReport/Analysis';
+import Report from './Components/MdcMessages/Reports/Report';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import TimelineSharpIcon from '@material-ui/icons/TimelineSharp';
-import Rawdata from './Components/Rawdata';
+import Rawdata from './Components/MdcMessages/Reports/Rawdata/RawMdcMessages';
 import TrendingUpSharpIcon from '@material-ui/icons/TrendingUpSharp';
 
 const drawerWidth = 300;
@@ -375,6 +376,9 @@ export default function MiniDrawer() {
           </Route>
           <Route path="/analysis">
             <Analysis />
+          </Route>
+          <Route path="/report">
+            <Report />
           </Route>
           {/* <Route path="/pm">
             <PM />
