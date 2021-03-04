@@ -1,36 +1,43 @@
-import React from 'react';
+import React,{ Fragment} from 'react';
 //$ npm i --save date-fns@next @date-io/date-fns
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 //$ npm install @material-ui/pickers
 import {MuiPickersUtilsProvider,KeyboardTimePicker,KeyboardDatePicker,} from '@material-ui/pickers';
+import MomentUtils from "@date-io/moment";
+import moment from "moment";
 
 const DatePicker = (props) => {
+  const [selectedDate, setDate] = React.useState(moment());
+  const [inputValue, setInputValue] = React.useState(moment().format("YYYY-MM-DD"));
 
-  const [selectedDate, setSelectedDate] = React.useState();
+  const handleDateChange = (date, value) => {
+    setDate(date);
+    setInputValue(value);
+    props.handleDateFrom ? props.handleDateFrom(value) : props.handleDateTo(value);
+  };
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    props.handleDateFrom ? props.handleDateFrom(date) : props.handleDateTo(date);
+  const dateFormatter = str => {
+    return str;
   };
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <KeyboardDatePicker 
-        style={{marginBottom: "45px"}}
-        disableToolbar
-        variant="inline"
-        format="MM/dd/yyyy"
-        margin="normal"
-        id="date-picker-inline"
-        label={props.label}
-        value={selectedDate}
-        onChange={handleDateChange}
-        KeyboardButtonProps={{
-          'aria-label': 'change date',
-        }}
-      /> 
+    <Fragment>
+      <MuiPickersUtilsProvider libInstance={moment} utils={DateFnsUtils}>
+        <KeyboardDatePicker 
+          style={{margin: "12px 10px 10px"}}
+          autoOk={true}
+            showTodayButton={false}
+            value={selectedDate}
+            format="yyyy-mm-dd"
+            inputValue={inputValue}
+            onChange={handleDateChange}
+            rifmFormatter={dateFormatter}
+            label={props.label}
+            variant="inline"
+        /> 
     </MuiPickersUtilsProvider>
+    </Fragment>
   );
 };
 
