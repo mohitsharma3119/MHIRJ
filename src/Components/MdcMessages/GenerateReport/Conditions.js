@@ -76,16 +76,16 @@ const Conditions = (props) => {
 
    // ----- States and handle Functions for Radio Buttons  ----- 
    const [analysis, setAnalysisType] = useState("daily");
-   const [report, setReportType] = useState("daily");
+   //const [report, setReportType] = useState("daily");
 
-    const handleReportChange = (report) => {
-      setReportType(report);
-      console.log(report);
-    };
+    // const handleReportChange = (report) => {
+    //   setReportType(report);
+    //   console.log(report);
+    // };
 
     const handleAnalysisChange = (analysis) => {
       setAnalysisType(analysis);
-      console.log(analysis);
+      //console.log(analysis);
     };
 
    // ----- States and handle Functions for Date  ----- 
@@ -128,9 +128,9 @@ const Conditions = (props) => {
   // ----- States and handle Functions for Selects  ----- 
   const [airline, setAilineType] = useState();
   const [ATAMain, setATAMain] = React.useState('');
-  const [EqID, setEqID] = React.useState('');
+  //const [EqID, setEqID] = React.useState('');
   const [messagesChoice, setIncludeMessages] = React.useState('');
-  const [ACSN, setACSN] = React.useState('');
+  //const [ACSN, setACSN] = React.useState('');
 
   const handleAirlineChange = (Airline) => {
     setAilineType(Airline);
@@ -142,14 +142,14 @@ const Conditions = (props) => {
     console.log(ATA);
   };
 
-  const handleACSNChange = (ACSN) => {
-    setACSN(ACSN);
-    console.log(ACSN);
-  }
-  const handleEqIDChange = (EqID) => {
-    setEqID(EqID);
-    console.log(EqID);
-  };
+  // const handleACSNChange = (ACSN) => {
+  //   setACSN(ACSN);
+  //   console.log(ACSN);
+  // }
+  // const handleEqIDChange = (EqID) => {
+  //   setEqID(EqID);
+  //   console.log(EqID);
+  // };
   const handleMessagesChange = (messages) => {
     setIncludeMessages(messages);
     console.log(messages);
@@ -160,16 +160,16 @@ const Conditions = (props) => {
 const [reportConditions, setReportConditions] = React.useState(
   {
     analysis: '',
-    report: '',
+    // report: '',
     occurences: '',
     legs: '',
     intermittent: '',
     days: '',
     operator: '',
     ata: '',
-    eqID: '',
+    // eqID: '',
     messages: '',
-    ACSN: '',
+    // ACSN: '',
     fromDate: '',
     toDate: '',
   }
@@ -177,20 +177,21 @@ const [reportConditions, setReportConditions] = React.useState(
 
   const history = useHistory();
   useEffect(() => console.log(reportConditions), [reportConditions]);
+
   const handleGenerateReport = (event) => {
     setReportConditions(
       {
         analysis: analysis,
-        report: report,
+        // report: report,
         occurences: occurences,
         legs: legs,
         intermittent: intermittent,
         days: days,
         operator: airline,
         ata: ATAMain,
-        eqID: EqID,
+        // eqID: EqID,
         messages: messagesChoice,
-        ACSN: ACSN,
+        // ACSN: ACSN,
         fromDate: dateFrom,
         toDate: dateTo,
       },
@@ -198,9 +199,6 @@ const [reportConditions, setReportConditions] = React.useState(
     //console.log(reportConditions);
      history.push('/report');
   };
-
-//Remove: Analysis Type, Report type
-//Keep: Selectors
 
   return (
     <div>
@@ -228,17 +226,17 @@ const [reportConditions, setReportConditions] = React.useState(
                   color = 'default'
                   onChange={()=>handleAnalysisChange("history")} 
                   />} label="History" />
-                <FormControlLabel value="full" control={
+                <FormControlLabel value="both" control={
                   <Radio 
                     size="medium"
                     color='default'
-                    onChange={()=>handleAnalysisChange("full")} 
-                  />} label="Full" />
+                    onChange={()=>handleAnalysisChange("both")} 
+                  />} label="Both" />
               </RadioGroup>
               </FormControl> 
             </div>
             <div>
-              <FormControl component="fieldset" className="form">
+              {/* <FormControl component="fieldset" className="form">
                 <FormLabel component="legend" className={classes.formLabel}>Report Type</FormLabel>
                 <RadioGroup aria-label="analysis" name="analysis" value={report}>
                   <FormControlLabel value="history" control={
@@ -254,7 +252,7 @@ const [reportConditions, setReportConditions] = React.useState(
                       onChange={()=>handleReportChange("daily")} 
                     />} label="Daily" />
                 </RadioGroup>
-                </FormControl>  
+                </FormControl>   */}
             </div>            
             </Grid>
             <Grid item xs={3}>     
@@ -269,23 +267,21 @@ const [reportConditions, setReportConditions] = React.useState(
                 <IntermittentInput 
                   handleIntermittentChange = {handleIntermittentChange}
                 />
-                <DaysInput 
-                  handleDaysChange = {handleDaysChange}
-                />
+                <DaysInput analysis = {analysis}  handleDaysChange = {handleDaysChange}/>   
               </div>           
             </Grid>  
             <Grid item xs={3}>     
             <div>
-              <h3>Conditions</h3> 
+              <h3>Raw Data Conditions</h3> 
               <AirlineOperatorSelector
                 handleAirlineChange = {handleAirlineChange}  
               />         
               <ATAMainSelector 
                 handleATAChange = {handleATAChange}
               /> 
-              <EqIDSelector 
+              {/* <EqIDSelector 
                 handleEqIDChange = {handleEqIDChange}
-              />
+              /> */}
               <MessagesSelector 
                 handleMessagesChange = {handleMessagesChange}
               />
@@ -294,9 +290,9 @@ const [reportConditions, setReportConditions] = React.useState(
             <Grid item xs={3}>     
             
             <h3>Report Date</h3> 
-            <ACSNSelector 
+            {/* <ACSNSelector 
                 handleACSNChange = {handleACSNChange}
-            />
+            /> */}
             <DatePicker 
               label = "From"
               handleDateFrom = {handleDateFrom}

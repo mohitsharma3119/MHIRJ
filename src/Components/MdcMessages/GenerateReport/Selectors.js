@@ -19,11 +19,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AirlineList = ['Not Applicable','SKW'];
-const ATAMainList = ['Not Applicable', 21,22,23,24,26,27,28,30,31,32,33,34,36,38,45,49,71,78];
+const AirlineList = ['SKW'];
+const ATAMainList = ['Not Applicable', 'All' , 21,22,23,24,26,27,28,30,31,32,33,34,36,38,45,49,71,78];
 const ACSNList = ['Not Applicable', 'AC10201','AC10242','AC15092'];
 const EqList = ['Not Applicable','B1-006902'];
-const MessagesList = ['Not Applicable','Include Current Messages', 'Not Include Current Messages'];
+const MessagesList = ['Include', 'Exclude'];
 
 export const AirlineOperatorSelector = (props) => {
   const classes = useStyles();
@@ -120,13 +120,13 @@ export const MessagesSelector = (props) => {
 
   return(
     <FormControl variant="outlined" className={classes.formControl}>
-    <InputLabel id="demo-simple-select-outlined-label">Messages</InputLabel>
+    <InputLabel id="demo-simple-select-outlined-label">Current Messages</InputLabel>
       <Select
         labelId="demo-simple-select-outlined-label"
         id="demo-simple-select-outlined"
         value={messages}
         onChange={handleMessagesChange}
-        label="Messages"
+        label="Current Messages"
       >
       <MenuItem value="none"> </MenuItem>
       {MessagesList.map( item => 

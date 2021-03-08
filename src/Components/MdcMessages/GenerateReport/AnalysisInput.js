@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import TextField from '@material-ui/core/TextField';
 
 export const OccurencesInput = (props) => {
@@ -71,25 +71,37 @@ export const IntermittentInput = (props) => {
 }
 export const DaysInput = (props) => {
   const [days, setDays] = React.useState('0');
-  
+  const [disabled, setDisabled] = React.useState('');
+
   const handleDaysChange = (event) => {
     event.target.value < 0 
     ?  setDays(event.target.value = 0) 
     :  setDays(event.target.value);
     props.handleDaysChange(event.target.value);
   };
+  useEffect(() => {
+    if (props.analysis === 'daily'){
+      setDisabled(prevState => ({ disabled: "disabled"}));
+    }
+    else {
+      setDisabled(prevState => ({  disabled: ""}));
+    }    
+  console.log(props.analysis);
+  }, [props.analysis]);
+
   return(
     <TextField
-    id="outlined-number"
-    label="Max Consecutive Days"
-    type="number"
-    onChange = {handleDaysChange}
-    value = {days}
-    InputLabelProps={{
-      shrink: true,
-    }}
-    variant="outlined"
-  />
+      {...disabled}
+      id="outlined-number"
+      label="Max Consecutive Days"
+      type="number"
+      onChange = {handleDaysChange}
+      value = {days}
+      InputLabelProps={{
+        shrink: true,       
+      }}
+      variant="outlined"
+    />
   );
 }
 const AnalysisInput = (props) => {
