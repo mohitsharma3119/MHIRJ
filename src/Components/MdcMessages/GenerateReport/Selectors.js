@@ -4,6 +4,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+//Multiple select filters
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -21,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
 
 const AirlineList = ['SKW'];
 const ATAMainList = ['Not Applicable', 'All' , 21,22,23,24,26,27,28,30,31,32,33,34,36,38,45,49,71,78];
-const ACSNList = ['Not Applicable', 'AC10201','AC10242','AC15092'];
-const EqList = ['Not Applicable','B1-006902'];
+const ACSNList = ['AC10201','AC10242','AC15092'];
+const EqList = ['B1-006902','B2-006902','B3-006902'];
 const MessagesList = ['Include', 'Exclude'];
 
 export const AirlineOperatorSelector = (props) => {
@@ -83,31 +86,50 @@ export const ATAMainSelector = (props) => {
 
 export const EqIDSelector = (props) => {
   const classes = useStyles();
-  const [EqID, setEqID] = React.useState('');
+  const [EqID, setEqID] = React.useState([]);
 
-  const handleEqIDChange = (event) => {
-    setEqID(event.target.value);
-    props.handleEqIDChange(event.target.value);
+  const handleEqIDChange = (event, values) => {
+    setEqID(values);
+    props.handleEqIDChange(values);
+    //console.log(values);
   };
 
   return(
-    <FormControl variant="outlined" className={classes.formControl}>
-    <InputLabel id="demo-simple-select-outlined-label">Equation ID</InputLabel>
-      <Select
-        labelId="demo-simple-select-outlined-label"
-        id="demo-simple-select-outlined"
-        value={EqID}
-        onChange={handleEqIDChange}
-        label="Exclude Equation ID"
-      >
-      <MenuItem value="none"> </MenuItem>
-      {EqList.map( item => 
-        <MenuItem value={item}> {item} </MenuItem>
-      )};
-      </Select>
-    </FormControl>
+    // <FormControl variant="outlined" className={classes.formControl}>
+    // <InputLabel id="demo-simple-select-outlined-label">Equation ID</InputLabel>
+    //   <Select
+    //     labelId="demo-simple-select-outlined-label"
+    //     id="demo-simple-select-outlined"
+    //     value={EqID}
+    //     onChange={handleEqIDChange}
+    //     label="Exclude Equation ID"
+    //   >
+    //   <MenuItem value="none"> </MenuItem>
+    //   {EqList.map( item => 
+    //     <MenuItem value={item}> {item} </MenuItem>
+    //   )};
+    //   </Select>
+    // </FormControl>
+    <Autocomplete
+        className={classes.formControl}
+        multiple
+        id="tags-outlined"
+        options={EqList}
+        getOptionLabel={(item => item)}
+        value = {EqID}
+        filterSelectedOptions
+        onChange = {handleEqIDChange}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            variant="outlined"
+            label="Exclude Equation ID"
+            placeholder="EqID"
+            />
+        )}
+      />
   );
-}
+};
 
 export const MessagesSelector = (props) => {
   const classes = useStyles();
@@ -140,31 +162,52 @@ export const MessagesSelector = (props) => {
 export const ACSNSelector = (props) => {
   const classes = useStyles();
   
-  const [ACSN, setACSN] = React.useState('');
+  const [ACSN, setACSN] = React.useState([]);
 
-  const handleACSNChange = (event) => {
-    setACSN(event.target.value);
-    props.handleACSNChange(event.target.value);
+
+  const handleACSNChange = (event, values) => {
+    setACSN(values);
+    props.handleACSNChange(values);
+    //console.log(values);
   };
+  //console.log(ACSN);
 
   return(
-    <FormControl variant="outlined" className={classes.formControl}>
-      <InputLabel id="demo-simple-select-outlined-label">ACSN</InputLabel>
-      <Select
-        labelId="demo-simple-select-outlined-label"
-        id="demo-simple-select-outlined"
-        value={ACSN}
-        onChange={handleACSNChange}
-        label="ACSN"
-      >
-      <MenuItem value="none"> </MenuItem>
-      {ACSNList.map( item => 
-        <MenuItem value={item}> {item} </MenuItem>
-      )};
-      </Select>
-    </FormControl> 
+    // <FormControl variant="outlined" className={classes.formControl}>
+    //   <InputLabel id="demo-simple-select-outlined-label">ACSN</InputLabel>
+    //   <Select
+    //     labelId="demo-simple-select-outlined-label"
+    //     id="demo-simple-select-outlined"
+    //     value={ACSN}
+    //     onChange={handleACSNChange}
+    //     label="ACSN"
+    //   >
+    //   <MenuItem value="none"> </MenuItem>
+    //   {ACSNList.map( item => 
+    //     <MenuItem value={item}> {item} </MenuItem>
+    //   )};
+    //   </Select>
+    // </FormControl> 
+    <Autocomplete
+        className={classes.formControl}
+        multiple
+        id="tags-outlined"
+        options={ACSNList}
+        getOptionLabel={(item => item)}
+        value = {ACSN}
+        filterSelectedOptions
+        onChange = {handleACSNChange}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            variant="outlined"
+            label="ACSN"
+            placeholder="ACSN"
+          />
+        )}
+      />
   );
-}
+};
 
 const Selectors = (props) => {
 

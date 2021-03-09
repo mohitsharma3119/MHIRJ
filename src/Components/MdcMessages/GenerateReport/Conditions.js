@@ -6,7 +6,7 @@ import {OccurencesInput,LegsInput,IntermittentInput,DaysInput} from './AnalysisI
 import Paper from '@material-ui/core/Paper';
 //import ReportType from './ReportType';
 import DatePicker from './DatePicker';
-import {AirlineOperatorSelector,ATAMainSelector,EqIDSelector,MessagesSelector,ACSNSelector} from './Selectors';
+import {AirlineOperatorSelector,ATAMainSelector,MessagesSelector} from './Selectors';
 import { useHistory } from "react-router-dom";
 //Radio Button Imports
 import Radio from '@material-ui/core/Radio';
@@ -128,9 +128,7 @@ const Conditions = (props) => {
   // ----- States and handle Functions for Selects  ----- 
   const [airline, setAilineType] = useState();
   const [ATAMain, setATAMain] = React.useState('');
-  //const [EqID, setEqID] = React.useState('');
   const [messagesChoice, setIncludeMessages] = React.useState('');
-  //const [ACSN, setACSN] = React.useState('');
 
   const handleAirlineChange = (Airline) => {
     setAilineType(Airline);
@@ -142,14 +140,6 @@ const Conditions = (props) => {
     console.log(ATA);
   };
 
-  // const handleACSNChange = (ACSN) => {
-  //   setACSN(ACSN);
-  //   console.log(ACSN);
-  // }
-  // const handleEqIDChange = (EqID) => {
-  //   setEqID(EqID);
-  //   console.log(EqID);
-  // };
   const handleMessagesChange = (messages) => {
     setIncludeMessages(messages);
     console.log(messages);
@@ -176,28 +166,60 @@ const [reportConditions, setReportConditions] = React.useState(
  );
 
   const history = useHistory();
-  useEffect(() => console.log(reportConditions), [reportConditions]);
 
   const handleGenerateReport = (event) => {
-    setReportConditions(
-      {
-        analysis: analysis,
-        // report: report,
-        occurences: occurences,
-        legs: legs,
-        intermittent: intermittent,
-        days: days,
-        operator: airline,
-        ata: ATAMain,
-        // eqID: EqID,
-        messages: messagesChoice,
-        // ACSN: ACSN,
-        fromDate: dateFrom,
-        toDate: dateTo,
-      },
-    );
-    //console.log(reportConditions);
-     history.push('/report');
+
+    if (analysis === "daily"){
+      setReportConditions(
+        {
+          analysis: analysis,
+          // report: report,
+          occurences: occurences,
+          legs: legs,
+          intermittent: intermittent,
+          operator: airline,
+          ata: ATAMain,
+          // eqID: EqID,
+          messages: messagesChoice,
+          // ACSN: ACSN,
+          fromDate: dateFrom,
+          toDate: dateTo,
+        },
+      );
+    }
+    else{
+      setReportConditions(
+        {
+          analysis: analysis,
+          // report: report,
+          occurences: occurences,
+          legs: legs,
+          intermittent: intermittent,
+          days: days,
+          operator: airline,
+          ata: ATAMain,
+          // eqID: EqID,
+          messages: messagesChoice,
+          // ACSN: ACSN,
+          fromDate: dateFrom,
+          toDate: dateTo,
+        },
+      );
+    }  
+    let flag = true;
+    Object.values(reportConditions).map(item => {
+      if (item === ""){
+        flag = false;
+      }
+      return flag;
+    });
+      if (flag === true) {  
+        history.push({
+        pathname: '/report',
+        state: {reportConditions:reportConditions}
+      //history.push('/report',reportConditions)
+      });
+    } 
   };
 
   return (
