@@ -38,6 +38,7 @@ import Corr from './Components/Corr';
 import Graphs from './Components/Graphs';
 import Analysis from './Components/MdcMessages/GenerateReport/Analysis';
 import Report from './Components/MdcMessages/Reports/Report';
+import FlagReport from './Components/MdcMessages/Reports/FlagReport/FlagReport';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import TimelineSharpIcon from '@material-ui/icons/TimelineSharp';
 import Rawdata from './Components/MdcMessages/Reports/Rawdata/RawMdcMessages';
@@ -379,6 +380,9 @@ export default function MiniDrawer() {
           </Route>
           <Route path="/report">
             <Report />
+          </Route>
+          <Route path="/flag">
+            <FlagReport />
           </Route>
           {/* <Route path="/pm">
             <PM />
