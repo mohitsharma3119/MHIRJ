@@ -106,7 +106,7 @@ const Conditions = (props) => {
     const [occurences, setOccurrences] = useState();
     const [legs, setLegs] = useState();
     const [intermittent, setIntermittent] = useState();
-    const [days, setDays] = useState();
+    const [days, setDays] = useState('0');
 
   const handleOccurencesChange = (occurences) =>{
     setOccurrences(occurences);
@@ -169,43 +169,21 @@ const [reportConditions, setReportConditions] = React.useState(
 
   const handleGenerateReport = (event) => {
 
-    if (analysis === "daily"){
       setReportConditions(
         {
           analysis: analysis,
-          // report: report,
-          occurences: occurences,
-          legs: legs,
-          intermittent: intermittent,
-          operator: airline,
-          ata: ATAMain,
-          // eqID: EqID,
-          messages: messagesChoice,
-          // ACSN: ACSN,
-          fromDate: dateFrom,
-          toDate: dateTo,
-        },
-      );
-    }
-    else{
-      setReportConditions(
-        {
-          analysis: analysis,
-          // report: report,
           occurences: occurences,
           legs: legs,
           intermittent: intermittent,
           days: days,
           operator: airline,
           ata: ATAMain,
-          // eqID: EqID,
           messages: messagesChoice,
-          // ACSN: ACSN,
           fromDate: dateFrom,
           toDate: dateTo,
         },
       );
-    }  
+
     let flag = true;
     Object.values(reportConditions).map(item => {
       if (item === ""){
