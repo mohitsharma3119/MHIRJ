@@ -136,8 +136,12 @@ export const MessagesSelector = (props) => {
   const [messages, setIncludeMessages] = React.useState('');
 
   const handleMessagesChange = (event) => {
+    let value = 0;
+    if(event.target.value == 'Include'){
+      value = 1;
+    }
     setIncludeMessages(event.target.value);
-    props.handleMessagesChange(event.target.value);
+    props.handleMessagesChange(value);
   };
 
   return(

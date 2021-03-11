@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DailyReport = () => {
+const DailyReport = (props) => {
   const columns = [
     {
       name: "date",
@@ -196,91 +196,36 @@ const DailyReport = () => {
      },
     ];
 
-    const data = [
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-      {
-        date: "	2020-11-30", ACSN: "10330", EICASMessages: 'mdctrend.csv', mdcMessages: 'INTERNAL FAULT',  LRU: 'ACSC 1', ATA: "21-61",  B1Equation: "B1-005812",  type: "Fault Message",  equationDescriptions: "Internal Fault", totalOccurences: 2, ConsecutiveFlights: 0,
-        intermittent: 0, reasons: "Total occurances exceeded 2 occurances" , priority: 1, topMessage: "Known Nuissance: Y / In-Service Document: CRJ7...",recommendation: "1. Reset per SL procedure: na) Reset procedur...", comments: "This is related to pack cycling. Will have to ...", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20)n.."      
-      },
-        
-    ];
-
-
+    let data = [];
+  
+    props.data.map((item => {
+      console.log(item["AC SN"]); 
+      data.push(
+        {
+          date: item["Date"], 
+          ACSN: item["AC SN"], 
+          EICASMessages: item["EICAS Message"], 
+          mdcMessages: item["MDC Message"],  
+          LRU: item["LRU"],  
+          ATA: item["ATA"],  
+          B1Equation: item["B1-Equation"],  
+          type: item["Type"],   
+          equationDescription: item["Equation Description"],   
+          totalOccurences: item["Total Occurences"],  
+          ConsecutiveFlights: item["Consecutive FL"],  
+          intermittent: item["Intermittent"],  
+          reasons: item["Reason(s) for flag"],   
+          priority: item["Priority"],   
+          topMessage: item["Known Top Message - Recommended Documents"],  
+          recommendation: item["MHIRJ ISE Recommendation"], 
+          comments: item["Additional Comments"],  
+          input: item["MHIRJ ISE Input"],  
+        }
+      );
+      return data;
+    }
+    ));
+  
     const options = {
       filter: true,
       filterType: 'multiselect',
@@ -323,7 +268,7 @@ const classes = useStyles();
         <Grid item xs={12}>
             <MuiThemeProvider theme={theme}>
               <MUIDataTable
-                title={"Daily Report"}
+                title={props.title}
                 data={data}
                 columns={columns}
                 options={options}
