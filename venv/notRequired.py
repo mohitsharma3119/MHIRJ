@@ -662,58 +662,6 @@ async def parseAircraft(Aircraft: str):
 
 # CurrentFlightPhaseEnabled is used here since in original code it was used inside the history analysis function
 
-@app.post("/Toreport/{Flagsreport}/{AircraftSN}/{Bcode}/{newreport}/{CurrentFlightPhaseEnabled}")
-# create a flags report
-def Toreport(Flagsreport: int, AircraftSN: str, Bcode: str, newreport: int, CurrentFlightPhaseEnabled: int):
-    '''Populates a report with input from the previous report, aircraft serial number and B1 message code'''
-    # if the user wants a brand new report
-    # print(OutputTableHistory)
-    HistoryReport = OutputTableHistory
-    if newreport:
-        del Flagsreport
-        Flagsreport = pd.DataFrame(data=None, columns=["MSN", "ATA", "B1-code", "LRU", "Message",
-                                                       "Type", "Potential FDE", "Date From", "Date To",
-                                                       "SKW action WIP", "ISE Input", "ISE Rec Act"])
-    indexedreport = HistoryReport.set_index(["AC SN", "B1-Equation"])
-
-    # creating dataframe to look at dates
-    if CurrentFlightPhaseEnabled == 1:  # Show all, current and history
-        DatesDF = MDCdataDF[["DateAndTime", "Equation ID", "Aircraft"]].copy()
-
-    elif CurrentFlightPhaseEnabled == 0:  # Only show history
-        DatesDF = MDCdataDF[["DateAndTime", "Equation ID", "Aircraft", "Flight Phase"]].copy()
-        DatesDF = DatesDF.replace(False, np.nan).dropna(axis=0, how='any')
-        DatesDF = DatesDF[["DateAndTime", "Equation ID", "Aircraft"]].copy()
-
-    # this exists to check which dates are present for the specific aircraft and message chosen
-    counts = pd.DataFrame(data=DatesDF.groupby(['Aircraft', "Equation ID", "DateAndTime"]).agg(len), columns=["Counts"])
-    DatesfoundinMDCdata = counts.loc[(AircraftSN, Bcode)].resample('D')["Counts"].sum().index
-
-    # create the new row that will be appended to the existing report
-    newrow = indexedreport.loc[
-        (AircraftSN, Bcode), ["ATA", "LRU", "MDC Message", "Type", "EICAS Message", "MHIRJ ISE Input",
-                              "MHIRJ ISE Recommendation"]].to_frame().transpose()
-    newrow.insert(loc=0, column="AC SN", value=AircraftSN)
-    newrow.insert(loc=2, column="B1-code", value=Bcode)
-    newrow.insert(loc=7, column="Date From",
-                  value=DatesfoundinMDCdata.min().date())
-
-    # .date()removes the time data from datetime format
-    newrow.insert(loc=8, column="Date To", value=DatesfoundinMDCdata.max().date())
-    newrow.insert(loc=9, column="SKW action WIP", value="")
-    newrow = newrow.rename(columns={"AC SN": "MSN", "MDC Message": "Message", "EICAS Message": "Potential FDE",
-                                    "MHIRJ ISE Input": "ISE Input",
-                                    "MHIRJ ISE Recommendation": "ISE Rec Act"})
-
-    # append the new row to the existing report
-    Flagsreport = Flagsreport.append(newrow, ignore_index=True)
-    Flagsreport.to_excel("FlagReport.xlsx")
-    Flagsreport["Date From"] = Flagsreport["Date From"].astype(str)
-    Flagsreport["Date To"] = Flagsreport["Date To"].astype(str)
-    reader = Flagsreport.to_dict()
-    json_flagreport = json.dumps(reader, sort_keys=True, indent=4)
-    return json_flagreport
-
 
 '''
 #B1 messages analyses

@@ -11,14 +11,29 @@ import sys
 import pyodbc
 import json
 #from datetime import datetime
-
+from flask import Flask, jsonify
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from fastapi.encoders import jsonable_encoder
 templates = Jinja2Templates(directory="templates")
 
 app = FastAPI()
+origins = [
 
+    "https://GenerateReport/{analysisType}/{occurences}/{legs}/{intermittent}/{consecutiveDays}/{airlineOperator}/{ata}/{messages}/{fromDate}/{toDate}",
+
+    "http://localhost",
+    "http://localhost:8000",
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 #####
 
@@ -99,7 +114,7 @@ def connect_database_MDCmessagesInputs():
         return MDCMessagesDF
     except pyodbc.Error as err:
         print("Couldn't connect to Server")
-        print("Error message:- " + err)
+        print("E     rror message:- " + err)
 
 def connect_database_TopMessagesSheet():
     sql = "SELECT * FROM TopMessagesSheet"
@@ -116,13 +131,13 @@ def connect_database_TopMessagesSheet():
 @app.post("/MDCRawData/{ATAMain}/{fromDate}/{toDate}")
 async def get_MDCRawData(ATAMain:str, fromDate: str , toDate: str):
     MDCdataDF = connect_database_MDCdata(ATAMain, fromDate, toDate)
-    MDCdataDF_json = MDCdataDF.to_dict()
-    json_MDCRawData = json.dumps(MDCdataDF_json)
-    return json_MDCRawData
+    MDCdataDF_json = MDCdataDF.to_json(orient='records')
+    return MDCdataDF_json
+#    return jsonify(MDCdataDF_json1)
 
 #for Daily Report: value of consecutiveDays = 0 in URL -> for reference!!
-@app.post("/GenerateReport/{analysisType}/{reportType}/{occurences}/{legs}/{intermittent}/{consecutiveDays}/{airlineOperator}/{ata}/{equationID}/{messages}/{fromDate}/{toDate}")
-async def generateReport(analysisType: str, reportType: str, occurences: int, legs: int, intermittent: int, consecutiveDays: int, airlineOperator: str, ata: str, equationID: str, messages: int, fromDate: str , toDate: str):
+@app.post("/GenerateReport/{analysisType}/{occurences}/{legs}/{intermittent}/{consecutiveDays}/{airlineOperator}/{ata}/{messages}/{fromDate}/{toDate}")
+async def generateReport(analysisType: str, occurences: int, legs: int, intermittent: int, consecutiveDays: int, airlineOperator: str, ata: str, messages: int, fromDate: str , toDate: str):
     print(fromDate, " ", toDate)
 
     MDCdataDF = connect_database_MDCdata(ata, fromDate, toDate)
@@ -168,7 +183,7 @@ async def generateReport(analysisType: str, reportType: str, occurences: int, le
     MaxAllowedConsecLegs = legs  # flag for consecutive legs -> CF
     MaxAllowedIntermittent = intermittent  # flag for intermittent values ->IM
     MaxAllowedConsecDays = consecutiveDays
-    Bcode = equationID
+    #Bcode = equationID
     newreport = True    #set a counter variable to bring back it to false
 
     if(analysisType == "daily"):
@@ -461,19 +476,10 @@ async def generateReport(analysisType: str, reportType: str, occurences: int, le
         OutputTableDaily = pd.DataFrame(data=MAINtable_array, columns=TitlesArrayDaily).fillna(" ").sort_values(
             by=["Date", "Type", "Priority"])
 
-        #print(OutputTableDaily)
+        OutputTableDaily_json = OutputTableDaily.to_json(orient = 'records')
         OutputTableDaily.to_csv("OutputTableDaily.csv")
-        #output = []
-        reader = OutputTableDaily.to_dict()
-        '''
-        with open("OutputTableDaily.csv","r") as f:
-            reader = csv.DictReader(f)
-    
-            for records in reader:
-                output.append(records)
-        '''
-        json_daily = json.dumps(reader)
-        return json_daily
+
+        return OutputTableDaily_json
 
     elif(analysisType == "history"):
         #global UniqueSerialNumArray
@@ -794,16 +800,86 @@ async def generateReport(analysisType: str, reportType: str, occurences: int, le
         OutputTableHistory = pd.DataFrame(data=MAINtable_array, columns=TitlesArrayHistory).fillna(" ").sort_values(
             by=["Type", "Priority"])
         OutputTableHistory.to_csv("OutputTableHistory.csv")
-        output = []
-        reader = OutputTableHistory.to_dict()
-        '''
-        with open("OutputTableDaily.csv","r") as f:
-            reader = csv.DictReader(f)
+        OutputTableHistory_json = OutputTableHistory.to_json(orient = 'records')
+        return OutputTableHistory_json
 
-            for records in reader:
-                output.append(records)
-        '''
-        json_history = json.dumps(reader)
-        return json_history
+# Bcode = B1-89989 | B2-2342 |
+
+@app.post("/Toreport/{Flagsreport}/{AircraftSN}/{Bcode}/{newreport}/{CurrentFlightPhaseEnabled}")
+# create a flags report
+def Toreport(Flagsreport: int, AircraftSN: str, Bcode: str, newreport: int, CurrentFlightPhaseEnabled: int):
+    '''Populates a report with input from the previous report, aircraft serial number and B1 message code'''
+    # if the user wants a brand new report
+    # print(OutputTableHistory)
+    HistoryReport = OutputTableHistory
+    if newreport:
+        del Flagsreport
+        Flagsreport = pd.DataFrame(data=None, columns=["MSN", "ATA", "B1-code", "LRU", "Message",
+                                                       "Type", "Potential FDE", "Date From", "Date To",
+                                                       "SKW action WIP", "ISE Input", "ISE Rec Act"])
+    indexedreport = HistoryReport.set_index(["AC SN", "B1-Equation"])
+
+    # creating dataframe to look at dates
+    if CurrentFlightPhaseEnabled == 1:  # Show all, current and history
+        DatesDF = MDCdataDF[["DateAndTime", "Equation ID", "Aircraft"]].copy()
+
+    elif CurrentFlightPhaseEnabled == 0:  # Only show history
+        DatesDF = MDCdataDF[["DateAndTime", "Equation ID", "Aircraft", "Flight Phase"]].copy()
+        DatesDF = DatesDF.replace(False, np.nan).dropna(axis=0, how='any')
+        DatesDF = DatesDF[["DateAndTime", "Equation ID", "Aircraft"]].copy()
+
+    # this exists to check which dates are present for the specific aircraft and message chosen
+    counts = pd.DataFrame(data=DatesDF.groupby(['Aircraft', "Equation ID", "DateAndTime"]).agg(len), columns=["Counts"])
+    DatesfoundinMDCdata = counts.loc[(AircraftSN, Bcode)].resample('D')["Counts"].sum().index
+
+    # create the new row that will be appended to the existing report
+    newrow = indexedreport.loc[
+        (AircraftSN, Bcode), ["ATA", "LRU", "MDC Message", "Type", "EICAS Message", "MHIRJ ISE Input",
+                              "MHIRJ ISE Recommendation"]].to_frame().transpose()
+    newrow.insert(loc=0, column="AC SN", value=AircraftSN)
+    newrow.insert(loc=2, column="B1-code", value=Bcode)
+    newrow.insert(loc=7, column="Date From",
+                  value=DatesfoundinMDCdata.min().date())
+
+    # .date()removes the time data from datetime format
+    newrow.insert(loc=8, column="Date To", value=DatesfoundinMDCdata.max().date())
+    newrow.insert(loc=9, column="SKW action WIP", value="")
+    newrow = newrow.rename(columns={"AC SN": "MSN", "MDC Message": "Message", "EICAS Message": "Potential FDE",
+                                    "MHIRJ ISE Input": "ISE Input",
+                                    "MHIRJ ISE Recommendation": "ISE Rec Act"})
+
+    # append the new row to the existing report
+    Flagsreport = Flagsreport.append(newrow, ignore_index=True)
+    Flagsreport.to_excel("FlagReport.xlsx")
+    Flagsreport["Date From"] = Flagsreport["Date From"].astype(str)
+    Flagsreport["Date To"] = Flagsreport["Date To"].astype(str)
+    reader = Flagsreport.to_dict()
+    json_flagreport = json.dumps(reader, sort_keys=True, indent=4)
+    return json_flagreport
+
+def connect_database_for_chart1(aircraft_no, from_dt, to_dt):
+    sql = "SELECT Count(MDCMessagesInputs.Message), Airline_MDC_Data. Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA FROM Airline_MDC_Data INNER JOIN MDCMessagesInputs ON Airline_MDC_Data.ATA = MDCMessagesInputs.ATA WHERE Airline_MDC_Data.aircraftno = '10201' AND Airline_MDC_Data.DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Airline_MDC_Data.Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA ORDER BY Count(MDCMessagesInputs.Message) DESC"
+    """
+    column_names = ["Aircraft", "Tail", "Flight Leg No",
+               "ATA Main", "ATA Sub", "ATA", "ATA Description", "LRU",
+               "DateAndTime", "MDC Message", "Status", "Flight Phase", "Type",
+               "Intermittent", "Equation ID", "Source", "Diagnostic Data",
+               "Data Used to Determine Msg", "ID", "Flight", "airline_id", "aircraftno"]
+    """
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        chart1_sql_df = pd.read_sql(sql, conn)
+        #MDCdataDF.columns = column_names
+        return chart1_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
 
 
+
+@app.post("/chart_one/{aircraftNo}/{fromDate}/{toDate}")
+async def get_ChartOneData(aircraftNo:int, fromDate: str , toDate: str):
+    chart1_sql_df = connect_database_for_chart1(aircraftNo, fromDate, toDate)
+    chart1_sql_df_json = chart1_sql_df.to_json(orient='records')
+    return chart1_sql_df_json
