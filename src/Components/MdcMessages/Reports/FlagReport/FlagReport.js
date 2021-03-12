@@ -1,8 +1,9 @@
-import React from 'react';
+import React,{useState} from 'react';
 import MUIDataTable from "mui-datatables";
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,7 +14,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FlagReport = () => {
+const FlagReport = (props) => {
+  const history = useHistory();
+  const [ACSN, setACSN] = useState(history.location.state.ACSNList);
+  const [eqID, setEqid] = useState(history.location.state.eqList);
+
   const columns = [
     {
       name: "MSN",
@@ -214,16 +219,20 @@ const FlagReport = () => {
       },   
     ];
 
+    
+    console.log(ACSN);
+    console.log(eqID);
+
 
     const options = {
       filter: true,
       filterType: 'multiselect',
-      responsive: "stacked",
+      responsive: "standard",
       fixedHeader: true,
       fixedSelectColumn: true,
       rowHover: true,
       //tableBodyMaxHeight: '700px',
-      enableNestedDataAccess: true,
+      // enableNestedDataAccess: true,
       downloadOptions: {
         filename: 'MdcRawData.csv',
         separator: ',',
@@ -233,9 +242,9 @@ const FlagReport = () => {
         transitionTime: 300,
       },
       elevation: 4,
-      rowsPerPage: 30,
+      rowsPerPage: 50,
       rowsPerPageOptions: [50, 100, 250, 500, 1000],
-      disableToolbarSelect: true,
+      selectToolbarPlacement:"none",
       setFilterChipProps: (colIndex, colName, data) => {
         return {
           color: 'primary',

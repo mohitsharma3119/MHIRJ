@@ -36,8 +36,8 @@ const Report = (props) => {
   const classes = useStyles();
   const history = useHistory();
   const [report, setReport] = useState(history.location.state.reportConditions);
-  const [EqID, setEqID] = React.useState('');
-  const [ACSN, setACSN] = React.useState('');
+  // const [EqID, setEqID] = React.useState('');
+  // const [ACSN, setACSN] = React.useState('');
   const [dailyReportData, setDailyReportData] = React.useState('');
   const [historyReportData, setHistoryReportData] = React.useState('');
 
@@ -51,51 +51,51 @@ const [flagConditions, setFlagConditions] = React.useState(
     days: report.days,
     operator: report.operator,
     ata: report.ata,
-    EqID: '',
+    EqID: report.EqID,
     messages: report.messages,
     ACSN: '',
     fromDate: report.fromDate,
     toDate: report.toDate,
   }
  );
-// ----- States and handle Functions for Buttons -----
-const handleGenerateFlagReport = (event) => {
-  if (ACSN !== '' && EqID !== '') {  
-    setFlagConditions ({ACSN : ACSN});
-    setFlagConditions ({EqID : EqID});
-    history.push({
-      pathname: '/flag',
-      state: {flagConditions:flagConditions}
-    });
-  };
-};
+// // ----- States and handle Functions for Buttons -----
+// const handleGenerateFlagReport = (event) => {
+//   if (ACSN !== '' && EqID !== '') {  
+//     setFlagConditions ({ACSN : ACSN});
+//     setFlagConditions ({EqID : EqID});
+//     history.push({
+//       pathname: '/flag',
+//       state: {flagConditions:flagConditions}
+//     });
+//   };
+// };
 
-// ----- States and handle Functions for Selects  ----- 
+// // ----- States and handle Functions for Selects  ----- 
 
-const handleACSNChange = (ACSN) => {
-  setACSN(ACSN);
-};
+// const handleACSNChange = (ACSN) => {
+//   setACSN(ACSN);
+// };
 
-const handleEqIDChange = (EqID) => {
-  setEqID(EqID);
-};
+// const handleEqIDChange = (EqID) => {
+//   setEqID(EqID);
+// };
 
   // ----- Report Loading Method ----- 
-  var flagTitle = <h3 className={classes.flagH3}>Flag Report Conditions</h3>;
+  // var flagTitle = <h3 className={classes.flagH3}>Flag Report Conditions</h3>;
   var reportTable = '';
-  var historyFilters = 
-    <div className={classes.flagFilters}>
-      <EqIDSelector 
-        handleEqIDChange = {handleEqIDChange} /> 
-      <ACSNSelector 
-        handleACSNChange = {handleACSNChange} />
-        <Button 
-          variant="contained" 
-          onClick = {()=>handleGenerateFlagReport()}
-          className={classes.button}>
-            Generate Flag Report
-        </Button>     
-      </div>;  
+  // var historyFilters = 
+  //   <div className={classes.flagFilters}>
+  //     <EqIDSelector 
+  //       handleEqIDChange = {handleEqIDChange} /> 
+  //     <ACSNSelector 
+  //       handleACSNChange = {handleACSNChange} />
+  //       <Button 
+  //         variant="contained" 
+  //         onClick = {()=>handleGenerateFlagReport()}
+  //         className={classes.button}>
+  //           Generate Flag Report
+  //       </Button>     
+  //     </div>;  
 
     useEffect( () => {
         /* Using useEffect so that axios can run only on the first render 
@@ -122,6 +122,7 @@ const handleEqIDChange = (EqID) => {
         }
         const operator = report.operator;
         const ata = report.ata;
+        const eqid = report.EqID;
         const messages = 0; 
         const fromDate = report.fromDate;
         const toDate = report.toDate;
@@ -171,8 +172,8 @@ const handleEqIDChange = (EqID) => {
 
       if (report.analysis === "daily" && dailyReportData !== "") {
         reportTable = <DailyReport data = {dailyReportData} title = "Daily Report"/>
-        historyFilters = '';
-        flagTitle = '';
+        // historyFilters = '';
+        // flagTitle = '';
       }
       else if (report.analysis === "history" && historyReportData !== "") {
           reportTable = <HistoryReport data = {historyReportData}  title = "History Report"/>
@@ -185,8 +186,8 @@ const handleEqIDChange = (EqID) => {
     <div className={classes.root}>
       { report.analysis !== "daily" &&
       <>
-        {flagTitle}
-        {historyFilters}
+        {/* {flagTitle}
+        {historyFilters} */}
       </>
       }
       {reportTable}

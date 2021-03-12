@@ -6,7 +6,7 @@ import {OccurencesInput,LegsInput,IntermittentInput,DaysInput} from './AnalysisI
 import Paper from '@material-ui/core/Paper';
 //import ReportType from './ReportType';
 import DatePicker from './DatePicker';
-import {AirlineOperatorSelector,ATAMainSelector,MessagesSelector} from './Selectors';
+import {AirlineOperatorSelector,ATAMainSelector,MessagesSelector,EqIDSelector} from './Selectors';
 import { useHistory } from "react-router-dom";
 //Radio Button Imports
 import Radio from '@material-ui/core/Radio';
@@ -76,6 +76,7 @@ const Conditions = (props) => {
 
    // ----- States and handle Functions for Radio Buttons  ----- 
    const [analysis, setAnalysisType] = useState("daily");
+   const [EqID, setEqID] = React.useState('');
    //const [report, setReportType] = useState("daily");
 
     // const handleReportChange = (report) => {
@@ -144,7 +145,12 @@ const Conditions = (props) => {
     setIncludeMessages(messages);
     console.log(messages);
   };
-  
+
+  const handleEqIDChange = (EqID) => {
+    setEqID(EqID);
+    console.log(EqID);
+  };
+    
 // ----- States and handle Functions for Generate Report  ----- 
 
 const [reportConditions, setReportConditions] = React.useState(
@@ -157,7 +163,7 @@ const [reportConditions, setReportConditions] = React.useState(
     days: '',
     operator: '',
     ata: '',
-    // eqID: '',
+    eqID: '',
     messages: '',
     // ACSN: '',
     fromDate: '',
@@ -174,6 +180,7 @@ const [reportConditions, setReportConditions] = React.useState(
           analysis: analysis,
           occurences: occurences,
           legs: legs,
+          eqID: EqID,
           intermittent: intermittent,
           days: days,
           operator: airline,
@@ -279,16 +286,15 @@ const [reportConditions, setReportConditions] = React.useState(
               <ATAMainSelector 
                 handleATAChange = {handleATAChange}
               /> 
-              {/* <EqIDSelector 
-                handleEqIDChange = {handleEqIDChange}
-              /> */}
               <MessagesSelector 
                 handleMessagesChange = {handleMessagesChange}
               />
+              <EqIDSelector 
+                handleEqIDChange = {handleEqIDChange}
+              />   
             </div>                    
             </Grid>      
             <Grid item xs={3}>     
-            
             <h3>Report Date</h3> 
             {/* <ACSNSelector 
                 handleACSNChange = {handleACSNChange}
@@ -306,7 +312,8 @@ const [reportConditions, setReportConditions] = React.useState(
               onClick = {()=>handleGenerateReport()}
               className={classes.button}>
                 Generate Report
-            </Button>               
+            </Button>       
+                
           </Grid>  
         </Grid>
       </div>

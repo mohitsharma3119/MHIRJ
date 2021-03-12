@@ -20,12 +20,17 @@ const useStyles = makeStyles((theme) => ({
   container:{
     margin: '0px 50px 0px 0px',
   },
+  autocomplete:{
+    margin: theme.spacing(0),
+    width:'90%',
+    minWidth: 120,
+  }
 }));
 
 const AirlineList = ['SKW'];
-const ATAMainList = ['Not Applicable', 'All' , 21,22,23,24,26,27,28,30,31,32,33,34,36,38,45,49,71,78];
+const ATAMainList = ['All' , '21','22','23','24','26','27','28','30','31','32','33','34','36','38','45','49','71','78'];
 const ACSNList = ['AC10201','AC10242','AC15092'];
-const EqList = ['B1-006902','B2-006902','B3-006902'];
+const EqList = ['B1-006901','B1-006902','B1-006903','B1-006904','B1-006905','B1-006906'];
 const MessagesList = ['Include', 'Exclude'];
 
 export const AirlineOperatorSelector = (props) => {
@@ -58,29 +63,47 @@ export const AirlineOperatorSelector = (props) => {
 
 export const ATAMainSelector = (props) => {
   const classes = useStyles();
-  const [ATAMain, setATAMain] = React.useState('');
+  const [ATAMain, setATAMain] = React.useState([]);
 
-  const handleATAChange = (event) => {
-    setATAMain(event.target.value);
-    props.handleATAChange(event.target.value);
+  const handleATAChange = (event, values) => {
+    setATAMain(values);
+    props.handleATAChange(values);
   };
 
   return(
-    <FormControl variant="outlined" className={classes.formControl}>
-    <InputLabel id="demo-simple-select-outlined-label">ATA Main</InputLabel> 
-      <Select
-        labelId="demo-simple-select-outlined-label"
-        id="demo-simple-select-outlined"
-        value={ATAMain}
-        onChange={handleATAChange}
+    // <FormControl variant="outlined" className={classes.formControl}>
+    // <InputLabel id="demo-simple-select-outlined-label">ATA Main</InputLabel> 
+    //   <Select
+    //     labelId="demo-simple-select-outlined-label"
+    //     id="demo-simple-select-outlined"
+    //     value={ATAMain}
+    //     onChange={handleATAChange}
+    //     label="ATA Main"
+    //   >
+    //   <MenuItem value="none"> </MenuItem>
+    //   {ATAMainList.map( item => 
+    //     <MenuItem value={item}> {item} </MenuItem>
+    //   )};
+    //   </Select>
+    // </FormControl>
+    <Autocomplete
+    className={classes.autocomplete}
+    multiple
+    id="tags-outlined"
+    options={ATAMainList}
+    getOptionLabel={(item => item)}
+    value = {ATAMain}
+    filterSelectedOptions
+    onChange = {handleATAChange}
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        variant="outlined"
         label="ATA Main"
-      >
-      <MenuItem value="none"> </MenuItem>
-      {ATAMainList.map( item => 
-        <MenuItem value={item}> {item} </MenuItem>
-      )};
-      </Select>
-    </FormControl>
+        placeholder="ATA Main"
+        />
+    )}
+  />
   );
 }
 
@@ -111,7 +134,7 @@ export const EqIDSelector = (props) => {
     //   </Select>
     // </FormControl>
     <Autocomplete
-        className={classes.formControl}
+        className={classes.autocomplete}
         multiple
         id="tags-outlined"
         options={EqList}
@@ -193,7 +216,7 @@ export const ACSNSelector = (props) => {
     //   </Select>
     // </FormControl> 
     <Autocomplete
-        className={classes.formControl}
+        className={classes.autocomplete}
         multiple
         id="tags-outlined"
         options={ACSNList}
