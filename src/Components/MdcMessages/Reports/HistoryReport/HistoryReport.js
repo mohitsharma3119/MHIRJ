@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import MUIDataTable from "mui-datatables";
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+//Buttons Imports
+import Button from '@material-ui/core/Button';
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -11,9 +14,50 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '92vw',
     margin:  '20px',
   },
+  button:{
+    margin:'0px 20px 15px 0px',
+    backgroundColor:"#C5D3E0",
+    width: '230px',
+    height: '51px',
+  },
 }));
 
 const HistoryReport = (props) => {
+  const [ACSNList, setACSNList] = useState([]);
+  const [eqList, setEqList] = useState([]);
+  const [rowsSelectedState, setRowsSelected] = useState('');
+
+  const HandleMultipleRowSelect = (rowsSelectedData, allRows, rowsSelected) => {
+    //Data index to get the row no matter the sorting or filtering;
+    // console.log(rowsSelected);
+    setRowsSelected(rowsSelected);
+    let FlagACArray = [];
+    let FlagB1Array = [];
+    Object(rowsSelected).map((item => {
+      FlagACArray.push(data[item].ACSN);
+      FlagB1Array.push(data[item].B1Equation);
+      return FlagACArray;
+    }));
+    // console.log(FlagACArray,"Flag AC Array")
+    // console.log(FlagB1Array,"FlagB1 Array")
+    setACSNList(FlagACArray);
+    setEqList(FlagB1Array);
+  };
+
+// ----- States and handle Functions for Buttons -----
+const history = useHistory();
+  const handleGenerateFlagReport = (event) => {
+    console.log(ACSNList,"AC State");
+    console.log(eqList,"EQ State");
+      history.push({
+        pathname: '/flag',
+        state: {
+          ACSNList:ACSNList,
+          eqList:eqList
+        }
+      });
+    };
+
   const columns = [
     {
       name: 'ACSN', 
@@ -199,7 +243,7 @@ const HistoryReport = (props) => {
     let data = [];
   
     props.data.map((item => {
-      console.log(item["AC SN"]); 
+      //console.log(item["AC SN"]); 
       data.push(
         {
           ACSN: item["AC SN"], 
@@ -227,14 +271,18 @@ const HistoryReport = (props) => {
     ));
 
     const options = {
+      selectableRows: 'multiple',
+      selectableRowsOnClick: true,
+      rowsSelected: rowsSelectedState,
+      onRowSelectionChange: HandleMultipleRowSelect,
       filter: true,
       filterType: 'multiselect',
-      responsive: "stacked",
+      responsive: "standard",
       fixedHeader: true,
       fixedSelectColumn: true,
       rowHover: true,
       //tableBodyMaxHeight: '700px',
-      enableNestedDataAccess: true,
+      //enableNestedDataAccess: true,
       downloadOptions: {
         filename: 'MdcRawData.csv',
         separator: ',',
@@ -244,9 +292,9 @@ const HistoryReport = (props) => {
         transitionTime: 300,
       },
       elevation: 4,
-      rowsPerPage: 30,
+      rowsPerPage: 50,
       rowsPerPageOptions: [50, 100, 250, 500, 1000],
-      disableToolbarSelect: true,
+      selectToolbarPlacement:"none",
       setFilterChipProps: (colIndex, colName, data) => {
         return {
           color: 'primary',
@@ -265,6 +313,15 @@ const classes = useStyles();
   return (
     <div className={classes.root}>
       <Grid container spacing={0}>
+        <Grid item xs={10}></Grid>
+        <Grid item xs={2}>
+        <Button 
+          variant="contained" 
+          onClick = {()=>handleGenerateFlagReport()}
+          className={classes.button}>
+            Generate Flag Report
+        </Button>
+        </Grid>
         <Grid item xs={12}>
             <MuiThemeProvider theme={theme}>
               <MUIDataTable
