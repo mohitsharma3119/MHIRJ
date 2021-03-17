@@ -1645,7 +1645,7 @@ async def flagreport(AircraftSN: str, Bcode: str):
     """
 
 def connect_database_for_chart1(aircraft_no, from_dt, to_dt):
-    sql = "SELECT Count(MDCMessagesInputs.Message), Airline_MDC_Data. Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA FROM Airline_MDC_Data INNER JOIN MDCMessagesInputs ON Airline_MDC_Data.ATA = MDCMessagesInputs.ATA WHERE Airline_MDC_Data.aircraftno = '10201' AND Airline_MDC_Data.DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Airline_MDC_Data.Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA ORDER BY Count(MDCMessagesInputs.Message) DESC"
+    sql = "SELECT Count(MDCMessagesInputs.Message), Airline_MDC_Data. Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA FROM Airline_MDC_Data INNER JOIN MDCMessagesInputs ON Airline_MDC_Data.ATA = MDCMessagesInputs.ATA WHERE Airline_MDC_Data.aircraftno = "+str(aircraft_no)+" AND Airline_MDC_Data.DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Airline_MDC_Data.Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA ORDER BY Count(MDCMessagesInputs.Message) DESC"
     """
     column_names = ["Aircraft", "Tail", "Flight Leg No",
                "ATA Main", "ATA Sub", "ATA", "ATA Description", "LRU",
@@ -1671,28 +1671,25 @@ async def get_ChartOneData(aircraftNo:int, fromDate: str , toDate: str):
     chart1_sql_df_json = chart1_sql_df.to_json(orient='records')
     return chart1_sql_df_json
 
-def connect_database_for_chart2(ata, from_dt, to_dt):
-    sql2 = "Select  Count(ata),  aircraft FROM Airline_MDC_Data where ata='"+ata+"' AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"'Group by ata, Aircraft Order by COUNT(ata)DESC"
 
-    """
-       column_names = ["Aircraft", "Tail", "Flight Leg No",
-                  "ATA Main", "ATA Sub", "ATA", "ATA Description", "LRU",
-                  "DateAndTime", "MDC Message", "Status", "Flight Phase", "Type",
-                  "Intermittent", "Equation ID", "Source", "Diagnostic Data",
-                  "Data Used to Determine Msg", "ID", "Flight", "airline_id", "aircraftno"]
-       """
+def connect_database_for_chart2(n, ata, from_dt, to_dt):
+    if len(ata) == 2:
+        sql = "SELECT TOP "+str(n)+" COUNT(ATA_Main), aircraft FROM Airline_MDC_Data where ATA_Main='"+ata+"' AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY ATA_Main, Aircraft ORDER BY COUNT(ATA_Main) DESC"
+    elif len(ata) == 5:
+        sql = "SELECT TOP "+str(n)+" COUNT(ATA), aircraft FROM Airline_MDC_Data where ATA='"+ata+"' AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY ATA, Aircraft ORDER BY COUNT(ATA) DESC"
+
     try:
         conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
                               user='mhirj-admin', password='KaranCool123')
-        chart2_sql_df = pd.read_sql(sql2, conn)
+        chart2_sql_df = pd.read_sql(sql, conn)
         # MDCdataDF.columns = column_names
         return chart2_sql_df
     except pyodbc.Error as err:
         print("Couldn't connect to Server")
         print("Error message:- " + str(err))
 
-@app.post("/chart_two/{ata}/{fromDate}/{toDate}")
-async def get_ChartwoData(ata:str, fromDate: str , toDate: str):
-    chart2_sql_df = connect_database_for_chart2(ata, fromDate, toDate)
+@app.post("/chart_two/{top_values}/{ata}/{fromDate}/{toDate}")
+async def get_ChartwoData(top_values:int, ata:str, fromDate: str , toDate: str):
+    chart2_sql_df = connect_database_for_chart2(top_values, ata, fromDate, toDate)
     chart2_sql_df_json = chart2_sql_df.to_json(orient='records')
     return chart2_sql_df_json
