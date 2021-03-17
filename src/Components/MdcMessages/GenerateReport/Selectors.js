@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 const AirlineList = ['SKW'];
 const ATAMainList = ['All' , '21','22','23','24','26','27','28','30','31','32','33','34','36','38','45','49','71','78'];
 const ACSNList = ['AC10201','AC10242','AC15092'];
-const EqList = ['B1-006901','B1-006902','B1-006903','B1-006904','B1-006905','B1-006906'];
+const EqList = ['B1-007553','B1-246748','B1-007061','B1-006952','B1-113037','B1-005970'];
 const MessagesList = ['Include', 'Exclude'];
 
 export const AirlineOperatorSelector = (props) => {

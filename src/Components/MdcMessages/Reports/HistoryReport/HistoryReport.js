@@ -6,6 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 //Buttons Imports
 import Button from '@material-ui/core/Button';
 import { useHistory } from "react-router-dom";
+//Axios Imports 
+import axios from 'axios';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,10 +29,11 @@ const HistoryReport = (props) => {
   const [ACSNList, setACSNList] = useState([]);
   const [eqList, setEqList] = useState([]);
   const [rowsSelectedState, setRowsSelected] = useState('');
+  const [flagConditions,setFlagConditions] = useState('');
+  const [flagData,setFlagData] = useState('');
 
   const HandleMultipleRowSelect = (rowsSelectedData, allRows, rowsSelected) => {
     //Data index to get the row no matter the sorting or filtering;
-    // console.log(rowsSelected);
     setRowsSelected(rowsSelected);
     let FlagACArray = [];
     let FlagB1Array = [];
@@ -38,8 +42,6 @@ const HistoryReport = (props) => {
       FlagB1Array.push(data[item].B1Equation);
       return FlagACArray;
     }));
-    // console.log(FlagACArray,"Flag AC Array")
-    // console.log(FlagB1Array,"FlagB1 Array")
     setACSNList(FlagACArray);
     setEqList(FlagB1Array);
   };
@@ -47,13 +49,56 @@ const HistoryReport = (props) => {
 // ----- States and handle Functions for Buttons -----
 const history = useHistory();
   const handleGenerateFlagReport = (event) => {
-    console.log(ACSNList,"AC State");
-    console.log(eqList,"EQ State");
+    setFlagConditions(
+      {
+        analysis: props.analysis,
+        occurences: props.occurences,
+        legs: props.legs,
+        HistExEqID: props.EqID,
+        intermittent: props.intermittent,
+        days: props.days,
+        operator: props.airline,
+        HistAta: props.ATAMain,
+        messages: props.messagesChoice,
+        fromDate: props.dateFrom,
+        toDate: props.dateTo,
+        FlagEqID: "('"+ eqList.join("','") +"')",
+        FlagACSN:"('"+ ACSNList.join("','") +"')"
+      },
+    );
+    let flag = true;
+    Object.values(flagConditions).map(item => {
+      if (item === ""){
+        flag = false;
+      }
+      return flag;
+    });
+  
+    if (flag === true) {  
+      console.log(flagConditions);
+      ///MDCRawData/{ATAMain_list}/{exclude_EqID_list}/{fromDate}/{toDate}"
+      //http://localhost:8000/MDCRawData/('32','22')/('B1-007553','B1-246748')/2020-11-05/2020-11-12
+      
+      const path = '';
+      /*const path = 'http://localhost:8000/MDCRawData/' + rawDataConditions.ata + '/' + rawDataConditions.eqID + '/' + rawDataConditions.operator + 
+      '/' + rawDataConditions.ata + '/' + rawDataConditions.messages + '/' + rawDataConditions.fromDate + '/' + rawDataConditions.toDate;
+      */
+
+      try{
+        axios.post(path).then(function (res) {
+          // console.log(res);
+          var data = JSON.parse(res.data);
+          setFlagData(data);
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
       history.push({
         pathname: '/flag',
         state: {
-          ACSNList:ACSNList,
-          eqList:eqList
+          flagConditions: flagConditions,
+          flagData: flagData
         }
       });
     };

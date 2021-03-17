@@ -41,23 +41,7 @@ const Report = (props) => {
   const [dailyReportData, setDailyReportData] = React.useState('');
   const [historyReportData, setHistoryReportData] = React.useState('');
 
-// ----- States and handle Functions for setting flag report ----- 
-const [flagConditions, setFlagConditions] = React.useState(
-  {
-    analysis: report.analysis,
-    occurences: report.occurences,
-    legs: report.legs,
-    intermittent: report.intermittent,
-    days: report.days,
-    operator: report.operator,
-    ata: report.ata,
-    EqID: report.EqID,
-    messages: report.messages,
-    ACSN: '',
-    fromDate: report.fromDate,
-    toDate: report.toDate,
-  }
- );
+
 // // ----- States and handle Functions for Buttons -----
 // const handleGenerateFlagReport = (event) => {
 //   if (ACSN !== '' && EqID !== '') {  
@@ -99,7 +83,7 @@ const [flagConditions, setFlagConditions] = React.useState(
 
     useEffect( () => {
         /* Using useEffect so that axios can run only on the first render 
-        http://localhost:8000/GenerateReport/{analysis}/{occurences}/{legs}/{intermittent}/{consecutiveDays}/{operator}/{ata}/{messages}/{fromDate}/{toDate}") 
+        http://localhost:8000/"/GenerateReport/{analysisType}/{occurences}/{legs}/{intermittent}/{consecutiveDays}/{ata}/{exclude_EqID}/{airline_operator}/{include_current_message}/{fromDate}/{toDate}") 
         Example of Daily Path: http://localhost:8000/GenerateReport/daily/2/2/3/0/SKW/28/0/2020-11-14/2020-11-15 */
 
         const analysis = report.analysis;
@@ -121,15 +105,17 @@ const [flagConditions, setFlagConditions] = React.useState(
           consecutiveDays = report.days;
         }
         const operator = report.operator;
-        const ata = report.ata;
-        const eqid = report.EqID;
+
+        const ata =  "('"+ report.ata.join("','") +"')";
+        const eqid = "('"+ report.eqID.join("','") +"')";
+
         const messages = 0; 
         const fromDate = report.fromDate;
         const toDate = report.toDate;
 
         if (report.analysis !== "both") {
           const path = 'http://localhost:8000/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
-          consecutiveDays + '/' + operator + '/' + ata + '/' + messages + '/' + fromDate + '/' + toDate;
+          consecutiveDays + '/' + ata + '/' + eqid + '/'+ operator + '/' + messages + '/' + fromDate + '/' + toDate;
 
           try{
             axios.post(path).then(function (res) {
@@ -176,7 +162,7 @@ const [flagConditions, setFlagConditions] = React.useState(
         // flagTitle = '';
       }
       else if (report.analysis === "history" && historyReportData !== "") {
-          reportTable = <HistoryReport data = {historyReportData}  title = "History Report"/>
+          reportTable = <HistoryReport data = {historyReportData}  title = "History Report" reportConditions = {report}/>
       }  
       else if (report.analysis === "both" && dailyReportData !== ""  && historyReportData !== "") {
         reportTable = <div><DailyReport data = {dailyReportData} title = "Daily Report"/> <HistoryReport data = {historyReportData}  title = "History Report"/></div>;

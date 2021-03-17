@@ -1,22 +1,208 @@
-import React from 'react';
-import Table from '../../Table';
+import React,{useState} from 'react';
+import RawDataTable from './RawDataTable';
 import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import DatePicker from '../../GenerateReport/DatePicker';
+import {AirlineOperatorSelector,ATAMainSelector,MessagesSelector,EqIDSelector} from '../../GenerateReport/Selectors';
+//Buttons Imports
+import Button from '@material-ui/core/Button';
+import { useHistory } from "react-router-dom";
+//Axios Imports 
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+  },
+  form:{
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      // width: '25ch',
+      // marginBottom:20,
+  },
+},
+  paper: {
+    margin: '50px auto 20px',
+    width: '92vw',
+  },
+  card:{
+    backgroundColor: "#C5D3E0",
+    textAlign: 'center',
+    justify: 'center',
+    padding: '5px',
+  },
+  Grid:{
+    margin: 'auto',
+    padding:'20px 20px 20px 50px',
+  },
+  button:{
+    margin:'50px 30px',
+    // height:'40px',
+    padding: '10px',
+    backgroundColor:"#C5D3E0",
+  },
+  EqSelector:{
+    marginTop:'9px',
+    marginRight:'0px',
+    width:'100px',
+  },
+  ATASelector:{
+    // marginTop:'9px',
+  },
+  h3:{
+    marginLeft: '5px',
+    fontSize:'20px',
   },
 }));
 
 const RawMdcMessages = () => {
   const classes = useStyles();
 
+  // ----- States and handle Functions for Date  ----- 
+  const [dateFrom, setDateFrom] = useState();
+  const [dateTo, setDateTo] = useState();
+
+  const handleDateFrom = (date) => {
+    setDateFrom(date);
+    console.log(date);
+  };
+
+  const handleDateTo = (date) => {
+    setDateTo(date);
+    console.log(date);
+  };
+// ----- States and handle Functions for Selects  ----- 
+const [airline, setAilineType] = useState();
+const [ATAMain, setATAMain] = React.useState('');
+const [messagesChoice, setIncludeMessages] = React.useState('');
+const [EqID, setEqID] = React.useState('');
+
+const handleAirlineChange = (Airline) => {
+  setAilineType(Airline);
+  console.log(Airline);
+};
+
+const handleATAChange = (ATA) => {
+  setATAMain("('"+ ATA.join("','") +"')");
+  console.log(ATAMain);
+};
+
+const handleMessagesChange = (messages) => {
+  setIncludeMessages(messages);
+  console.log(messages);
+};
+
+const handleEqIDChange = (eqIDList) => {
+  setEqID("('"+ eqIDList.join("','") +"')");
+  console.log(EqID);
+};
+// ----- States and handle Functions for Generate Report  ----- 
+
+const [rawDataConditions, setRawDataConditions] = React.useState(
+  {
+    operator: '',
+    ata: '',
+    eqID: '',
+    messages: '',
+    fromDate: '',
+    toDate: '',
+  }
+ );
+const [rawData, setRawData] = React.useState('');
+
+const history = useHistory();
+
+const handleGenerateReport = (event) => {
+
+  setRawDataConditions(
+      {
+        operator: airline,
+        ata: ATAMain,
+        eqID: EqID,
+        messages: messagesChoice,
+        fromDate: dateFrom,
+        toDate: dateTo,
+      },
+    );
+
+  let flag = true;
+  Object.values(rawDataConditions).map(item => {
+    if (item === ""){
+      flag = false;
+    }
+    return flag;
+  });
+
+  if (flag === true) {  
+    console.log(rawDataConditions);
+    ///MDCRawData/{ATAMain_list}/{exclude_EqID_list}/{fromDate}/{toDate}"
+    //http://localhost:8000/MDCRawData/('32','22')/('B1-007553','B1-246748')/skw/0/2020-11-05/2020-11-12
+    
+    const path = 'http://localhost:8000/MDCRawData/' + rawDataConditions.ata + '/' + rawDataConditions.eqID + '/' + rawDataConditions.operator + 
+    '/' + rawDataConditions.messages + '/' + rawDataConditions.fromDate + '/' + rawDataConditions.toDate;
+
+    try{
+      axios.post(path).then(function (res) {
+        // console.log(res);
+        var data = JSON.parse(res.data);
+          setRawData(data);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  }
+} 
+
   return (
     <div className={classes.root}>   
-        <Table 
-        />
-    </div>
-  
+     <form className={classes.form}>
+      <Paper className={classes.paper}>
+        <div className ={classes.card}>
+          <h2>RAW DATA FILTERS</h2>
+        </div>
+         <Grid className={classes.Grid} container spacing={0}> 
+            <Grid item xs={2}>
+            <AirlineOperatorSelector
+                handleAirlineChange = {handleAirlineChange}                
+              />     
+              <MessagesSelector 
+                handleMessagesChange = {handleMessagesChange}
+              />
+            </Grid>
+            <Grid className={classes.ATASelector} item xs={6}>
+            <ATAMainSelector 
+                handleATAChange = {handleATAChange}
+              /> 
+              <EqIDSelector 
+                handleEqIDChange = {handleEqIDChange}
+              />   
+            </Grid>
+            <Grid item xs={2}>
+            <DatePicker 
+              label = "From"
+              handleDateFrom = {handleDateFrom}
+            />   
+            <DatePicker 
+              label = "To"
+              handleDateTo = {handleDateTo}
+            /> 
+            </Grid>
+            <Grid item xs={2}>
+              <Button 
+                variant="contained" 
+                onClick = {()=>handleGenerateReport()}
+                className={classes.button}>
+                  Filter Raw Data
+              </Button>                 
+            </Grid>
+          </Grid>
+     </Paper>
+     </form>
+     <RawDataTable
+       data = {rawData}
+     />
+    </div> 
   );
 };
 
