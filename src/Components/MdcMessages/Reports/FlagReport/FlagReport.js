@@ -16,8 +16,8 @@ const useStyles = makeStyles((theme) => ({
 
 const FlagReport = (props) => {
   const history = useHistory();
-  const [ACSN, setACSN] = useState(history.location.state.ACSNList);
-  const [eqID, setEqid] = useState(history.location.state.eqList);
+  const [flagConditions, setFlagConditions] = useState(history.location.state.flagConditions);
+  const [flagData, setFlagData] = useState(history.location.state.flagData);
 
   const columns = [
     {
@@ -141,88 +141,31 @@ const FlagReport = (props) => {
      },
     ];
 
-    const data = [
-      {
-        MSN: "10330", ATA: "21-61", code: 'B1-005812', LRU: 'ACSC 1',  message: 'INTERNAL FAULT', type: "Fault Message",  FDE: "mdchisotry.csv",  dateFrom: "2020-11-30",  dateTo: "2020-11-30", action: "", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20) This is related to pack cycling. Will have to revise SL procedure (by 30 Sept 2020) and the FIM (31 Oct 2020). (Input from specialist Sep/2020) Fleet wide msg in top #10 position Reset SL procedure is not in FIM",
-        iseRecAct: "1. Reset per SL procedure: " +
-        "a) Reset procedure" +
-        "b) Wait for 30 sec., then select L Pack Manual Mode "+
-        "c) Wait for 30 sec., and then select Pack Auto Mode."+
-        "d) If still cycling Swap ACSC. If not replace ACSC. Do not remove sensors"+
-        "2. Follow FIM 21−61−04−810−81:"+
-        "NOTE:Bombardier strongly recommends to swap ASCSs before replacing the LRUs. Byswapping LRUs, you will verify the integrity of the ASCSs. Go to Fault Confirmation."+
-        "1. Pack Discharge Pressure Sensor (PDPS) MT13 unserviceable."+
-        "2. Pack Inlet Flow Sensor (PIFS) MT11 unserviceable."+
-        "3. Pack Inlet Pressure Sensor (PIPS) MT9 unserviceable."+
-        "4. Defective wiring interface between Air Conditioning System Controller #1 (ACSC 1)and oneof the pressure sensors."
-      },
-      {
-        MSN: "10330", ATA: "21-61", code: 'B1-005812', LRU: 'ACSC 1',  message: 'INTERNAL FAULT', type: "Fault Message",  FDE: "mdchisotry.csv",  dateFrom: "2020-11-30",  dateTo: "2020-11-30", action: "", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20) This is related to pack cycling. Will have to revise SL procedure (by 30 Sept 2020) and the FIM (31 Oct 2020). (Input from specialist Sep/2020) Fleet wide msg in top #10 position Reset SL procedure is not in FIM",
-        iseRecAct: "1. Reset per SL procedure: " +
-        "a) Reset procedure" +
-        "b) Wait for 30 sec., then select L Pack Manual Mode "+
-        "c) Wait for 30 sec., and then select Pack Auto Mode."+
-        "d) If still cycling Swap ACSC. If not replace ACSC. Do not remove sensors"+
-        "2. Follow FIM 21−61−04−810−81:"+
-        "NOTE:Bombardier strongly recommends to swap ASCSs before replacing the LRUs. Byswapping LRUs, you will verify the integrity of the ASCSs. Go to Fault Confirmation."+
-        "1. Pack Discharge Pressure Sensor (PDPS) MT13 unserviceable."+
-        "2. Pack Inlet Flow Sensor (PIFS) MT11 unserviceable."+
-        "3. Pack Inlet Pressure Sensor (PIPS) MT9 unserviceable."+
-        "4. Defective wiring interface between Air Conditioning System Controller #1 (ACSC 1)and oneof the pressure sensors."
-      },
-      {
-        MSN: "10330", ATA: "21-61", code: 'B1-005812', LRU: 'ACSC 1',  message: 'INTERNAL FAULT', type: "Fault Message",  FDE: "mdchisotry.csv",  dateFrom: "2020-11-30",  dateTo: "2020-11-30", action: "", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20) This is related to pack cycling. Will have to revise SL procedure (by 30 Sept 2020) and the FIM (31 Oct 2020). (Input from specialist Sep/2020) Fleet wide msg in top #10 position Reset SL procedure is not in FIM",
-        iseRecAct: "1. Reset per SL procedure: " +
-        "a) Reset procedure" +
-        "b) Wait for 30 sec., then select L Pack Manual Mode "+
-        "c) Wait for 30 sec., and then select Pack Auto Mode."+
-        "d) If still cycling Swap ACSC. If not replace ACSC. Do not remove sensors"+
-        "2. Follow FIM 21−61−04−810−81:"+
-        "NOTE:Bombardier strongly recommends to swap ASCSs before replacing the LRUs. Byswapping LRUs, you will verify the integrity of the ASCSs. Go to Fault Confirmation."+
-        "1. Pack Discharge Pressure Sensor (PDPS) MT13 unserviceable."+
-        "2. Pack Inlet Flow Sensor (PIFS) MT11 unserviceable."+
-        "3. Pack Inlet Pressure Sensor (PIPS) MT9 unserviceable."+
-        "4. Defective wiring interface between Air Conditioning System Controller #1 (ACSC 1)and oneof the pressure sensors."
-      },
-      {
-        MSN: "10330", ATA: "21-61", code: 'B1-005812', LRU: 'ACSC 1',  message: 'INTERNAL FAULT', type: "Fault Message",  FDE: "mdchisotry.csv",  dateFrom: "2020-11-30",  dateTo: "2020-11-30", action: "", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20) This is related to pack cycling. Will have to revise SL procedure (by 30 Sept 2020) and the FIM (31 Oct 2020). (Input from specialist Sep/2020) Fleet wide msg in top #10 position Reset SL procedure is not in FIM",
-        iseRecAct: "1. Reset per SL procedure: \n" +
-        "a) Reset procedure \n" +
-        "b) Wait for 30 sec., then select L Pack Manual Mode "+
-        "c) Wait for 30 sec., and then select Pack Auto Mode."+
-        "d) If still cycling Swap ACSC. If not replace ACSC. Do not remove sensors"+
-        "2. Follow FIM 21−61−04−810−81:"+
-        "NOTE:Bombardier strongly recommends to swap ASCSs before replacing the LRUs. Byswapping LRUs, you will verify the integrity of the ASCSs. Go to Fault Confirmation."+
-        "1. Pack Discharge Pressure Sensor (PDPS) MT13 unserviceable."+
-        "2. Pack Inlet Flow Sensor (PIFS) MT11 unserviceable."+
-        "3. Pack Inlet Pressure Sensor (PIPS) MT9 unserviceable."+
-        "4. Defective wiring interface between Air Conditioning System Controller #1 (ACSC 1)and oneof the pressure sensors."
-      },
-      {
-        MSN: "10330", ATA: "21-61", code: 'B1-005812', LRU: 'ACSC 1',  message: 'INTERNAL FAULT', type: "Fault Message",  FDE: "mdchisotry.csv",  dateFrom: "2020-11-30",  dateTo: "2020-11-30", action: "", 
-        input: "Per SL-21-018 (to be revised as of 9/24/20) This is related to pack cycling. Will have to revise SL procedure (by 30 Sept 2020) and the FIM (31 Oct 2020). (Input from specialist Sep/2020) Fleet wide msg in top #10 position Reset SL procedure is not in FIM",
-        iseRecAct: "1. Reset per SL procedure: " +
-        "a) Reset procedure" +
-        "b) Wait for 30 sec., then select L Pack Manual Mode "+
-        "c) Wait for 30 sec., and then select Pack Auto Mode."+
-        "d) If still cycling Swap ACSC. If not replace ACSC. Do not remove sensors"+
-        "2. Follow FIM 21−61−04−810−81:"+
-        "NOTE:Bombardier strongly recommends to swap ASCSs before replacing the LRUs. Byswapping LRUs, you will verify the integrity of the ASCSs. Go to Fault Confirmation."+
-        "1. Pack Discharge Pressure Sensor (PDPS) MT13 unserviceable."+
-        "2. Pack Inlet Flow Sensor (PIFS) MT11 unserviceable."+
-        "3. Pack Inlet Pressure Sensor (PIPS) MT9 unserviceable."+
-        "4. Defective wiring interface between Air Conditioning System Controller #1 (ACSC 1)and oneof the pressure sensors."
-      },   
-    ];
-
-    
-    console.log(ACSN);
-    console.log(eqID);
-
+    let data = [];
+  
+    if (props.data.map != null || props.data.map!= undefined){
+      props.data.map((item => {
+        console.log(item["AC SN"]); 
+        data.push(
+          {
+            MSN: item[""], 
+            ATA: item[""], 
+            code: item[""], 
+            LRU: item[""],  
+            message: item[""],  
+            type: item[""],  
+            FDE: item[""],  
+            dateFrom: item[""],   
+            dateTo: item[""],   
+            action: item[""],  
+            input: item[""],  
+            iseRecAct: item[""],  
+          }
+        );
+        return data;
+      }
+      ));
+    }  
 
     const options = {
       filter: true,
@@ -230,11 +173,11 @@ const FlagReport = (props) => {
       responsive: "standard",
       fixedHeader: true,
       fixedSelectColumn: true,
-      rowHover: true,
+      //rowHover: true,
       //tableBodyMaxHeight: '700px',
-      // enableNestedDataAccess: true,
+      //enableNestedDataAccess: true,
       downloadOptions: {
-        filename: 'MdcRawData.csv',
+        filename: 'FlagReport.csv',
         separator: ',',
       },
       draggableColumns: {

@@ -29,11 +29,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   paper: {
-    margin: 'auto',
-    width: '1200px',
+    // margin: 'auto',
+    // width: '1200px',
+    margin: '20px auto',
+    width: '92vw',
   },
   container: {
-    padding: '40px',
+    padding: '20px 40px',
   },
   h3:{
     margin: 'auto',
@@ -58,7 +60,8 @@ const useStyles = makeStyles((theme) => ({
     margin: '20px auto 30px',
   },
   button:{
-    margin:'30px',
+    margin:'40px auto',
+    width:'70%',
     backgroundColor:"#C5D3E0",
   },
   formControl: {
@@ -138,7 +141,7 @@ const Conditions = (props) => {
 
   const handleATAChange = (ATA) => {
     setATAMain(ATA);
-    console.log(ATA);
+    console.log(ATAMain);
   };
 
   const handleMessagesChange = (messages) => {
@@ -146,8 +149,8 @@ const Conditions = (props) => {
     console.log(messages);
   };
 
-  const handleEqIDChange = (EqID) => {
-    setEqID(EqID);
+  const handleEqIDChange = (eqIDList) => {
+    setEqID(eqIDList);
     console.log(EqID);
   };
     
@@ -199,10 +202,10 @@ const [reportConditions, setReportConditions] = React.useState(
       return flag;
     });
       if (flag === true) {  
+        console.log(reportConditions);
         history.push({
         pathname: '/report',
         state: {reportConditions:reportConditions}
-      //history.push('/report',reportConditions)
       });
     } 
   };
@@ -262,7 +265,7 @@ const [reportConditions, setReportConditions] = React.useState(
                 </FormControl>   */}
             </div>            
             </Grid>
-            <Grid item xs={3}>     
+            <Grid item xs={2}>     
               <div>
                 <h3>Analysis Input</h3>   
                 <OccurencesInput 
@@ -270,30 +273,30 @@ const [reportConditions, setReportConditions] = React.useState(
                 />
                 <LegsInput 
                   handleLegsChange = {handleLegsChange}
-                />
+                />  
                 <IntermittentInput 
                   handleIntermittentChange = {handleIntermittentChange}
                 />
                 <DaysInput analysis = {analysis}  handleDaysChange = {handleDaysChange}/>   
               </div>           
             </Grid>  
-            <Grid item xs={3}>     
+            <Grid item xs={5}>     
             <div>
-              <h3>Raw Data Conditions</h3> 
-              <AirlineOperatorSelector
+            <h3>Raw Data Conditions</h3> 
+            <AirlineOperatorSelector
                 handleAirlineChange = {handleAirlineChange}  
               />         
-              <ATAMainSelector 
-                handleATAChange = {handleATAChange}
-              /> 
               <MessagesSelector 
                 handleMessagesChange = {handleMessagesChange}
-              />
+              />   
+              <ATAMainSelector 
+                handleATAChange = {handleATAChange}
+              />   
               <EqIDSelector 
                 handleEqIDChange = {handleEqIDChange}
-              />   
+              />  
             </div>                    
-            </Grid>      
+            </Grid>       
             <Grid item xs={3}>     
             <h3>Report Date</h3> 
             {/* <ACSNSelector 
@@ -312,9 +315,8 @@ const [reportConditions, setReportConditions] = React.useState(
               onClick = {()=>handleGenerateReport()}
               className={classes.button}>
                 Generate Report
-            </Button>       
-                
-          </Grid>  
+            </Button>  
+            </Grid>          
         </Grid>
       </div>
         </Paper>

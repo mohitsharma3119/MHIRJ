@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Table2 = () => {
+const RawDataTable = (props) => {
   const columns = [
     {
       name: "aircraft",
@@ -204,285 +204,73 @@ const Table2 = () => {
        setCellProps: () => ({style: {whiteSpace:'nowrap'}})
       }
      },
+    //  {
+    //   name: 'airlineID', 
+    //   label: 'Airline ID',
+    //   options: {
+    //    filter: true,
+    //    filterType: 'dropdown',
+    //    sort: true,
+    //    setCellProps: () => ({style: {whiteSpace:'nowrap'}})
+    //   }
+    //  },
+    //  {
+    //   name: 'aircraftno', 
+    //   label: 'Aircraft No',
+    //   options: {
+    //    filter: true,
+    //    filterType: 'dropdown',
+    //    sort: true,
+    //    setCellProps: () => ({style: {whiteSpace:'nowrap'}})
+    //   }
+    //  },
     ];
 
-    const data = [
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },   
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },   
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },   
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },   
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },       
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },   
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },   
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },   
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },   
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },   
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },   
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },   
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },   
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },  
-      {
-        aircraft: "AC10242", tail: "778SK", fightLeg: 26407, ATAMain: 21,  ATASub: 61, ATA: "21-61",  ATADesc: "TEMPERATURE CONTROL",  LRU: "GALLEY FAN",  date: "11/30/2020 23:59", MDCMessages: "LOW FAN SPEED", status: "FAILED/WIRING",
-        phase: "AIR", type: "Service" , intermittent: 0, equationID: "B1-006902",source: "AC102421.SMH", diagnostic: "", data: "350A ACSC 2 100002", id: "40286708765b8d1801765bf51a28048e", flightNumber: 3110       
-      },      
-    ];
-
+    let data = [];
+  
+    if (props.data.map != null){
+      props.data.map((item => {
+        console.log(item["AC SN"]); 
+        data.push(
+          {
+            aircraft: item["Aircraft"], 
+            tail: item["Tail"], 
+            fightLeg: item["Flight Leg No"], 
+            ATAMain: item["ATA Main"],  
+            ATASub: item["ATA Sub"],  
+            ATA: item["ATA"],  
+            ATADesc: item["Ata Description"],  
+            LRU: item["LRU"],   
+            date: item["DateAndTime"],   
+            MDCMessages: item["MDC Message"],  
+            status: item["Status"],  
+            phase: item["Flight Phase"],  
+            type: item["Type"],   
+            intermittent: item["Intermittent"],   
+            equationID: item["Equation ID"],  
+            source: item["Source"], 
+            diagnostic: item["Diagnostic Data"],  
+            data: item["Data Used to Determine Msg"],  
+            id:item["ID"],
+            flightNumber: item["Flight"],
+            // airlineID: item["airline_id"],
+            // aircraftno: item["aircraftno"],
+          }
+        );
+        return data;
+      }
+      ));
+    }  
 
     const options = {
       filter: true,
       filterType: 'multiselect',
-      responsive: "stacked",
+      responsive: "standard",
       fixedHeader: true,
       fixedSelectColumn: true,
-      rowHover: true,
+      //rowHover: true,
       //tableBodyMaxHeight: '700px',
-      enableNestedDataAccess: true,
+      //enableNestedDataAccess: true,
       downloadOptions: {
         filename: 'MdcRawData.csv',
         separator: ',',
@@ -492,9 +280,9 @@ const Table2 = () => {
         transitionTime: 300,
       },
       elevation: 4,
-      rowsPerPage: 30,
+      rowsPerPage: 50,
       rowsPerPageOptions: [50, 100, 250, 500, 1000],
-      disableToolbarSelect: true,
+      selectToolbarPlacement:"none",
       setFilterChipProps: (colIndex, colName, data) => {
         return {
           color: 'primary',
@@ -527,5 +315,5 @@ const classes = useStyles();
     </div>
   );
 }
-export default Table2;
+export default RawDataTable;
 
