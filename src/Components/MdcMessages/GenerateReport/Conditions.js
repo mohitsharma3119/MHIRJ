@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 //import ReportType from './ReportType';
 import DatePicker from './DatePicker';
 import {AirlineOperatorSelector,ATAMainSelector,MessagesSelector,EqIDSelector} from './Selectors';
+import Report from '../Reports/Report';
 import { useHistory } from "react-router-dom";
 //Radio Button Imports
 import Radio from '@material-ui/core/Radio';
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     // margin: 'auto',
     // width: '1200px',
-    margin: '20px auto',
+    margin: '20px auto 23px 20px',
     width: '92vw',
   },
   container: {
@@ -79,17 +80,10 @@ const Conditions = (props) => {
 
    // ----- States and handle Functions for Radio Buttons  ----- 
    const [analysis, setAnalysisType] = useState("daily");
-   const [EqID, setEqID] = React.useState('');
-   //const [report, setReportType] = useState("daily");
-
-    // const handleReportChange = (report) => {
-    //   setReportType(report);
-    //   console.log(report);
-    // };
+   const [EqID, setEqID] = useState('');
 
     const handleAnalysisChange = (analysis) => {
       setAnalysisType(analysis);
-      //console.log(analysis);
     };
 
    // ----- States and handle Functions for Date  ----- 
@@ -98,12 +92,10 @@ const Conditions = (props) => {
 
     const handleDateFrom = (date) => {
       setDateFrom(date);
-      console.log(date);
     };
 
     const handleDateTo = (date) => {
       setDateTo(date);
-      console.log(date);
     };
 
   // ----- States and handle Functions for Inputs  ----- 
@@ -114,19 +106,15 @@ const Conditions = (props) => {
 
   const handleOccurencesChange = (occurences) =>{
     setOccurrences(occurences);
-    console.log(occurences);
   };
   const handleLegsChange = (legs) =>{
     setLegs(legs);
-    console.log(legs);
   };
   const handleIntermittentChange = (intermittent) =>{
     setIntermittent(intermittent);
-    console.log(intermittent);
   };
   const handleDaysChange = (days) =>{
     setDays(days);
-    console.log(days);
   };
 
   // ----- States and handle Functions for Selects  ----- 
@@ -136,30 +124,25 @@ const Conditions = (props) => {
 
   const handleAirlineChange = (Airline) => {
     setAilineType(Airline);
-    console.log(Airline);
   };
 
   const handleATAChange = (ATA) => {
     setATAMain(ATA);
-    console.log(ATAMain);
   };
 
   const handleMessagesChange = (messages) => {
     setIncludeMessages(messages);
-    console.log(messages);
   };
 
   const handleEqIDChange = (eqIDList) => {
     setEqID(eqIDList);
-    console.log(EqID);
   };
     
 // ----- States and handle Functions for Generate Report  ----- 
 
-const [reportConditions, setReportConditions] = React.useState(
+const [reportConditions, setReportConditions] = useState(
   {
     analysis: '',
-    // report: '',
     occurences: '',
     legs: '',
     intermittent: '',
@@ -168,13 +151,13 @@ const [reportConditions, setReportConditions] = React.useState(
     ata: '',
     eqID: '',
     messages: '',
-    // ACSN: '',
     fromDate: '',
     toDate: '',
   }
  );
 
-  const history = useHistory();
+  // const history = useHistory();
+  // const [isValid, setIsValid] = useState(false);
 
   const handleGenerateReport = (event) => {
 
@@ -194,20 +177,33 @@ const [reportConditions, setReportConditions] = React.useState(
         },
       );
 
-    let flag = true;
-    Object.values(reportConditions).map(item => {
-      if (item === ""){
-        flag = false;
-      }
-      return flag;
-    });
-      if (flag === true) {  
-        console.log(reportConditions);
-        history.push({
-        pathname: '/report',
-        state: {reportConditions:reportConditions}
-      });
-    } 
+    // let flag = false;
+    // for (const item in reportConditions) {
+    //   if (Object.hasOwnProperty.call(reportConditions, item)) {
+    //     const element = reportConditions[item];
+    //     if ( element !== false ) {
+    //       flag = true;
+    //     } else {
+    //       flag = false;
+    //       break;
+    //     }
+    //   }
+    // }
+    // Object.values(reportConditions).map(item => {
+    //   if (item === ""){
+    //     flag = false;
+    //   }
+    //   return flag;
+    // });
+    // setIsValid(flag);
+      // if (flag === true) {  
+      //   console.log(reportConditions);
+        //setReportRender(<Report reportConditions = {reportConditions}/>) 
+        // history.push({
+        // pathname: '/report',
+        // state: {reportConditions:reportConditions}
+      // });
+    //} 
   };
 
   return (
@@ -244,26 +240,7 @@ const [reportConditions, setReportConditions] = React.useState(
                   />} label="Both" />
               </RadioGroup>
               </FormControl> 
-            </div>
-            <div>
-              {/* <FormControl component="fieldset" className="form">
-                <FormLabel component="legend" className={classes.formLabel}>Report Type</FormLabel>
-                <RadioGroup aria-label="analysis" name="analysis" value={report}>
-                  <FormControlLabel value="history" control={
-                    <Radio 
-                    size="medium"
-                    color='default'
-                    onChange={()=>handleReportChange("history")} 
-                    />} label="History" />
-                  <FormControlLabel value="daily" control={
-                    <Radio 
-                      size="medium"
-                      color='default'
-                      onChange={()=>handleReportChange("daily")} 
-                    />} label="Daily" />
-                </RadioGroup>
-                </FormControl>   */}
-            </div>            
+            </div>           
             </Grid>
             <Grid item xs={2}>     
               <div>
@@ -299,9 +276,7 @@ const [reportConditions, setReportConditions] = React.useState(
             </Grid>       
             <Grid item xs={3}>     
             <h3>Report Date</h3> 
-            {/* <ACSNSelector 
-                handleACSNChange = {handleACSNChange}
-            /> */}
+        
             <DatePicker 
               label = "From"
               handleDateFrom = {handleDateFrom}
@@ -321,6 +296,7 @@ const [reportConditions, setReportConditions] = React.useState(
       </div>
         </Paper>
       </form>
+        <Report reportConditions = {reportConditions}/>
     </div>
   );
 };

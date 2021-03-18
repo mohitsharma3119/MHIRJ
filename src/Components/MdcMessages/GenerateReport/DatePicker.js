@@ -1,15 +1,18 @@
-import React,{ Fragment} from 'react';
+import React,{useState,Fragment} from 'react';
 //$ npm i --save date-fns@next @date-io/date-fns
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 //$ npm install @material-ui/pickers
-import {MuiPickersUtilsProvider,KeyboardTimePicker,KeyboardDatePicker,} from '@material-ui/pickers';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker
+} from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import moment from "moment";
 
 const DatePicker = (props) => {
-  const [selectedDate, setDate] = React.useState(moment());
-  const [inputValue, setInputValue] = React.useState(moment().format("YYYY-MM-DD"));
+  const [selectedDate, setDate] = useState(moment());
+  const [inputValue, setInputValue] = useState(moment().format("YYYY-MM-DD"));
 
   const handleDateChange = (date, value) => {
     setDate(date);
@@ -23,13 +26,13 @@ const DatePicker = (props) => {
 
   return (
     <Fragment>
-      <MuiPickersUtilsProvider libInstance={moment} utils={DateFnsUtils}>
+      <MuiPickersUtilsProvider libInstance={moment} utils={MomentUtils}>
         <KeyboardDatePicker 
           style={{margin: "12px 10px 10px"}}
           autoOk={true}
-            showTodayButton={false}
+          //showTodayButton={true}
             value={selectedDate}
-            format="yyyy-mm-dd"
+            format="YYYY-MM-DD"
             inputValue={inputValue}
             onChange={handleDateChange}
             rifmFormatter={dateFormatter}

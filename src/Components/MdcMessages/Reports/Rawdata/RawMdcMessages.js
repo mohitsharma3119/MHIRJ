@@ -65,12 +65,10 @@ const RawMdcMessages = () => {
 
   const handleDateFrom = (date) => {
     setDateFrom(date);
-    console.log(date);
   };
 
   const handleDateTo = (date) => {
     setDateTo(date);
-    console.log(date);
   };
 // ----- States and handle Functions for Selects  ----- 
 const [airline, setAilineType] = useState();
@@ -80,22 +78,18 @@ const [EqID, setEqID] = React.useState('');
 
 const handleAirlineChange = (Airline) => {
   setAilineType(Airline);
-  console.log(Airline);
 };
 
 const handleATAChange = (ATA) => {
   setATAMain("('"+ ATA.join("','") +"')");
-  console.log(ATAMain);
 };
 
 const handleMessagesChange = (messages) => {
   setIncludeMessages(messages);
-  console.log(messages);
 };
 
 const handleEqIDChange = (eqIDList) => {
   setEqID("('"+ eqIDList.join("','") +"')");
-  console.log(EqID);
 };
 // ----- States and handle Functions for Generate Report  ----- 
 
@@ -110,6 +104,7 @@ const [rawDataConditions, setRawDataConditions] = React.useState(
   }
  );
 const [rawData, setRawData] = React.useState('');
+const [isValid, setIsValid] = React.useState(false);
 
 const history = useHistory();
 
@@ -126,13 +121,19 @@ const handleGenerateReport = (event) => {
       },
     );
 
-  let flag = true;
-  Object.values(rawDataConditions).map(item => {
-    if (item === ""){
-      flag = false;
+    let flag = isValid;
+    for (const item in rawDataConditions) {
+      if (Object.hasOwnProperty.call(rawDataConditions, item)) {
+        const element = rawDataConditions[item];
+        if ( element !== false ) {
+          flag = true;
+        } else {
+          flag = false;
+          break;
+        }
+      }
     }
-    return flag;
-  });
+    setIsValid(flag);
 
   if (flag === true) {  
     console.log(rawDataConditions);

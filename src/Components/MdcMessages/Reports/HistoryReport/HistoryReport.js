@@ -18,17 +18,17 @@ const useStyles = makeStyles((theme) => ({
     margin:  '20px',
   },
   button:{
-    margin:'0px 20px 15px 0px',
+    margin:'0px 30px 15px 0px',
     backgroundColor:"#C5D3E0",
-    width: '230px',
-    height: '51px',
+    width: '100%',
+    // height: '51px',
   },
 }));
 
 const HistoryReport = (props) => {
   const [ACSNList, setACSNList] = useState([]);
   const [eqList, setEqList] = useState([]);
-  const [rowsSelectedState, setRowsSelected] = useState('');
+  const [rowsSelectedState, setRowsSelected] = useState([]);
   const [flagConditions,setFlagConditions] = useState('');
   const [flagData,setFlagData] = useState('');
 
@@ -51,17 +51,17 @@ const history = useHistory();
   const handleGenerateFlagReport = (event) => {
     setFlagConditions(
       {
-        analysis: props.analysis,
-        occurences: props.occurences,
-        legs: props.legs,
-        HistExEqID: props.EqID,
-        intermittent: props.intermittent,
-        days: props.days,
-        operator: props.airline,
-        HistAta: props.ATAMain,
-        messages: props.messagesChoice,
-        fromDate: props.dateFrom,
-        toDate: props.dateTo,
+        analysis: props.reportConditions.analysis,
+        occurences: props.reportConditions.occurences,
+        legs: props.reportConditions.legs,
+        HistExEqID: props.reportConditions.EqID,
+        intermittent: props.reportConditions.intermittent,
+        days: props.reportConditions.days,
+        operator: props.reportConditions.airline,
+        HistAta: props.reportConditions.ATAMain,
+        messages: props.reportConditions.messagesChoice,
+        fromDate: props.reportConditions.fromDate,
+        toDate: props.reportConditions.toDate,
         FlagEqID: "('"+ eqList.join("','") +"')",
         FlagACSN:"('"+ ACSNList.join("','") +"')"
       },
@@ -286,34 +286,35 @@ const history = useHistory();
     ];
 
     let data = [];
-  
-    props.data.map((item => {
-      //console.log(item["AC SN"]); 
-      data.push(
-        {
-          ACSN: item["AC SN"], 
-          EICASMessages: item["EICAS Message"], 
-          mdcMessages: item["MDC Message"],  
-          LRU: item["LRU"],  
-          ATA: item["ATA"],  
-          B1Equation: item["B1-Equation"],  
-          type: item["Type"],   
-          equationDescription: item["Equation Description"],   
-          totalOccurences: item["Total Occurences"],  
-          consecutiveDays: item["Consective Days"],
-          ConsecutiveFlights: item["Consecutive FL"],  
-          intermittent: item["Intermittent"],  
-          reasons: item["Reason(s) for flag"],   
-          priority: item["Priority"],   
-          topMessage: item["Known Top Message - Recommended Documents"],  
-          recommendation: item["MHIRJ ISE Recommendation"], 
-          comments: item["Additional Comments"],  
-          input: item["MHIRJ ISE Input"],  
-        }
-      );
-      return data;
+    if (props.data.map != null || props.data.map!= undefined ){
+      props.data.map((item => {
+        //console.log(item["AC SN"]); 
+        data.push(
+          {
+            ACSN: item["AC SN"], 
+            EICASMessages: item["EICAS Message"], 
+            mdcMessages: item["MDC Message"],  
+            LRU: item["LRU"],  
+            ATA: item["ATA"],  
+            B1Equation: item["B1-Equation"],  
+            type: item["Type"],   
+            equationDescription: item["Equation Description"],   
+            totalOccurences: item["Total Occurences"],  
+            consecutiveDays: item["Consective Days"],
+            ConsecutiveFlights: item["Consecutive FL"],  
+            intermittent: item["Intermittent"],  
+            reasons: item["Reason(s) for flag"],   
+            priority: item["Priority"],   
+            topMessage: item["Known Top Message - Recommended Documents"],  
+            recommendation: item["MHIRJ ISE Recommendation"], 
+            comments: item["Additional Comments"],  
+            input: item["MHIRJ ISE Input"],  
+          }
+        );
+        return data;
+      }
+      ));
     }
-    ));
 
     const options = {
       selectableRows: 'multiple',
@@ -325,7 +326,7 @@ const history = useHistory();
       responsive: "standard",
       fixedHeader: true,
       fixedSelectColumn: true,
-      rowHover: true,
+      // rowHover: true,
       //tableBodyMaxHeight: '700px',
       //enableNestedDataAccess: true,
       downloadOptions: {
@@ -337,16 +338,16 @@ const history = useHistory();
         transitionTime: 300,
       },
       elevation: 4,
-      rowsPerPage: 50,
-      rowsPerPageOptions: [50, 100, 250, 500, 1000],
+      rowsPerPage: 25,
+      rowsPerPageOptions: [25,50],
       selectToolbarPlacement:"none",
-      setFilterChipProps: (colIndex, colName, data) => {
-        return {
-          color: 'primary',
-          variant: 'outlined',
-          className: 'testClass123',
-        };
-      }
+      // setFilterChipProps: (colIndex, colName, data) => {
+      //   return {
+      //     color: 'primary',
+      //     variant: 'outlined',
+      //     className: 'testClass123',
+      //   };
+      // }
     };
 
     const theme = createMuiTheme({

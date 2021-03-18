@@ -197,46 +197,47 @@ const DailyReport = (props) => {
     ];
 
     let data = [];
-  
-    props.data.map((item => {
-      console.log(item["AC SN"]); 
-      data.push(
-        {
-          date: item["Date"], 
-          ACSN: item["AC SN"], 
-          EICASMessages: item["EICAS Message"], 
-          mdcMessages: item["MDC Message"],  
-          LRU: item["LRU"],  
-          ATA: item["ATA"],  
-          B1Equation: item["B1-Equation"],  
-          type: item["Type"],   
-          equationDescription: item["Equation Description"],   
-          totalOccurences: item["Total Occurences"],  
-          ConsecutiveFlights: item["Consecutive FL"],  
-          intermittent: item["Intermittent"],  
-          reasons: item["Reason(s) for flag"],   
-          priority: item["Priority"],   
-          topMessage: item["Known Top Message - Recommended Documents"],  
-          recommendation: item["MHIRJ ISE Recommendation"], 
-          comments: item["Additional Comments"],  
-          input: item["MHIRJ ISE Input"],  
-        }
-      );
-      return data;
-    }
-    ));
+    // if (props.data){
+      props.data?.map((item => {
+        // console.log(item["AC SN"]); 
+        data.push(
+          {
+            date: item["Date"], 
+            ACSN: item["AC SN"], 
+            EICASMessages: item["EICAS Message"], 
+            mdcMessages: item["MDC Message"],  
+            LRU: item["LRU"],  
+            ATA: item["ATA"],  
+            B1Equation: item["B1-Equation"],  
+            type: item["Type"],   
+            equationDescription: item["Equation Description"],   
+            totalOccurences: item["Total Occurences"],  
+            ConsecutiveFlights: item["Consecutive FL"],  
+            intermittent: item["Intermittent"],  
+            reasons: item["Reason(s) for flag"],   
+            priority: item["Priority"],   
+            topMessage: item["Known Top Message - Recommended Documents"],  
+            recommendation: item["MHIRJ ISE Recommendation"], 
+            comments: item["Additional Comments"],  
+            input: item["MHIRJ ISE Input"],  
+          }
+        );
+        return data;
+      }
+      ));
+    // }
   
     const options = {
       filter: true,
       filterType: 'multiselect',
-      responsive: "stacked",
+      responsive: "standard",
       fixedHeader: true,
       fixedSelectColumn: true,
-      rowHover: true,
+      // rowHover: true,
       //tableBodyMaxHeight: '700px',
-      enableNestedDataAccess: true,
+      //enableNestedDataAccess: true,
       downloadOptions: {
-        filename: 'MdcRawData.csv',
+        filename: 'MDCDailyReport.csv',
         separator: ',',
       },
       draggableColumns: {
@@ -244,16 +245,16 @@ const DailyReport = (props) => {
         transitionTime: 300,
       },
       elevation: 4,
-      rowsPerPage: 30,
-      rowsPerPageOptions: [50, 100, 250, 500, 1000],
-      disableToolbarSelect: true,
-      setFilterChipProps: (colIndex, colName, data) => {
-        return {
-          color: 'primary',
-          variant: 'outlined',
-          className: 'testClass123',
-        };
-      }
+      rowsPerPage: 25,
+      rowsPerPageOptions: [25, 50],
+      selectToolbarPlacement:"none",
+      // setFilterChipProps: (colIndex, colName, data) => {
+      //   return {
+      //     color: 'primary',
+      //     variant: 'outlined',
+      //     className: 'testClass123',
+      //   };
+      // }
     };
 
     const theme = createMuiTheme({
