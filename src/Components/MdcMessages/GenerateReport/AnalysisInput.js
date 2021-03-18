@@ -12,7 +12,7 @@ export const OccurencesInput = (props) => {
 
   return(
     <TextField
-      id="outlined-number"
+      // id="outlined-number"
       label="Max Allowed Occurences"
       type="number"
       onChange = {handleOccurencesChange}
@@ -35,7 +35,7 @@ export const LegsInput = (props) => {
 
   return(
     <TextField
-    id="outlined-number"
+    // id="outlined-number"
     label="Max Consecutive Legs"
     type="number"
     onChange = {handleLegsChange}
@@ -57,7 +57,7 @@ export const IntermittentInput = (props) => {
   };
   return(
     <TextField
-      id="outlined-number"
+      // id="outlined-number"
       label="Max Allowed Intermittent"
       type="number"
       onChange = {handleIntermittentChange}
@@ -81,18 +81,17 @@ export const DaysInput = (props) => {
   };
   useEffect(() => {
     if (props.analysis === 'daily'){
-      setDisabled(prevState => ({ disabled: "disabled"}));
+      setDisabled(prevState => ({ disabled: true}));
     }
     else {
-      setDisabled(prevState => ({  disabled: ""}));
+      setDisabled(prevState => ({  disabled: false}));
     }    
-  console.log(props.analysis);
   }, [props.analysis]);
 
   return(
     <TextField
       {...disabled}
-      id="outlined-number"
+      // id="outlined-number"
       label="Max Consecutive Days"
       type="number"
       onChange = {handleDaysChange}

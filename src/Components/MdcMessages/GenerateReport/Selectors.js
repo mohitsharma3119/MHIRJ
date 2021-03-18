@@ -54,7 +54,7 @@ export const AirlineOperatorSelector = (props) => {
       >
       <MenuItem value="none"> </MenuItem>
       {AirlineList.map( item => 
-        <MenuItem value={item}> {item} </MenuItem>
+        <MenuItem value={item} key={item}> {item} </MenuItem>
       )};
       </Select>
     </FormControl>
@@ -89,7 +89,7 @@ export const ATAMainSelector = (props) => {
     <Autocomplete
     className={classes.autocomplete}
     multiple
-    id="tags-outlined"
+    //id="tags-outlined"
     options={ATAMainList}
     getOptionLabel={(item => item)}
     value = {ATAMain}
@@ -118,25 +118,11 @@ export const EqIDSelector = (props) => {
   };
 
   return(
-    // <FormControl variant="outlined" className={classes.formControl}>
-    // <InputLabel id="demo-simple-select-outlined-label">Equation ID</InputLabel>
-    //   <Select
-    //     labelId="demo-simple-select-outlined-label"
-    //     id="demo-simple-select-outlined"
-    //     value={EqID}
-    //     onChange={handleEqIDChange}
-    //     label="Exclude Equation ID"
-    //   >
-    //   <MenuItem value="none"> </MenuItem>
-    //   {EqList.map( item => 
-    //     <MenuItem value={item}> {item} </MenuItem>
-    //   )};
-    //   </Select>
-    // </FormControl>
+
     <Autocomplete
         className={classes.autocomplete}
         multiple
-        id="tags-outlined"
+        //id="tags-outlined"
         options={EqList}
         getOptionLabel={(item => item)}
         value = {EqID}
@@ -179,7 +165,7 @@ export const MessagesSelector = (props) => {
       >
       <MenuItem value="none"> </MenuItem>
       {MessagesList.map( item => 
-        <MenuItem value={item}> {item} </MenuItem>
+        <MenuItem value={item} key={item} >{item} </MenuItem>
       )};
       </Select>
     </FormControl>

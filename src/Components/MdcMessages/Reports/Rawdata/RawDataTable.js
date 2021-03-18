@@ -230,7 +230,6 @@ const RawDataTable = (props) => {
   
     if (props.data.map != null){
       props.data.map((item => {
-        console.log(item["AC SN"]); 
         data.push(
           {
             aircraft: item["Aircraft"], 

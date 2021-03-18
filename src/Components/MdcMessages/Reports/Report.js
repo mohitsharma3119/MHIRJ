@@ -35,11 +35,13 @@ const useStyles = makeStyles((theme) => ({
 const Report = (props) => {
   const classes = useStyles();
   const history = useHistory();
-  const [report, setReport] = useState(history.location.state.reportConditions);
+  //const [report, setReport] = useState(history.location.state.reportConditions);
+  const [report, setReport] = useState(props.reportConditions);
+  // setReport(props.reportConditions);
   // const [EqID, setEqID] = React.useState('');
   // const [ACSN, setACSN] = React.useState('');
-  const [dailyReportData, setDailyReportData] = React.useState('');
-  const [historyReportData, setHistoryReportData] = React.useState('');
+  const [dailyReportData, setDailyReportData] = useState([]);
+  const [historyReportData, setHistoryReportData] = useState([]);
 
 
 // // ----- States and handle Functions for Buttons -----
@@ -82,79 +84,90 @@ const Report = (props) => {
   //     </div>;  
 
     useEffect( () => {
-        /* Using useEffect so that axios can run only on the first render 
-        http://localhost:8000/"/GenerateReport/{analysisType}/{occurences}/{legs}/{intermittent}/{consecutiveDays}/{ata}/{exclude_EqID}/{airline_operator}/{include_current_message}/{fromDate}/{toDate}") 
-        Example of Daily Path: http://localhost:8000/GenerateReport/daily/2/2/3/0/SKW/28/0/2020-11-14/2020-11-15 */
+        setReport(props.reportConditions);
+      }, [props.reportConditions]);
 
-        const analysis = report.analysis;
-        const occurences = report.occurences;
-        const legs = report.legs;
-        const intermittent = report.intermittent;
-        let consecutiveDays;
-        let consecutiveDaysDaily;
-        let consecutiveDaysHistory;
+      useEffect( () => {
+        console.log(report.ata);
+        if (report.ata !== null && report.ata !== undefined &&  report.ata !== ''){
+          /* Using useEffect so that axios can run only on the first render 
+          http://localhost:8000/"/GenerateReport/{analysisType}/{occurences}/{legs}/{intermittent}/{consecutiveDays}/{ata}/{exclude_EqID}/{airline_operator}/{include_current_message}/{fromDate}/{toDate}") 
+          Example of Daily Path: http://localhost:8000/GenerateReport/daily/2/2/3/0/SKW/28/0/2020-11-14/2020-11-15 */
 
-        if (report.analysis === "daily") {
-          consecutiveDays = 0;
-        }
-        else if (report.analysis === "both") {
-          consecutiveDaysDaily = 0;
-          consecutiveDaysHistory = report.days;
-        }
-        else {
-          consecutiveDays = report.days;
-        }
-        const operator = report.operator;
+          // const analysis = report.analysis;
+          // const occurences = report.occurences;
+          // const legs = report.legs;
+          // const intermittent = report.intermittent;
+          const {analysis, occurences, legs, intermittent} = report;
+          let consecutiveDays;
+          let consecutiveDaysDaily;
+          let consecutiveDaysHistory;
 
-        const ata =  "('"+ report.ata.join("','") +"')";
-        const eqid = "('"+ report.eqID.join("','") +"')";
+          if (report.analysis === "daily") {
+            consecutiveDays = 0;
+          }
+          else if (report.analysis === "both") {
+            consecutiveDaysDaily = 0;
+            consecutiveDaysHistory = report.days;
+          }
+          else {
+            consecutiveDays = report.days;
+          }
+          const operator = report.operator;
+        
+          const ata =  "('"+ report.ata.join("','") +"')";
+          const eqid = "('"+ report.eqID.join("','") +"')";
 
-        const messages = 0; 
-        const fromDate = report.fromDate;
-        const toDate = report.toDate;
+          const messages = 0; 
+          const fromDate = report.fromDate;
+          const toDate = report.toDate;
 
-        if (report.analysis !== "both") {
-          const path = 'http://localhost:8000/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
-          consecutiveDays + '/' + ata + '/' + eqid + '/'+ operator + '/' + messages + '/' + fromDate + '/' + toDate;
+          if (report.analysis !== "both") {
+            /*http://localhost:8000/GenerateReport/history/2/2/2/3/('31','22','24','23')/('B1-007553','B1-005970')/skw/0/2020-11-18/2020-11-22*/
 
-          try{
-            axios.post(path).then(function (res) {
-              // console.log(res);
-              var data = JSON.parse(res.data);
-              if (report.analysis === "daily") {
-                setDailyReportData(data);
-              }
-              else if (report.analysis === "history") {
+            const path = 'http://localhost:8000/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
+            consecutiveDays + '/' + ata + '/' + eqid + '/'+ operator + '/' + messages + '/' + fromDate + '/' + toDate;
+
+            try{
+              axios.post(path).then(function (res) {
+                // console.log(res);
+                var data = JSON.parse(res.data);
+                if (report.analysis === "daily") {
+                  setDailyReportData(data);
+                }
+                else if (report.analysis === "history") {
+                  setHistoryReportData(data);
+                }
+              });
+            } catch (err) {
+              console.error(err);
+            }
+          }
+          else {
+            const dailyPath = 'http://localhost:8000/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
+            consecutiveDaysDaily + '/' + operator + '/' + ata + '/' + messages + '/' + fromDate + '/' + toDate;
+            
+            const historyPath = 'http://localhost:8000/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
+            consecutiveDaysHistory + '/' + operator + '/' + ata + '/' + messages + '/' + fromDate + '/' + toDate;
+            try{
+              axios.post(dailyPath).then(function (res) {
+                var data = JSON.parse(res.data);
+                  setDailyReportData(data);
+              });
+            } catch (err) {
+              console.error(err);
+            }
+            try{
+              axios.post(historyPath).then(function (res) {
+                var data = JSON.parse(res.data);
                 setHistoryReportData(data);
-              }
-            });
-          } catch (err) {
-            console.error(err);
+              });
+            } catch (err) {
+              console.error(err);
+            }
           }
         }
-        else {
-          const dailyPath = 'http://localhost:8000/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
-          consecutiveDaysDaily + '/' + operator + '/' + ata + '/' + messages + '/' + fromDate + '/' + toDate;
-          const historyPath = 'http://localhost:8000/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
-          consecutiveDaysHistory + '/' + operator + '/' + ata + '/' + messages + '/' + fromDate + '/' + toDate;
-          try{
-            axios.post(dailyPath).then(function (res) {
-              var data = JSON.parse(res.data);
-                setDailyReportData(data);
-            });
-          } catch (err) {
-            console.error(err);
-          }
-          try{
-            axios.post(historyPath).then(function (res) {
-              var data = JSON.parse(res.data);
-              setHistoryReportData(data);
-            });
-          } catch (err) {
-            console.error(err);
-          }
-        }
-    }, [report]);
+     }, [report]);
 
       if (report.analysis === "daily" && dailyReportData !== "") {
         reportTable = <DailyReport data = {dailyReportData} title = "Daily Report"/>
