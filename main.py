@@ -9,6 +9,7 @@ import time
 import sys
 #import csv
 import pyodbc
+import re
 import json
 #from datetime import datetime
 from flask import Flask, jsonify
@@ -65,7 +66,7 @@ def convert_array_to_tuple(array_list):
         l2.append(t)
         l1 = []
 
-    return '(' + ', '.join('{}'.format(t[0]) for t in l2) + ')'
+    return "(" + ', '.join('''{}'''.format(str(t[0])) for t in l2) + ")"
 
 """
 
@@ -98,10 +99,34 @@ MDCdataDF = pd.DataFrame((tuple(t) for t in records), columns = ["Aircraft", "Ta
 # Reading CSV file
 #MDCdataDF = pd.read_csv(Datatobeanalyzed_path, encoding="utf8")
 """
+def connect_to_fetch_all_ata(from_dt, to_dt):
+    all_ata_query = "SELECT DISTINCT ATA_Main from Airline_MDC_Data WHERE DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        all_ata_df = pd.read_sql(all_ata_query, conn)
+
+        return all_ata_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+def connect_to_fetch_all_eqids(from_dt, to_dt):
+    all_ata_query = "SELECT DISTINCT Equation_ID from Airline_MDC_Data WHERE DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        all_eqid_df = pd.read_sql(all_ata_query, conn)
+
+        return all_eqid_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
 
 def connect_database_MDCdata(ata, excl_eqid, airline_operator, include_current_message, from_dt, to_dt):
     global MDCdataDF
     global airline_id
+    all_ata_str_list = []
     #ata_list = tuple(ata)
     #excl_eqid_list = tuple(excl_eqid)
     #for each_ata in ata:
@@ -110,21 +135,77 @@ def connect_database_MDCdata(ata, excl_eqid, airline_operator, include_current_m
         print(airline_operator.upper())
         airline_id = 101
 
+    if ata == 'ALL':
+        all_ata = connect_to_fetch_all_ata(from_dt, to_dt)
+
+        all_ata_str = "("
+        all_ata_list = all_ata['ATA_Main'].tolist()
+        for each_ata in all_ata_list:
+            all_ata_str_list.append(str(each_ata))
+            all_ata_str += "'"+str(each_ata)+"'"
+            if each_ata != all_ata_list[-1]:
+                all_ata_str += ","
+            else:
+                all_ata_str += ")"
+        print(all_ata_str)
+
+    if excl_eqid == 'NONE':
+        all_eqid = connect_to_fetch_all_eqids(from_dt, to_dt)
+
+        all_eqid_str = "("
+        all_eqid_list = all_eqid['Equation_ID'].tolist()
+        for each_eqid in all_eqid_list:
+            #all_eqid_str_list.append(str(each_eqid))
+            all_eqid_str += "'" + str(each_eqid) + "'"
+            if each_eqid != all_eqid_list[-1]:
+                all_eqid_str += ","
+            else:
+                all_eqid_str += ")"
+        print(all_eqid_str)
+
+
     if include_current_message == 0:    # If we do not include current message
-        sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(ata) + " AND Equation_ID NOT IN " + str(
-            excl_eqid) + " AND airline_id = " + str(
-            airline_id) + " AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+        if ata == 'ALL' and excl_eqid == 'NONE':
+            sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(all_ata_str) + " AND Equation_ID IN " + str(
+                all_eqid_str) + " AND airline_id = " + str(
+                airline_id) + " AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+        elif excl_eqid == 'NONE':
+            sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(ata) + " AND Equation_ID IN " + str(
+                all_eqid_str) + " AND airline_id = " + str(
+                airline_id) + " AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+        elif ata == 'ALL':
+            sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(all_ata_str) + " AND Equation_ID NOT IN " + str(
+                excl_eqid) + " AND airline_id = " + str(
+                airline_id) + " AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+        else:
+            sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(ata) + " AND Equation_ID NOT IN " + str(
+                excl_eqid) + " AND airline_id = " + str(
+                airline_id) + " AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+
     elif include_current_message == 1:
-        sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(ata) + " AND Equation_ID NOT IN " + str(
-            excl_eqid) + " AND airline_id = " + str(
-            airline_id) + " AND flight_phase IS NULL AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+        if ata == 'ALL' and excl_eqid =='NONE':
+            sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(all_ata_str) + " AND Equation_ID IN " + str(
+                all_eqid_str) + " AND airline_id = " + str(
+                airline_id) + " AND flight_phase IS NULL AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+        elif ata == 'ALL':
+            sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(all_ata_str) + " AND Equation_ID NOT IN " + str(
+                excl_eqid) + " AND airline_id = " + str(
+                airline_id) + " AND flight_phase IS NULL AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+        elif excl_eqid == 'NONE':
+            sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(ata) + " AND Equation_ID IN " + str(
+                all_eqid_str) + " AND airline_id = " + str(
+                airline_id) + " AND flight_phase IS NULL AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+        else:
+            sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(ata) + " AND Equation_ID NOT IN " + str(
+                excl_eqid) + " AND airline_id = " + str(
+                airline_id) + " AND flight_phase IS NULL AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
 
     column_names = ["Aircraft", "Tail", "Flight Leg No",
                "ATA Main", "ATA Sub", "ATA", "ATA Description", "LRU",
                "DateAndTime", "MDC Message", "Status", "Flight Phase", "Type",
                "Intermittent", "Equation ID", "Source", "Diagnostic Data",
                "Data Used to Determine Msg", "ID", "Flight", "airline_id", "aircraftno"]
-
+    print(sql)
     try:
         conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
                               user='mhirj-admin', password='KaranCool123')
@@ -134,7 +215,7 @@ def connect_database_MDCdata(ata, excl_eqid, airline_operator, include_current_m
     except pyodbc.Error as err:
         print("Couldn't connect to Server")
         print("Error message:- " + str(err))
-
+"""
 def connect_database_MDCdata2(ata, from_dt, to_dt, equation_id, bcode):
     global MDCdataDF
     sql = "SELECT top 1000 * FROM Airline_MDC_Data WHERE ATA_Main in '" + ata + "' AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "' AND Equation_ID not in '" + bcode + "' ";
@@ -153,7 +234,7 @@ def connect_database_MDCdata2(ata, from_dt, to_dt, equation_id, bcode):
     except pyodbc.Error as err:
         print("Couldn't connect to Server")
         print("Error message:- " + str(err))
-
+"""
 def connect_database_MDCmessagesInputs():
     global MDCMessagesDF
     sql = "SELECT * FROM MDCMessagesInputs"
@@ -183,11 +264,11 @@ def connect_database_TopMessagesSheet():
 
 @app.post("/MDCRawData/{ATAMain_list}/{exclude_EqID_list}/{airline_operator}/{include_current_message}/{fromDate}/{toDate}")
 async def get_MDCRawData(ATAMain_list:str, exclude_EqID_list:str, airline_operator:str, include_current_message:int, fromDate: str , toDate: str):
-    #print(ATAMain_list)
-    ATAMain_list_new = convert_array_to_tuple(ATAMain_list)
-    exclude_EqID_list_new = convert_array_to_tuple(exclude_EqID_list)
 
     c = connect_database_MDCdata(ATAMain_list, exclude_EqID_list, airline_operator, include_current_message, fromDate, toDate)
+    #print(c['DateAndTime'].astype('datetime64[s]'))
+    #c['DateAndTime'] = c['DateAndTime'].astype('datetime64[s]')
+    c['DateAndTime'] = c['DateAndTime'].str.strip(':00.0000000')
     MDCdataDF_json = c.to_json(orient='records')
     return MDCdataDF_json
 #    return jsonify(MDCdataDF_json1)
