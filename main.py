@@ -1382,6 +1382,7 @@ async def generateFlagReport(analysisType: str, occurences: int, legs: int, inte
 
 
 # Plots
+## Chart 1
 def connect_database_for_chart1(n, aircraft_no, from_dt, to_dt):
     sql = "SELECT TOP "+str(n)+" Count(MDCMessagesInputs.Message), Airline_MDC_Data. Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA FROM Airline_MDC_Data INNER JOIN MDCMessagesInputs ON Airline_MDC_Data.ATA = MDCMessagesInputs.ATA WHERE Airline_MDC_Data.aircraftno = "+str(aircraft_no)+" AND Airline_MDC_Data.DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Airline_MDC_Data.Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA ORDER BY Count(MDCMessagesInputs.Message) DESC"
 
@@ -1403,7 +1404,7 @@ async def get_ChartOneData(top_n:int, aircraftNo:int, fromDate: str , toDate: st
     chart1_sql_df_json = chart1_sql_df.to_json(orient='records')
     return chart1_sql_df_json
 
-
+## Chart 2
 def connect_database_for_chart2(n, ata, from_dt, to_dt):
     if len(ata) == 2:
         sql = "SELECT TOP "+str(n)+" COUNT(ATA_Main), aircraft FROM Airline_MDC_Data where ATA_Main='"+ata+"' AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY ATA_Main, Aircraft ORDER BY COUNT(ATA_Main) DESC"
@@ -1425,3 +1426,51 @@ async def get_ChartwoData(top_values:int, ata:str, fromDate: str , toDate: str):
     chart2_sql_df = connect_database_for_chart2(top_values, ata, fromDate, toDate)
     chart2_sql_df_json = chart2_sql_df.to_json(orient='records')
     return chart2_sql_df_json
+
+
+## Chart 3
+def connect_database_for_chart3(aircraft_no, equation_id, is_flight_phase_enabled, from_dt, to_dt):
+    if is_flight_phase_enabled == 0: # Flight phase is NOT enabled
+        sql = "SELECT COUNT(*) AS OccurencesPerDay, cast(DateAndTime as date) AS Dates from Airline_MDC_Data WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NOT NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY cast(DateAndTime as date)"
+    elif is_flight_phase_enabled == 1:
+        sql = "SELECT COUNT(*) AS OccurencesPerDay, cast(DateAndTime as date) AS Dates from Airline_MDC_Data WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY cast(DateAndTime as date)"
+
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        chart3_sql_df = pd.read_sql(sql, conn)
+        # MDCdataDF.columns = column_names
+        return chart3_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+@app.post("/chart_three/{aircraft_no}/{equation_id}/{is_flight_phase_enabled}/{fromDate}/{toDate}")
+async def get_CharThreeData(aircraft_no:int, equation_id:str, is_flight_phase_enabled:int, fromDate: str , toDate: str):
+    chart3_sql_df = connect_database_for_chart3(aircraft_no, equation_id, is_flight_phase_enabled, fromDate, toDate)
+    chart3_sql_df_json = chart3_sql_df.to_json(orient='records')
+    return chart3_sql_df_json
+
+
+## Chart 5
+def connect_database_for_chart5(aircraft_no, equation_id, is_flight_phase_enabled, from_dt, to_dt):
+    if is_flight_phase_enabled == 0: # Flight phase is NOT enabled
+        sql = "SELECT COUNT(Intermittent) AS OccurencesOfIntermittent, Flight_Leg_No FROM Airline_MDC_Data  WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NOT NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Flight_Leg_No"
+    elif is_flight_phase_enabled == 1:
+        sql = "SELECT COUNT(Intermittent) AS OccurencesOfIntermittent, Flight_Leg_No FROM Airline_MDC_Data  WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Flight_Leg_No"
+
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        chart5_sql_df = pd.read_sql(sql, conn)
+        # MDCdataDF.columns = column_names
+        return chart5_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+@app.post("/chart_five/{aircraft_no}/{equation_id}/{is_flight_phase_enabled}/{fromDate}/{toDate}")
+async def get_CharFiveData(aircraft_no:int, equation_id:str, is_flight_phase_enabled:int, fromDate: str , toDate: str):
+    chart5_sql_df = connect_database_for_chart5(aircraft_no, equation_id, is_flight_phase_enabled, fromDate, toDate)
+    chart5_sql_df_json = chart5_sql_df.to_json(orient='records')
+    return chart5_sql_df_json
