@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import RawDataTable from './RawDataTable';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -7,7 +7,6 @@ import DatePicker from '../../GenerateReport/DatePicker';
 import {AirlineOperatorSelector,ATAMainSelector,MessagesSelector,EqIDSelector} from '../../GenerateReport/Selectors';
 //Buttons Imports
 import Button from '@material-ui/core/Button';
-import { useHistory } from "react-router-dom";
 //Axios Imports 
 import axios from 'axios';
 
@@ -81,7 +80,7 @@ const handleAirlineChange = (Airline) => {
 };
 
 const handleATAChange = (ATA) => {
-  setATAMain("('"+ ATA.join("','") +"')");
+  setATAMain(ATA);
 };
 
 const handleMessagesChange = (messages) => {
@@ -89,8 +88,9 @@ const handleMessagesChange = (messages) => {
 };
 
 const handleEqIDChange = (eqIDList) => {
-  setEqID("('"+ eqIDList.join("','") +"')");
+  setEqID(eqIDList);
 };
+
 // ----- States and handle Functions for Generate Report  ----- 
 
 const [rawDataConditions, setRawDataConditions] = React.useState(
@@ -105,8 +105,6 @@ const [rawDataConditions, setRawDataConditions] = React.useState(
  );
 const [rawData, setRawData] = React.useState('');
 const [isValid, setIsValid] = React.useState(false);
-
-const history = useHistory();
 
 const handleGenerateReport = (event) => {
 
@@ -134,9 +132,10 @@ const handleGenerateReport = (event) => {
       }
     }
     setIsValid(flag);
+}
 
-  if (flag === true) {  
-    console.log(rawDataConditions);
+useEffect(()=>{
+  if (isValid === true) {  
     ///MDCRawData/{ATAMain_list}/{exclude_EqID_list}/{fromDate}/{toDate}"
     //http://localhost:8000/MDCRawData/('32','22')/('B1-007553','B1-246748')/skw/0/2020-11-05/2020-11-12
     
@@ -153,7 +152,7 @@ const handleGenerateReport = (event) => {
       console.error(err);
     }
   }
-} 
+},[rawDataConditions])
 
   return (
     <div className={classes.root}>   
@@ -202,6 +201,7 @@ const handleGenerateReport = (event) => {
      </form>
      <RawDataTable
        data = {rawData}
+       rawDataConditions = {rawDataConditions}
      />
     </div> 
   );

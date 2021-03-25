@@ -3,12 +3,6 @@ import MUIDataTable from "mui-datatables";
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-//Buttons Imports
-import Button from '@material-ui/core/Button';
-import { useHistory } from "react-router-dom";
-//Axios Imports 
-import axios from 'axios';
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,11 +23,10 @@ const HistoryReport = (props) => {
   const [ACSNList, setACSNList] = useState([]);
   const [eqList, setEqList] = useState([]);
   const [rowsSelectedState, setRowsSelected] = useState([]);
-  const [flagConditions,setFlagConditions] = useState('');
-  const [flagData,setFlagData] = useState('');
 
   const HandleMultipleRowSelect = (rowsSelectedData, allRows, rowsSelected) => {
     //Data index to get the row no matter the sorting or filtering;
+    //console.log(rowsSelectedData,allRows,rowsSelected);
     setRowsSelected(rowsSelected);
     let FlagACArray = [];
     let FlagB1Array = [];
@@ -44,64 +37,8 @@ const HistoryReport = (props) => {
     }));
     setACSNList(FlagACArray);
     setEqList(FlagB1Array);
+    props.HandleMultipleRowSelectReport(FlagACArray,FlagB1Array);
   };
-
-// ----- States and handle Functions for Buttons -----
-const history = useHistory();
-  const handleGenerateFlagReport = (event) => {
-    setFlagConditions(
-      {
-        analysis: props.reportConditions.analysis,
-        occurences: props.reportConditions.occurences,
-        legs: props.reportConditions.legs,
-        HistExEqID: props.reportConditions.EqID,
-        intermittent: props.reportConditions.intermittent,
-        days: props.reportConditions.days,
-        operator: props.reportConditions.airline,
-        HistAta: props.reportConditions.ATAMain,
-        messages: props.reportConditions.messagesChoice,
-        fromDate: props.reportConditions.fromDate,
-        toDate: props.reportConditions.toDate,
-        FlagEqID: "('"+ eqList.join("','") +"')",
-        FlagACSN:"('"+ ACSNList.join("','") +"')"
-      },
-    );
-    let flag = true;
-    Object.values(flagConditions).map(item => {
-      if (item === ""){
-        flag = false;
-      }
-      return flag;
-    });
-  
-    if (flag === true) {  
-      console.log(flagConditions);
-      ///MDCRawData/{ATAMain_list}/{exclude_EqID_list}/{fromDate}/{toDate}"
-      //http://localhost:8000/MDCRawData/('32','22')/('B1-007553','B1-246748')/2020-11-05/2020-11-12
-      
-      const path = '';
-      /*const path = 'http://localhost:8000/MDCRawData/' + rawDataConditions.ata + '/' + rawDataConditions.eqID + '/' + rawDataConditions.operator + 
-      '/' + rawDataConditions.ata + '/' + rawDataConditions.messages + '/' + rawDataConditions.fromDate + '/' + rawDataConditions.toDate;
-      */
-
-      try{
-        axios.post(path).then(function (res) {
-          // console.log(res);
-          var data = JSON.parse(res.data);
-          setFlagData(data);
-        });
-      } catch (err) {
-        console.error(err);
-      }
-    }
-      history.push({
-        pathname: '/flag',
-        state: {
-          flagConditions: flagConditions,
-          flagData: flagData
-        }
-      });
-    };
 
   const columns = [
     {
@@ -286,9 +223,7 @@ const history = useHistory();
     ];
 
     let data = [];
-    if (props.data.map != null || props.data.map!= undefined ){
-      props.data.map((item => {
-        //console.log(item["AC SN"]); 
+      props?.data?.map((item => {
         data.push(
           {
             ACSN: item["AC SN"], 
@@ -314,7 +249,6 @@ const history = useHistory();
         return data;
       }
       ));
-    }
 
     const options = {
       selectableRows: 'multiple',
@@ -326,11 +260,8 @@ const history = useHistory();
       responsive: "standard",
       fixedHeader: true,
       fixedSelectColumn: true,
-      // rowHover: true,
-      //tableBodyMaxHeight: '700px',
-      //enableNestedDataAccess: true,
       downloadOptions: {
-        filename: 'MdcRawData.csv',
+        filename: 'History Report from ' + props.reportConditions.fromDate + ' to ' + props.reportConditions.toDate + '.csv',
         separator: ',',
       },
       draggableColumns: {
@@ -338,16 +269,9 @@ const history = useHistory();
         transitionTime: 300,
       },
       elevation: 4,
-      rowsPerPage: 25,
-      rowsPerPageOptions: [25,50],
+      rowsPerPage: 20,
+      rowsPerPageOptions: [20,50],
       selectToolbarPlacement:"none",
-      // setFilterChipProps: (colIndex, colName, data) => {
-      //   return {
-      //     color: 'primary',
-      //     variant: 'outlined',
-      //     className: 'testClass123',
-      //   };
-      // }
     };
 
     const theme = createMuiTheme({
@@ -359,15 +283,6 @@ const classes = useStyles();
   return (
     <div className={classes.root}>
       <Grid container spacing={0}>
-        <Grid item xs={10}></Grid>
-        <Grid item xs={2}>
-        <Button 
-          variant="contained" 
-          onClick = {()=>handleGenerateFlagReport()}
-          className={classes.button}>
-            Generate Flag Report
-        </Button>
-        </Grid>
         <Grid item xs={12}>
             <MuiThemeProvider theme={theme}>
               <MUIDataTable
