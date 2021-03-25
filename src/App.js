@@ -16,6 +16,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InfoSharpIcon from '@material-ui/icons/InfoSharp';
+import EqualizerSharpIcon from '@material-ui/icons/EqualizerSharp';
+import ShowChartSharpIcon from '@material-ui/icons/ShowChartSharp';
 import Button from '@material-ui/core/Button';
 import TableChartSharpIcon from '@material-ui/icons/TableChartSharp';
 import AssessmentSharpIcon from '@material-ui/icons/AssessmentSharp';
@@ -32,53 +34,57 @@ import {
   Link
 } from "react-router-dom";
 import Home from './Components/Home';
-import MDC from './Components/MDC';
-import PM from './Components/PM';
+// import MDC from './Components/MDC';
+// import PM from './Components/PM';
 import Corr from './Components/Corr';
-import Graphs from './Components/Graphs';
+import Chart1 from './Components/Chart1';
+import Chart2 from './Components/Chart2';
+import Chart3 from './Components/Chart3';
+import Chart4 from './Components/Chart4';
+import Chart5 from './Components/Chart5';
 import Analysis from './Components/MdcMessages/GenerateReport/Analysis';
 import Report from './Components/MdcMessages/Reports/Report';
 import FlagReport from './Components/MdcMessages/Reports/FlagReport/FlagReport';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+// import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import TimelineSharpIcon from '@material-ui/icons/TimelineSharp';
 import Rawdata from './Components/MdcMessages/Reports/Rawdata/RawMdcMessages';
 import TrendingUpSharpIcon from '@material-ui/icons/TrendingUpSharp';
 
 const drawerWidth = 300;
 
-const theme = createMuiTheme({
-    palette: {
-      primary: {
-        main: "#044269",
-        light: "#416d97",
-        dark: "#001c3e",
-      },
-      secondary: {
-        main: "#c5d3e0",
-        light: "#d8e4f0",
-      },
-      default: {
-        light: "#f3f2f1",
-        main: "#e0e0e0",
-        dark: "#92A0AD",
-      },
-      success: {
-        main: "#044269",
-      },
-      text: {
-        primary: "#272727",
-        secondary: "#757575",
-        title1: "#044269",
-        title2: "#2c3942",
-      },
-      background: {
-        tabContent: "#f3f2f1",
-      },
-      typography: {
-      useNextVariants: true,
-    },
-  }
-});
+// const theme = createMuiTheme({
+//     palette: {
+//       primary: {
+//         main: "#044269",
+//         light: "#416d97",
+//         dark: "#001c3e",
+//       },
+//       secondary: {
+//         main: "#c5d3e0",
+//         light: "#d8e4f0",
+//       },
+//       default: {
+//         light: "#f3f2f1",
+//         main: "#e0e0e0",
+//         dark: "#92A0AD",
+//       },
+//       success: {
+//         main: "#044269",
+//       },
+//       text: {
+//         primary: "#272727",
+//         secondary: "#757575",
+//         title1: "#044269",
+//         title2: "#2c3942",
+//       },
+//       background: {
+//         tabContent: "#f3f2f1",
+//       },
+//       typography: {
+//       useNextVariants: true,
+//     },
+//   }
+// });
 
 
 const useStyles = makeStyles((theme) => ({
@@ -179,6 +185,11 @@ const useStyles = makeStyles((theme) => ({
   nested: {
     paddingLeft: theme.spacing(3),
   },
+  nested_1: {
+  
+      paddingLeft: theme.spacing(4),
+    
+  },
 }));
 
 
@@ -189,6 +200,7 @@ export default function MiniDrawer() {
   const [open, setOpen] = React.useState(false);
   const [page, setPage] = React.useState("main");
   const [openMDC, setOpenMDC] = React.useState(false);
+  const [openGraphs, setOpenGraphs] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -203,6 +215,9 @@ export default function MiniDrawer() {
   };
   const handleClick = () => {
     setOpenMDC(!openMDC);
+  };
+  const handleGraphsClick = () => {
+    setOpenGraphs(!openGraphs);
   };
   return (
 
@@ -279,41 +294,104 @@ export default function MiniDrawer() {
 
 
             <Collapse in={openMDC} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-            <Link to="/rawdata" style={{ textDecoration: 'none'}}> 
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <TocSharpIcon style={{ color:"#001c3e"}} />
-                </ListItemIcon>
-                <ListItemText primary="Raw Data"  style={{color:"#001c3e"}}/>
-              </ListItem>
-              </Link>
-            </List>
-
-            <List component="div" disablePadding>
-            <Link to="/graphs" style={{ textDecoration: 'none'}}>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <TimelineSharpIcon style={{ color:"#001c3e"}} />
-                </ListItemIcon>
-                <ListItemText primary="Graphs" style={{color:"#001c3e"}}/>
-              </ListItem>
-            </Link>
-            </List>
-
-
+            
             <List component="div" disablePadding>
             <Link to="/analysis" style={{ textDecoration: 'none'}}>
               <ListItem button className={classes.nested}>
                 <ListItemIcon>
                   <TrendingUpSharpIcon style={{ color:"#001c3e"}} />
                 </ListItemIcon>
-                <ListItemText primary="Analysis" style={{color:"#001c3e"}}/>
+                <ListItemText primary="ANALYSIS" style={{color:"#001c3e"}}/>
               </ListItem>
               </Link>
             </List>
+            
+
+            <List component="div" disablePadding>
+            
+              <ListItem button className={classes.nested} button onClick={handleGraphsClick}>
+                <ListItemIcon>
+                  <TimelineSharpIcon style={{ color:"#001c3e"}} />
+                </ListItemIcon>
+                <Button color="#001c3e" style={{fontSize: "16px"}}>
+                <typography>Graphs </typography>
+                {openGraphs ? <ExpandLess /> : <ExpandMore />}
+                </Button>
+              </ListItem>
+
+              <Collapse in={openGraphs} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      <Link to="/Chart1" style={{ textDecoration: 'none' }}>
+                        <ListItem button className={classes.nested_1}>
+                          <ListItemIcon>
+                            <EqualizerSharpIcon style={{ color: "#001c3e" }} />
+                          </ListItemIcon>
+                          <ListItemText primary="Message Occurence for AC" style={{ color: "#001c3e" }} />
+                        </ListItem>
+                      </Link>
+                    </List>
+
+                    <List component="div" disablePadding>
+                      <Link to="/Chart2" style={{ textDecoration: 'none' }}>
+                        <ListItem button className={classes.nested_1}>
+                          <ListItemIcon>
+                            <EqualizerSharpIcon style={{ color: "#001c3e" }} />
+                          </ListItemIcon>
+                          <ListItemText primary="Top AC by ATA" style={{ color: "#001c3e" }} />
+                        </ListItem>
+                      </Link>
+                    </List>
+
+                    <List component="div" disablePadding>
+                      <Link to="/Chart3" style={{ textDecoration: 'none' }}>
+                        <ListItem button className={classes.nested_1}>
+                          <ListItemIcon>
+                            <ShowChartSharpIcon style={{ color: "#001c3e" }} />
+                          </ListItemIcon>
+                          <ListItemText primary="Message Trends for AC" style={{ color: "#001c3e" }} />
+                        </ListItem>
+                      </Link>
+                    </List>
+
+                    <List component="div" disablePadding>
+                      <Link to="/Chart4" style={{ textDecoration: 'none' }}>
+                        <ListItem button className={classes.nested_1}>
+                          <ListItemIcon>
+                            <ShowChartSharpIcon style={{ color: "#001c3e" }} />
+                          </ListItemIcon>
+                          <ListItemText primary="Top ATA in Reports" style={{ color: "#001c3e" }} />
+                        </ListItem>
+                      </Link>
+                    </List>
+
+                    <List component="div" disablePadding>
+                      <Link to="/Chart5" style={{ textDecoration: 'none' }}>
+                        <ListItem button className={classes.nested_1}>
+                          <ListItemIcon>
+                          <ShowChartSharpIcon style={{ color: "#001c3e" }} />
+                          </ListItemIcon>
+                          <ListItemText primary="Intermittence Trend for AC" style={{ color: "#001c3e" }} />
+                        </ListItem>
+                      </Link>
+                    </List>
+              </Collapse>
+            </List>
+           
+           
+            <List component="div" disablePadding>
+            <Link to="/rawdata" style={{ textDecoration: 'none'}}> 
+                <ListItem button className={classes.nested}>
+                <ListItemIcon>
+                  <TocSharpIcon style={{ color:"#001c3e"}} />
+                </ListItemIcon>
+                <ListItemText primary="RAW DATA"  style={{color:"#001c3e"}}/>
+              </ListItem>
+              </Link>
+            </List>
+
           </Collapse>
 
+          
             
             
           
@@ -372,9 +450,30 @@ export default function MiniDrawer() {
           <Route path="/rawdata">
             <Rawdata />
           </Route>
-          <Route path="/graphs">
+          {/* <Route path="/graphs">
             <Graphs />
+          </Route> */}
+
+          <Route path="/Chart1">
+            <Chart1 />
           </Route>
+
+          <Route path="/Chart2">
+            <Chart2 />
+          </Route>
+
+          <Route path="/Chart3">
+            <Chart3 />
+          </Route>
+
+          <Route path="/Chart4">
+            <Chart4 />
+          </Route>
+
+          <Route path="/Chart5">
+            <Chart5 />
+          </Route>
+
           <Route path="/analysis">
             <Analysis />
           </Route>
