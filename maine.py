@@ -960,7 +960,9 @@ def GetDates(Flagreport, DatesDF, Listoftuples, maxormin):
             List.append(DatesfoundinMDCdata.max().date())
 
     return pd.Series(data=List)
+from typing import Optional
 
+# for reference -> http://localhost:8000/GenerateReport/history/2/2/2/8/('32','22')/('B1-007553', 'B1-246748')/skw/1/2020-11-11/2020-11-12/('10222','B1-006989'), ('10222','B1-007028'), ('10145','B1-007008')
 #for Daily Report: value of consecutiveDays = 0 in URL -> for reference!!       ('32','22')/('B1-007553', 'B1-246748')/skw/1/2020-11-11/2020-11-12
 @app.post("/GenerateReport/{analysisType}/{occurences}/{legs}/{intermittent}/{consecutiveDays}/{ata}/{exclude_EqID}/{airline_operator}/{include_current_message}/{fromDate}/{toDate}/{list_of_tuples_acsn_bcode}")
 async def generateFlagReport(analysisType: str, occurences: int, legs: int, intermittent: int, consecutiveDays: int, ata: str, exclude_EqID:str, airline_operator: str, include_current_message: int, fromDate: str , toDate: str, list_of_tuples_acsn_bcode):
@@ -1022,13 +1024,21 @@ async def generateFlagReport(analysisType: str, occurences: int, legs: int, inte
     #AircraftSN = acsn
     #Bcode = bcode
     newreport = True
-    ListofTupleofSNBcode = list_of_tuples_acsn_bcode
-
-    """print(list_of_tuples_acsn_bcode)
-    for each_pair in list_of_tuples_acsn_bcode:
-        print(each_pair)
-        ListofTupleofSNBcode.append(each_pair)"""
+    print(type(list_of_tuples_acsn_bcode))
+    #ListofTupleofSNBcode = list_of_tuples_acsn_bcode
+    ListofTupleofSNBcode = []
+    list_to_convert = (list_of_tuples_acsn_bcode).split(', ')
+    print(list_to_convert)
+    new_list = list(map(eval, list_to_convert))
+    print(new_list)
+    for each in new_list:
+        print(each)
+        ListofTupleofSNBcode.append(each)
     print(ListofTupleofSNBcode)
+    ty = isinstance(ListofTupleofSNBcode, list)
+    print(ty)
+    #print(ListofTupleofSNBcode)
+
     if (analysisType.upper() == "DAILY"):
 
         # function to separate the chunks of data and convert it into a numpy array
