@@ -1816,7 +1816,19 @@ async def get_CharFiveData(aircraft_no:int, equation_id:str, is_flight_phase_ena
 #### Corelation Stored Proc Call
 def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
 
-    sql = "EXEC corelation '"+from_dt+"','"+to_dt+"','"+equation_id+"','"+str(ata)+"'"
+    equation_id = str(tuple(equation_id.replace(")","").replace("(","").replace("'","").split(",")))
+    ata = str(tuple(ata.replace(")","").replace("(","").replace("'","").split(",")))
+    sql =''
+    sql += "SELECT distinct p_id ,Operator ,Model ,Type ,Serial_No ,N_No ,Date										"
+    sql += "      ,[Failure Flag] ,[Maint Trans] ,[Maintenance Cancellations] ,[Maintenance Delays] ,Inspection             "
+    sql += "      ,CampType ,MRB ,Discrepancy ,[Corrective Action] ,[AC Total Hours] ,[AC Total Cycles]                   "
+    sql += "      ,[Squawk Source] ,ATA ,Station ,ATA_SUB ,ATA_Main                                                   "
+    sql += "  FROM dbo.sample_corelation                                                                            "
+    sql += "WHERE CONVERT(date,Date) between '" + from_dt + "'  AND '" + to_dt + "'"                                              
+    if equation_id:                                                                                              
+        sql += "	AND EQ_ID NOT IN " + equation_id 
+    if 	ata:                                                                                      
+        sql += "	AND mdc_ata_Main IN " +  ata                                                           
 
     try:
         conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
