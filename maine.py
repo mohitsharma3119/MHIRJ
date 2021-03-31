@@ -1872,3 +1872,23 @@ async def get_CorelationData(fromDate: str , toDate: str, equation_id:str, ata:i
     corelation_df_json = corelation_df.to_json(orient='records')
     return corelation_df_json
 
+def connect_database_for_eqId(equation_id):
+    sql = "SELECT  Airline_MDC_Data.Equation_ID FROM Airline_MDC_Data"
+
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        report_eqId_sql_df = pd.read_sql(sql, conn)
+        #MDCdataDF.columns = column_names
+        return report_eqId_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+
+
+@app.post("/report/{equation_id}")
+async def get_eqIData(Equation_ID:str):
+    report_eqId_sql_df = connect_database_for_eqId(Equation_ID)
+    report_eqId_sql_df_json = report_eqId_sql_df.to_json(orient='records')
+    return report_eqId_sql_df_json
