@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -7,6 +7,7 @@ import Select from '@material-ui/core/Select';
 //Multiple select filters
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -28,8 +29,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AirlineList = ['SKW'];
-const ATAMainList = ['ALL' , '21','22','23','24','26','27','28','30','31','32','33','34','36','38','45','49','71','78'];
-const EqList = ['NONE','B1-007553','B1-246748','B1-007061','B1-006952','B1-113037','B1-005970'];
 const MessagesList = ['Include', 'Exclude'];
 
 export const AirlineOperatorSelector = (props) => {
@@ -63,6 +62,23 @@ export const AirlineOperatorSelector = (props) => {
 export const ATAMainSelector = (props) => {
   const classes = useStyles();
   const [ATAMain, setATAMain] = React.useState([]);
+  const [ATAMainList,setATAMainList] = useState([]);
+  useEffect(() => {
+    const path = 'http://localhost:8000/GenerateReport/ata_main/ALL'
+
+    try{
+      axios.post(path).then(function (res) {
+        var data = JSON.parse(res.data);
+        let ATAArray = ['ALL'];
+        Object.values(data).map((item=>{
+          ATAArray.push(item.ATA_Main.toString());
+        }))
+        setATAMainList(ATAArray);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+},[]);
 
   const handleATAChange = (event, values) => {
     setATAMain(values);
@@ -98,6 +114,23 @@ export const ATAMainSelector = (props) => {
 export const EqIDSelector = (props) => {
   const classes = useStyles();
   const [EqID, setEqID] = React.useState([]);
+  const [EqList,setEqIDList] = useState([]);
+  useEffect(() => {
+    const path = 'http://localhost:8000/GenerateReport/equation_id/ALL'
+
+    try{
+      axios.post(path).then(function (res) {
+        var data = JSON.parse(res.data);
+        let EQArray = ['NONE'];
+        Object.values(data).map((item=>{
+          EQArray.push(item.Equation_ID.toString());
+        }))
+        setEqIDList(EQArray);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+},[]);
 
   const handleEqIDChange = (event, values) => {
     setEqID(values);
