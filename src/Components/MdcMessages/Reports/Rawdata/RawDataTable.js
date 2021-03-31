@@ -252,8 +252,6 @@ const RawDataTable = (props) => {
             data: item["Data Used to Determine Msg"],  
             id:item["ID"],
             flightNumber: item["Flight"],
-            // airlineID: item["airline_id"],
-            // aircraftno: item["aircraftno"],
           }
         );
         return data;

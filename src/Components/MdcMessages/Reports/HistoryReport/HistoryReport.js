@@ -20,24 +20,21 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const HistoryReport = (props) => {
-  const [ACSNList, setACSNList] = useState([]);
-  const [eqList, setEqList] = useState([]);
+  const [flagList, setFlagList] = useState();
   const [rowsSelectedState, setRowsSelected] = useState([]);
 
   const HandleMultipleRowSelect = (rowsSelectedData, allRows, rowsSelected) => {
     //Data index to get the row no matter the sorting or filtering;
     //console.log(rowsSelectedData,allRows,rowsSelected);
     setRowsSelected(rowsSelected);
-    let FlagACArray = [];
-    let FlagB1Array = [];
+    let FlagArray = [];
     Object(rowsSelected).map((item => {
-      FlagACArray.push(data[item].ACSN);
-      FlagB1Array.push(data[item].B1Equation);
-      return FlagACArray;
+      FlagArray.push("('"+ data[item].ACSN +"','"+ data[item].B1Equation +"')");
+      return FlagArray;
     }));
-    setACSNList(FlagACArray);
-    setEqList(FlagB1Array);
-    props.HandleMultipleRowSelectReport(FlagACArray,FlagB1Array);
+    let flagList =  FlagArray.join(", ");
+    setFlagList(flagList);
+    props.HandleMultipleRowSelectReport(flagList);
   };
 
   const columns = [

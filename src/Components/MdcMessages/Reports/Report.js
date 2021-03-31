@@ -42,12 +42,13 @@ const Report = (props) => {
   const [dailyReportData, setDailyReportData] = useState([]);
   const [historyReportData, setHistoryReportData] = useState([]);
   const [flagData, setFlagData] = useState('');
-  const [ACSNList, setACSNList] = useState([]);
-  const [eqList, setEqList] = useState([]);
+  const [flagList,setFlagList] = useState('');
+  //const [ACSNList, setACSNList] = useState([]);
+ // const [eqList, setEqList] = useState([]);
 
-  const HandleMultipleRowSelectReport = (FlagACArray,FlagB1Array) => {
-    setACSNList(FlagACArray);
-    setEqList(FlagB1Array);
+  const HandleMultipleRowSelectReport = (flagList) => {
+    console.log(flagList);
+    setFlagList(flagList);
   }
 
   const [dailyValue,setDailyValue] = useState(0);
@@ -101,28 +102,6 @@ const Report = (props) => {
       else if (props.reportConditions.analysis === "history"){
         setHistValue(1);
       }
-
-      if (report.analysis !== "both") {
-        /*http://localhost:8000/GenerateReport/history/2/2/2/3/('31','22','24','23')/('B1-007553','B1-005970')/skw/0/2020-11-18/2020-11-22*/
-
-        const path = 'http://localhost:8000/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
-        consecutiveDays + '/' + ata + '/' + eqid + '/'+ operator + '/' + messages + '/' + fromDate + '/' + toDate;
-
-        try{
-          axios.post(path).then(function (res) {
-            // console.log(res);
-            var data = JSON.parse(res.data);
-            if (report.analysis === "daily") {
-              setDailyReportData(data);
-            }
-            else if (report.analysis === "history") {
-              setHistoryReportData(data);
-            }
-          });
-        } catch (err) {
-          console.error(err);
-        }
-      }
     }
   }, [report]);
 
@@ -142,10 +121,7 @@ const Report = (props) => {
       messages: props.reportConditions.messages,
       fromDate: props.reportConditions.fromDate,
       toDate: props.reportConditions.toDate,
-      // FlagEqID: "('"+ eqList.join("','") +"')",
-      // FlagACSN:"('"+ ACSNList.join("','") +"')"
-      FlagEqID: eqList[0],
-      FlagACSN:ACSNList[0]
+      flagList: flagList,
     },
   );
   }
@@ -160,25 +136,18 @@ const Report = (props) => {
     if (flag === false) {  
       /*
       const path = 'http://localhost:8000/GenerateReport/{analysisType}/{occurences}/{legs}/{intermittent}/{consecutiveDays}/{ata}/
-      {exclude_EqID}/{airline_operator}/{include_current_message}/{fromDate}/{toDate}/{acsn}/{bcode}';
-      http://127.0.0.1:8000/GenerateReport/history/2/2/2/8/('32','22')/('B1-007553', 'B1-246748')/skw/1/2020-11-11/2020-11-12/15455/B1-006952
+      {exclude_EqID}/{airline_operator}/{include_current_message}/{fromDate}/{toDate}/{acsn,bcode}';
+      http://127.0.0.1:8000/GenerateReport/history/2/2/2/8/('32','22')/('B1-007553', 'B1-246748')/skw/1/2020-11-11/2020-11-12/('10214','B1-005815'), ('10214','B1-005831')
       */
       
-      const path = 'http://localhost:8000/GenerateReport/' + flagConditions.analysis + '/' + flagConditions.occurences + '/' + 
+      const flagPath = 'http://localhost:8000/GenerateReport/' + flagConditions.analysis + '/' + flagConditions.occurences + '/' + 
       flagConditions.legs + '/' + flagConditions.intermittent + '/' + flagConditions.days + '/' + flagConditions.HistAta + '/' + 
       flagConditions.HistExEqID + '/'+ flagConditions.operator + '/' + flagConditions.messages + '/' + flagConditions.fromDate + '/' + 
-      flagConditions.toDate + '/' + flagConditions.FlagACSN + '/' + flagConditions.FlagEqID;
-      
+      flagConditions.toDate + '/' + flagConditions.flagList;
+
       try{
-        axios.post(path).then(function (res) {
+        axios.post(flagPath).then(function (res) {
           var data = JSON.parse(res.data);
-          // history.push({
-          //   pathname: '/flag',
-          //   state: {
-          //     flagConditions: flagConditions,
-          //     flagData: data
-          //   }
-          // });
           setFlagData(data);
         });
       } catch (err) {
