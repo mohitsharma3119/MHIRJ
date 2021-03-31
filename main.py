@@ -1842,7 +1842,7 @@ def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
 
 # for reference -> http://localhost:8000/corelation/11-11-2020/11-12-2020/B1-008003/27
 @app.post("/corelation/{fromDate}/{toDate}/{equation_id}/{ata}")
-async def get_CorelationData(fromDate: str , toDate: str, equation_id:str, ata:int):
+async def get_CorelationData(fromDate: str , toDate: str, equation_id:str, ata:str):
     corelation_df = connect_database_for_corelation(fromDate, toDate, equation_id, ata)
     corelation_df_json = corelation_df.to_json(orient='records')
     return corelation_df_json
