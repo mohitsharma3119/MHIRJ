@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import {OccurencesInput,LegsInput,IntermittentInput,DaysInput} from './AnalysisInput';
@@ -156,55 +156,22 @@ const [reportConditions, setReportConditions] = useState(
   }
  );
 
-  // const history = useHistory();
-  // const [isValid, setIsValid] = useState(false);
-
   const handleGenerateReport = (event) => {
-
-      setReportConditions(
-        {
-          analysis: analysis,
-          occurences: occurences,
-          legs: legs,
-          eqID: EqID,
-          intermittent: intermittent,
-          days: days,
-          operator: airline,
-          ata: ATAMain,
-          messages: messagesChoice,
-          fromDate: dateFrom,
-          toDate: dateTo,
-        },
-      );
-
-    // let flag = false;
-    // for (const item in reportConditions) {
-    //   if (Object.hasOwnProperty.call(reportConditions, item)) {
-    //     const element = reportConditions[item];
-    //     if ( element !== false ) {
-    //       flag = true;
-    //     } else {
-    //       flag = false;
-    //       break;
-    //     }
-    //   }
-    // }
-    // Object.values(reportConditions).map(item => {
-    //   if (item === ""){
-    //     flag = false;
-    //   }
-    //   return flag;
-    // });
-    // setIsValid(flag);
-      // if (flag === true) {  
-      //   console.log(reportConditions);
-        //setReportRender(<Report reportConditions = {reportConditions}/>) 
-        // history.push({
-        // pathname: '/report',
-        // state: {reportConditions:reportConditions}
-      // });
-    //} 
-  };
+    setReportConditions(
+    {
+      analysis: analysis,
+      occurences: occurences,
+      legs: legs,
+      eqID: EqID,
+      intermittent: intermittent,
+      days: days,
+      operator: airline,
+      ata: ATAMain,
+      messages: messagesChoice,
+      fromDate: dateFrom,
+      toDate: dateTo,
+    });
+  }    
 
   return (
     <div>
@@ -232,12 +199,6 @@ const [reportConditions, setReportConditions] = useState(
                   color = 'default'
                   onChange={()=>handleAnalysisChange("history")} 
                   />} label="History" />
-                <FormControlLabel value="both" control={
-                  <Radio 
-                    size="medium"
-                    color='default'
-                    onChange={()=>handleAnalysisChange("both")} 
-                  />} label="Both" />
               </RadioGroup>
               </FormControl> 
             </div>           
@@ -287,7 +248,7 @@ const [reportConditions, setReportConditions] = useState(
             />   
             <Button 
               variant="contained" 
-              onClick = {()=>handleGenerateReport()}
+              onClick = {async()=>handleGenerateReport()}
               className={classes.button}>
                 Generate Report
             </Button>  

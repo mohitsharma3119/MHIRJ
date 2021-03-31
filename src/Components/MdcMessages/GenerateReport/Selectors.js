@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -7,6 +7,7 @@ import Select from '@material-ui/core/Select';
 //Multiple select filters
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -28,9 +29,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AirlineList = ['SKW'];
-const ATAMainList = ['All' , '21','22','23','24','26','27','28','30','31','32','33','34','36','38','45','49','71','78'];
-const ACSNList = ['AC10201','AC10242','AC15092'];
-const EqList = ['B1-007553','B1-246748','B1-007061','B1-006952','B1-113037','B1-005970'];
 const MessagesList = ['Include', 'Exclude'];
 
 export const AirlineOperatorSelector = (props) => {
@@ -64,32 +62,38 @@ export const AirlineOperatorSelector = (props) => {
 export const ATAMainSelector = (props) => {
   const classes = useStyles();
   const [ATAMain, setATAMain] = React.useState([]);
+  const [ATAMainList,setATAMainList] = useState([]);
+  useEffect(() => {
+    const path = 'http://localhost:8000/GenerateReport/ata_main/ALL'
+
+    try{
+      axios.post(path).then(function (res) {
+        var data = JSON.parse(res.data);
+        let ATAArray = ['ALL'];
+        Object.values(data).map((item=>{
+          ATAArray.push(item.ATA_Main.toString());
+        }))
+        setATAMainList(ATAArray);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+},[]);
 
   const handleATAChange = (event, values) => {
     setATAMain(values);
-    props.handleATAChange(values);
+    if(values.includes("ALL")){
+      props.handleATAChange("ALL");
+    }else{
+      let ataList =  "('"+ values.join("','") +"')";
+      props.handleATAChange(ataList);
+    }
   };
 
   return(
-    // <FormControl variant="outlined" className={classes.formControl}>
-    // <InputLabel id="demo-simple-select-outlined-label">ATA Main</InputLabel> 
-    //   <Select
-    //     labelId="demo-simple-select-outlined-label"
-    //     id="demo-simple-select-outlined"
-    //     value={ATAMain}
-    //     onChange={handleATAChange}
-    //     label="ATA Main"
-    //   >
-    //   <MenuItem value="none"> </MenuItem>
-    //   {ATAMainList.map( item => 
-    //     <MenuItem value={item}> {item} </MenuItem>
-    //   )};
-    //   </Select>
-    // </FormControl>
     <Autocomplete
     className={classes.autocomplete}
     multiple
-    //id="tags-outlined"
     options={ATAMainList}
     getOptionLabel={(item => item)}
     value = {ATAMain}
@@ -110,11 +114,33 @@ export const ATAMainSelector = (props) => {
 export const EqIDSelector = (props) => {
   const classes = useStyles();
   const [EqID, setEqID] = React.useState([]);
+  const [EqList,setEqIDList] = useState([]);
+  useEffect(() => {
+    const path = 'http://localhost:8000/GenerateReport/equation_id/ALL'
+
+    try{
+      axios.post(path).then(function (res) {
+        var data = JSON.parse(res.data);
+        let EQArray = ['NONE'];
+        Object.values(data).map((item=>{
+          EQArray.push(item.Equation_ID.toString());
+        }))
+        setEqIDList(EQArray);
+      });
+    } catch (err) {
+      console.error(err);
+    }
+},[]);
 
   const handleEqIDChange = (event, values) => {
     setEqID(values);
-    props.handleEqIDChange(values);
-    //console.log(values);
+    if(values.includes("ALL")){
+      props.handleEqIDChange("ALL");
+    }
+    else{
+      let eqIDLIST =  "('"+ values.join("','") +"')";
+      props.handleEqIDChange(eqIDLIST);
+    }
   };
 
   return(
@@ -122,7 +148,6 @@ export const EqIDSelector = (props) => {
     <Autocomplete
         className={classes.autocomplete}
         multiple
-        //id="tags-outlined"
         options={EqList}
         getOptionLabel={(item => item)}
         value = {EqID}
@@ -171,56 +196,6 @@ export const MessagesSelector = (props) => {
     </FormControl>
   );
 }
-
-export const ACSNSelector = (props) => {
-  const classes = useStyles();
-  
-  const [ACSN, setACSN] = React.useState([]);
-
-
-  const handleACSNChange = (event, values) => {
-    setACSN(values);
-    props.handleACSNChange(values);
-    //console.log(values);
-  };
-  //console.log(ACSN);
-
-  return(
-    // <FormControl variant="outlined" className={classes.formControl}>
-    //   <InputLabel id="demo-simple-select-outlined-label">ACSN</InputLabel>
-    //   <Select
-    //     labelId="demo-simple-select-outlined-label"
-    //     id="demo-simple-select-outlined"
-    //     value={ACSN}
-    //     onChange={handleACSNChange}
-    //     label="ACSN"
-    //   >
-    //   <MenuItem value="none"> </MenuItem>
-    //   {ACSNList.map( item => 
-    //     <MenuItem value={item}> {item} </MenuItem>
-    //   )};
-    //   </Select>
-    // </FormControl> 
-    <Autocomplete
-        className={classes.autocomplete}
-        multiple
-        id="tags-outlined"
-        options={ACSNList}
-        getOptionLabel={(item => item)}
-        value = {ACSN}
-        filterSelectedOptions
-        onChange = {handleACSNChange}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            variant="outlined"
-            label="ACSN"
-            placeholder="ACSN"
-          />
-        )}
-      />
-  );
-};
 
 const Selectors = (props) => {
 

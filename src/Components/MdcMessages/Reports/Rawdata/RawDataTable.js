@@ -252,8 +252,6 @@ const RawDataTable = (props) => {
             data: item["Data Used to Determine Msg"],  
             id:item["ID"],
             flightNumber: item["Flight"],
-            // airlineID: item["airline_id"],
-            // aircraftno: item["aircraftno"],
           }
         );
         return data;
@@ -267,11 +265,8 @@ const RawDataTable = (props) => {
       responsive: "standard",
       fixedHeader: true,
       fixedSelectColumn: true,
-      //rowHover: true,
-      //tableBodyMaxHeight: '700px',
-      //enableNestedDataAccess: true,
       downloadOptions: {
-        filename: 'MdcRawData.csv',
+        filename: 'MDC Raw Data from ' + props.rawDataConditions.fromDate + ' to ' + props.rawDataConditions.toDate + '.csv',
         separator: ',',
       },
       draggableColumns: {
@@ -279,16 +274,9 @@ const RawDataTable = (props) => {
         transitionTime: 300,
       },
       elevation: 4,
-      rowsPerPage: 50,
-      rowsPerPageOptions: [50, 100, 250, 500, 1000],
+      rowsPerPage: 20,
+      rowsPerPageOptions: [20,50],
       selectToolbarPlacement:"none",
-      setFilterChipProps: (colIndex, colName, data) => {
-        return {
-          color: 'primary',
-          variant: 'outlined',
-          className: 'testClass123',
-        };
-      }
     };
 
     const theme = createMuiTheme({

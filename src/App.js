@@ -44,6 +44,7 @@ import Chart4 from './Components/Chart4';
 import Chart5 from './Components/Chart5';
 import Analysis from './Components/MdcMessages/GenerateReport/Analysis';
 import Report from './Components/MdcMessages/Reports/Report';
+import Correlation from './Components/Correlation/Correlation';
 import FlagReport from './Components/MdcMessages/Reports/FlagReport/FlagReport';
 // import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import TimelineSharpIcon from '@material-ui/icons/TimelineSharp';
@@ -487,7 +488,7 @@ export default function MiniDrawer() {
             <PM />
           </Route> */}
           <Route path="/corr">
-            <Corr />
+            <Correlation />
           </Route>
         </Switch>  
       </main>

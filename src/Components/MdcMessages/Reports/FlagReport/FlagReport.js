@@ -16,8 +16,8 @@ const useStyles = makeStyles((theme) => ({
 
 const FlagReport = (props) => {
   const history = useHistory();
-  const [flagConditions, setFlagConditions] = useState(history.location.state.flagConditions);
-  const [flagData, setFlagData] = useState(history.location.state.flagData);
+  // const [flagConditions, setFlagConditions] = useState(history.location.state.flagConditions);
+  // const [flagData, setFlagData] = useState(history.location.state.flagData);
 
   const columns = [
     {
@@ -143,29 +143,27 @@ const FlagReport = (props) => {
 
     let data = [];
   
-    if (props.data.map != null || props.data.map!= undefined){
-      props.data.map((item => {
-        console.log(item["AC SN"]); 
+    // history.location.state.flagData?.map((item => {
+      props?.data?.map((item => {
         data.push(
           {
-            MSN: item[""], 
-            ATA: item[""], 
-            code: item[""], 
-            LRU: item[""],  
-            message: item[""],  
-            type: item[""],  
-            FDE: item[""],  
-            dateFrom: item[""],   
-            dateTo: item[""],   
-            action: item[""],  
-            input: item[""],  
-            iseRecAct: item[""],  
+            MSN: item["MSN"], 
+            ATA: item["ATA"], 
+            code: item["B1-code"], 
+            LRU: item["LRU"],  
+            message: item["Message"],  
+            type: item["Type"],  
+            FDE: item["Potential FDE"],  
+            dateFrom: item["Date From"],   
+            dateTo: item["Date To"],   
+            action: item["SKW action WIP"],  
+            input: item["ISE Input"],  
+            iseRecAct: item["ISE Rec Act"],  
           }
         );
         return data;
       }
       ));
-    }  
 
     const options = {
       filter: true,
@@ -173,11 +171,8 @@ const FlagReport = (props) => {
       responsive: "standard",
       fixedHeader: true,
       fixedSelectColumn: true,
-      //rowHover: true,
-      //tableBodyMaxHeight: '700px',
-      //enableNestedDataAccess: true,
       downloadOptions: {
-        filename: 'FlagReport.csv',
+        filename: 'Flag Report from ' + props.flagReportConditions.fromDate + ' to ' + props.flagReportConditions.toDate + '.csv',
         separator: ',',
       },
       draggableColumns: {
@@ -185,16 +180,9 @@ const FlagReport = (props) => {
         transitionTime: 300,
       },
       elevation: 4,
-      rowsPerPage: 50,
-      rowsPerPageOptions: [50, 100, 250, 500, 1000],
+      rowsPerPage: 25,
+      rowsPerPageOptions: [25,50],
       selectToolbarPlacement:"none",
-      setFilterChipProps: (colIndex, colName, data) => {
-        return {
-          color: 'primary',
-          variant: 'outlined',
-          className: 'testClass123',
-        };
-      }
     };
 
     const theme = createMuiTheme({

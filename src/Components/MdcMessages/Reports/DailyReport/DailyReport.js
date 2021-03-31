@@ -233,11 +233,8 @@ const DailyReport = (props) => {
       responsive: "standard",
       fixedHeader: true,
       fixedSelectColumn: true,
-      // rowHover: true,
-      //tableBodyMaxHeight: '700px',
-      //enableNestedDataAccess: true,
       downloadOptions: {
-        filename: 'MDCDailyReport.csv',
+        filename: 'Daily Report from ' + props.reportConditions.fromDate + ' to ' + props.reportConditions.toDate + '.csv',
         separator: ',',
       },
       draggableColumns: {
@@ -245,16 +242,9 @@ const DailyReport = (props) => {
         transitionTime: 300,
       },
       elevation: 4,
-      rowsPerPage: 25,
-      rowsPerPageOptions: [25, 50],
+      rowsPerPage: 20,
+      rowsPerPageOptions: [20, 50],
       selectToolbarPlacement:"none",
-      // setFilterChipProps: (colIndex, colName, data) => {
-      //   return {
-      //     color: 'primary',
-      //     variant: 'outlined',
-      //     className: 'testClass123',
-      //   };
-      // }
     };
 
     const theme = createMuiTheme({
