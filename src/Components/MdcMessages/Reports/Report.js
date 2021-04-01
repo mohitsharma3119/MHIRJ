@@ -102,6 +102,27 @@ const Report = (props) => {
       else if (props.reportConditions.analysis === "history"){
         setHistValue(1);
       }
+      if (report.analysis !== "both") {
+        /*http://localhost:8000/GenerateReport/history/2/2/2/3/('31','22','24','23')/('B1-007553','B1-005970')/skw/0/2020-11-18/2020-11-22*/
+
+        const path = 'http://localhost:8000/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
+        consecutiveDays + '/' + ata + '/' + eqid + '/'+ operator + '/' + messages + '/' + fromDate + '/' + toDate;
+
+        try{
+          axios.post(path).then(function (res) {
+            // console.log(res);
+            var data = JSON.parse(res.data);
+            if (report.analysis === "daily") {
+              setDailyReportData(data);
+            }
+            else if (report.analysis === "history") {
+              setHistoryReportData(data);
+            }
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      }
     }
   }, [report]);
 
