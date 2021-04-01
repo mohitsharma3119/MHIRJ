@@ -29,6 +29,8 @@ origins = [
     "http://localhost",
     "http://localhost:8000",
 ]
+""" Create a list of allowed origins ( as strings)
+"""
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -350,7 +352,7 @@ async def generateReport(analysisType: str, occurences: int, legs: int, intermit
             daytopass = str(DatesinData[i])
 
             # define array to analyze
-            DailyanalysisDF = separate_data(AnalysisDF, daytopass)
+            cDailyanalysisDF = separate_data(AnalysisDF, daytopass)
 
             ShapeDailyanalysisDF = DailyanalysisDF.shape  # tuple of the shape of the daily data (#rows, #columns)
             DailyanalysisArray = DailyanalysisDF.to_numpy()  # slicing the array to only include the daily data
@@ -1811,7 +1813,385 @@ async def get_CharFiveData(aircraft_no:int, equation_id:str, is_flight_phase_ena
     chart5_sql_df_json = chart5_sql_df.to_json(orient='records')
     return chart5_sql_df_json
 
+#Landing Page Chart: Scatter Plot
+import datetime
+import timedelta
 
+def connect_db_MDCdata_chartb(from_dt, to_dt):
+    sql = "SELECT * FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+
+    column_names = ["Aircraft", "Tail", "Flight Leg No",
+                    "ATA Main", "ATA Sub", "ATA", "ATA Description", "LRU",
+                    "DateAndTime", "MDC Message", "Status", "Flight Phase", "Type",
+                    "Intermittent", "Equation ID", "Source", "Diagnostic Data",
+                    "Data Used to Determine Msg", "ID", "Flight", "airline_id", "aircraftno"]
+    print(sql)
+    try:
+        conn = pyodbc.connect(driver='{​SQL Server}​', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        MDCdataDF_chartb = pd.read_sql(sql, conn)
+        MDCdataDF_chartb.columns = column_names
+        conn.close()
+        return MDCdataDF_chartb
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+def connect_database_MDCData_Filtered(date_entered):
+
+    date_entered_new = datetime.datetime.strptime(date_entered, '%m-%d-%Y')
+
+    backdate = date_entered_new - datetime.timedelta(days=1)
+    leading_date = date_entered_new - datetime.timedelta(days=8)
+    leading_date_formatted = datetime.datetime.strftime(leading_date, '%m-%d-%Y')
+    backdate_formatted = datetime.datetime.strftime(backdate, '%m-%d-%Y')
+
+    print(leading_date_formatted)
+    print(backdate_formatted)
+
+    sql = "SELECT * FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '" + backdate_formatted + "' AND '" + leading_date_formatted + "'"
+
+    try:
+        conn = pyodbc.connect(driver='{​SQL Server}​', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        # add column names from csv file into dataframe
+        MDCDataFiltered = pd.read_sql(sql, conn)
+        conn.close()
+        return MDCDataFiltered
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + err)
+
+
+def connect_database_PMData_Filtered(date_entered):
+    #global MXIDataDF
+
+    date_entered_new = datetime.datetime.strptime(date_entered, '%m-%d-%Y')
+
+    backdate = date_entered_new - datetime.timedelta(days=30)
+    leading_date = date_entered_new - datetime.timedelta(days=8)
+    leading_date_formatted = datetime.datetime.strftime(leading_date, '%m-%d-%Y')
+    backdate_formatted = datetime.datetime.strftime(backdate, '%m-%d-%Y')
+
+    print(leading_date_formatted)
+    print(backdate_formatted)
+
+    sql = "SELECT * FROM SKW_PM_NOV_2020_post_MHIRJ_filter WHERE SNAG_DATE BETWEEN '" + backdate_formatted + "' AND '" + leading_date_formatted + "'"
+
+    try:
+        conn = pyodbc.connect(driver='{​SQL Server}​', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        # add column names from csv file into dataframe
+        PMDataFiltered = pd.read_sql(sql, conn)
+        conn.close()
+        return PMDataFiltered
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + err)
+
+
+def connect_database_for_MDC_ScatterPlot(leading_date):
+    leading_date_n = datetime.datetime.strptime(leading_date, '%m-%d-%Y')
+
+    backdate = leading_date_n - datetime.timedelta(days = 7)
+    leading_date_formatted = datetime.datetime.strftime(leading_date_n, '%m-%d-%Y')
+    backdate_formatted = datetime.datetime.strftime(backdate, '%m-%d-%Y')
+
+    print(leading_date_formatted)
+    print(backdate_formatted)
+
+    sql = "SELECT COUNT(Airline_MDC_Data.MDC_Message) as '# of MDC Messages' FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '"+str(backdate_formatted)+"' AND '"+str(leading_date_formatted)+"' GROUP BY aircraftno"
+
+    try:
+        conn = pyodbc.connect(driver='{​SQL Server}​', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        MDC_ScatterPlot_sql_df = pd.read_sql(sql, conn)
+        conn.close()
+        return MDC_ScatterPlot_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+# for reference -> http://localhost:8000/Landing_Chart_MDC_Scatter/11-12-2020
+@app.post("/Landing_Chart_MDC_Scatter/{​leading_date}​")
+async def get_Chart_MDC_Scatter(leading_date: str):
+    MDC_ScatterPlot_sql_df = connect_database_for_MDC_ScatterPlot(leading_date)
+    MDC_ScatterPlot_sql_df_json = MDC_ScatterPlot_sql_df.to_json(orient='records')
+    return MDC_ScatterPlot_sql_df_json
+
+
+def connect_database_for_MDC_ScatterPlot_static():
+    """
+    leading_date_n = datetime.datetime.strptime(leading_date, '%m-%d-%Y')
+
+    backdate = leading_date_n - datetime.timedelta(days = 7)
+    leading_date_formatted = datetime.datetime.strftime(leading_date_n, '%m-%d-%Y')
+    backdate_formatted = datetime.datetime.strftime(backdate, '%m-%d-%Y')
+
+    print(leading_date_formatted)
+    print(backdate_formatted)
+    """
+
+    sql = "SELECT COUNT(Airline_MDC_Data.MDC_Message) as '# of MDC Messages' FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '11-5-2020' AND '11-12-2020' GROUP BY aircraftno"
+
+    try:
+        conn = pyodbc.connect(driver='{​SQL Server}​', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        MDC_ScatterPlot_sql_df = pd.read_sql(sql, conn)
+        conn.close()
+        return MDC_ScatterPlot_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+# for reference -> http://localhost:8000/Landing_Chart_MDC_Scatter
+@app.post("/Landing_Chart_MDC_Scatter")
+async def get_Chart_MDC_Scatter():
+    MDC_ScatterPlot_sql_df = connect_database_for_MDC_ScatterPlot_static()
+    MDC_ScatterPlot_sql_df_json = MDC_ScatterPlot_sql_df.to_json(orient='records')
+    return MDC_ScatterPlot_sql_df_json
+
+
+
+
+def connect_database_for_PM_ScatterPlot(leading_date):
+    leading_date_n = datetime.datetime.strptime(leading_date, '%m-%d-%Y')
+
+    backdate = leading_date_n - datetime.timedelta(days = 7)
+    leading_date_formatted = datetime.datetime.strftime(leading_date_n, '%m-%d-%Y')
+    backdate_formatted = datetime.datetime.strftime(backdate, '%m-%d-%Y')
+
+    print(leading_date_formatted)
+    print(backdate_formatted)
+
+    sql = "SELECT COUNT(CORRECTIVE_ACTION) as '# of MX Actions' FROM SKW_PM_NOV_2020_post_MHIRJ_filter WHERE SNAG_DATE BETWEEN '"+str(backdate_formatted)+"' AND '"+str(leading_date_formatted)+"' AND AC_MODEL = 'CRJ700' GROUP BY AC_SN"
+
+    try:
+        conn = pyodbc.connect(driver='{​SQL Server}​', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        PM_ScatterPlot_sql_df = pd.read_sql(sql, conn)
+        conn.close()
+        return PM_ScatterPlot_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+# for reference -> http://localhost:8000/Landing_Chart_PM_Scatter/11-12-2020
+@app.post("/Landing_Chart_PM_Scatter/{​leading_date}​")
+async def get_Chart_PM_Scatter(leading_date: str):
+    PM_ScatterPlot_sql_df = connect_database_for_PM_ScatterPlot(leading_date)
+    PM_ScatterPlot_sql_df_json = PM_ScatterPlot_sql_df.to_json(orient='records')
+    return PM_ScatterPlot_sql_df_json
+
+def connect_database_for_PM_ScatterPlot_static():
+    """
+    current_date = datetime.datetime.now()
+    leading_date_n = datetime.datetime.strptime(current_date, '%m-%d-%Y')
+
+    backdate = leading_date_n - datetime.timedelta(days = 7)
+    leading_date_formatted = datetime.datetime.strftime(leading_date_n, '%m-%d-%Y')
+    backdate_formatted = datetime.datetime.strftime(backdate, '%m-%d-%Y')
+
+    print(leading_date_formatted)
+    print(backdate_formatted)
+    """
+
+    sql = "SELECT COUNT(CORRECTIVE_ACTION) as '# of MX Actions' FROM SKW_PM_NOV_2020_post_MHIRJ_filter WHERE SNAG_DATE BETWEEN '11-5-2020' AND '11-12-2020' AND AC_MODEL = 'CRJ700' GROUP BY AC_SN"
+
+    try:
+        conn = pyodbc.connect(driver='{​SQL Server}​', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        PM_ScatterPlot_sql_df = pd.read_sql(sql, conn)
+        conn.close()
+        return PM_ScatterPlot_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+# for reference -> http://localhost:8000/Landing_Chart_PM_Scatter
+@app.post("/Landing_Chart_PM_Scatter")
+async def get_Chart_PM_Scatter_static():
+    PM_ScatterPlot_sql_df = connect_database_for_PM_ScatterPlot_static()
+    PM_ScatterPlot_sql_df_json = PM_ScatterPlot_sql_df.to_json(orient='records')
+    return PM_ScatterPlot_sql_df_json
+
+##### AVERAGE CAL
+#connect_database_PMData_Filtered
+@app.post("/Landing_Chart_AVG_MDC_PM_Scatter/{​date_entered}​")
+async def get_Chart_AVG_MDC_PM_Scatter(date_entered: str):
+    # MDC raw data
+    MDCdataDF = connect_database_MDCData_Filtered(date_entered)
+    MDCdataDF["Aircraft"] = MDCdataDF["Aircraft"].str.replace('AC', '')
+    MDCdataDF["DateAndTime"] = pd.to_datetime(MDCdataDF["DateAndTime"])
+
+    # PM data
+    MXIdataDF = connect_database_PMData_Filtered(date_entered)
+    MXIdataDF = MXIdataDF[MXIdataDF["AC_MODEL"] == "CRJ700"].reset_index()
+    MXIdataDF["SNAG_DATE"] = pd.to_datetime(MXIdataDF["SNAG_DATE"])
+
+    # how many days in the data. How many days in MDC and how many days in MXI - Raw Data not date dependent (since Avg)
+    NMDC = len(MDCdataDF["DateAndTime"].dt.date.unique())
+    LatestdayMDC = datetime.datetime.strptime(date_entered, '%m-%d-%Y').date()   #MDCdataDF["DateAndTime"].dt.date.unique().max()
+
+    NMx = len(MXIdataDF["SNAG_DATE"].dt.date.unique())
+    LatestdayMx = datetime.datetime.strptime(date_entered, '%m-%d-%Y').date()    #MXIdataDF["SNAG_DATE"].dt.date.unique().max()
+    print(type(pd.Series(LatestdayMx)))
+    print(type((MXIdataDF["SNAG_DATE"].dt.date)))
+    # how many ranges can the data be split into
+    DateSplitsMDC = NMDC // 7
+    DateSplitsMx = NMx // 7
+
+    # graph the scatter of the latest 7 days in the data// Basically the same as the previous chart.
+    MDCdataLast7 = MDCdataDF[MDCdataDF["DateAndTime"].dt.date >= LatestdayMDC - datetime.timedelta(7)]
+
+    MDCdataLast7Counts = MDCdataLast7[["Aircraft", "Equation_ID"]].groupby(["Aircraft"]).count()
+    MDCdataLast7Counts.columns = ["MDCcounts"]
+
+    MXIdataLast7 = MXIdataDF[MXIdataDF["SNAG_DATE"].dt.date >= LatestdayMx - datetime.timedelta(7)]
+    MXIdataLast7Counts = MXIdataLast7[["AC_SN", "AC_MODEL"]].groupby(["AC_SN"]).count()
+    MXIdataLast7Counts.columns = ["MXIcounts"]
+    MXIdataLast7Counts.index.rename("Aircraft", inplace=True)
+    # Re map the index to match the MDC index datatype
+    MXIdataLast7Counts.index = MXIdataLast7Counts.index.map(str)
+    # Merge the two dataframes to graph!
+    CountsLast7Merged = MDCdataLast7Counts.merge(MXIdataLast7Counts, left_index=True, right_index=True)
+
+
+    #fig2, ax2 = plt.subplots()  # objects for figure and axes, figsize controls the size of the output window
+    #sc, annot, names, c, norm, cmap, ax, fig = scattermaker(fig2, ax2, CountsLast7Merged, ChartCase="Last 7 Days")
+    #fig2.canvas.mpl_connect("motion_notify_event", hover)
+
+    # avgMDC = for 7 days get conut of messages for each AC, sum those counts / # of AC --> do this for all Date ranges, sum all those avgs up and divide by number of datesplits
+
+    # initialize averages
+    avgMDC = 0
+    avgMx = 0
+
+    # Loop between 1 (since first week is scatter plot) and Datesplit (in range it goes to the value just before Datesplit, if Datesplit = 8, range will go to 7)
+    for i in range(1, DateSplitsMDC):
+        # these go backwards from the latest day
+        startdate = LatestdayMDC - datetime.timedelta(7 * i)
+
+        enddate = startdate - datetime.timedelta(7)
+
+        # slice the data between the two dates
+        MDCdataSlice = MDCdataDF[MDCdataDF["DateAndTime"].dt.date >= enddate]
+
+        MDCdataSlice = MDCdataSlice[MDCdataSlice["DateAndTime"].dt.date < startdate]
+
+        # get the sum of averages from the diff date ranges
+        avgMDC = avgMDC + MDCdataSlice[["Aircraft", "Equation ID"]].groupby(["Aircraft"]).count().mean()
+
+    # the final average divided by the number of date ranges
+    avgMDC = avgMDC / (DateSplitsMDC - 1)
+
+    # Loop between 1 (since first week is scatter plot) and Datesplit (in range it goes to the value just before Datesplit, if Datesplit = 8, range will go to 7)
+    for i in range(1, DateSplitsMx):
+        # these go backwards from the latest day
+        startdate = LatestdayMx - datetime.timedelta(7 * i)
+
+        enddate = startdate - datetime.timedelta(7)
+
+        # slice the data between the two dates
+        MxdataSlice = MXIdataDF[MXIdataDF["SNAG_DATE"].dt.date >= enddate]
+
+        MxdataSlice = MxdataSlice[MxdataSlice["SNAG_DATE"].dt.date < startdate]
+
+        # get the sum of averages from the diff date ranges
+        avgMx = avgMx + MxdataSlice[["AC_SN", "AC_MODEL"]].groupby(["AC_SN"]).count().mean()
+    # the final average divided by the number of date ranges
+    avgMx = avgMx / (DateSplitsMx - 1)
+    print(avgMDC)
+    print(avgMx)
+    avg_values = {​
+        'avgMDC': avgMDC,
+        'avgMx': avgMx
+    }​
+    avgMDC_df = pd.DataFrame(avgMDC)
+    avgMDC_df_json = avgMDC_df.to_json(orient='records')
+
+    avgMX_df = pd.DataFrame(data=avg_values)
+    avgMX_df_json = avgMX_df.to_json(orient='records')
+    return avgMX_df_json
+
+    #PM_ScatterPlot_sql_df_json = PM_ScatterPlot_sql_df.to_json(orient='records')
+    #return PM_ScatterPlot_sql_df_json
+
+def connect_db_MDCdata_chartb_static():
+    sql = "SELECT * FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '11-5-2020' AND '11-12-2020'"
+
+    column_names = ["Aircraft", "Tail", "Flight Leg No",
+                    "ATA Main", "ATA Sub", "ATA", "ATA Description", "LRU",
+                    "DateAndTime", "MDC Message", "Status", "Flight Phase", "Type",
+                    "Intermittent", "Equation ID", "Source", "Diagnostic Data",
+                    "Data Used to Determine Msg", "ID", "Flight", "airline_id", "aircraftno"]
+    print(sql)
+    try:
+        conn = pyodbc.connect(driver='{​SQL Server}​', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        MDCdataDF_chartb = pd.read_sql(sql, conn)
+        MDCdataDF_chartb.columns = column_names
+        conn.close()
+        return MDCdataDF_chartb
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+
+# for reference -> http://localhost:8000/Landing_Chart_B
+@app.post("/Landing_Chart_B")
+async def get_Chart_B():
+    MDCdataDF_chartb = connect_db_MDCdata_chartb_static()
+    Topvalues2 = 10
+    # groups the data by Aircraft and Main ATA, produces a count of values in each ata by counting entries in Equation ID
+    MessageCountbyAircraftATA = MDCdataDF_chartb[["aircraftno", "ATA Main", "Equation ID"]].groupby(
+        ["aircraftno", "ATA Main"]).count()
+
+    # transpose the indexes. where the ATA label becomes the column and the aircraft is row. counts are middle
+    TransposedMessageCountbyAircraftATA = MessageCountbyAircraftATA["Equation ID"].unstack()
+
+    # fill Null values with 0
+    TransposedMessageCountbyAircraftATA.fillna(value=0, inplace=True)
+
+    # sum all the counts by row, plus create a new column called sum
+    TransposedMessageCountbyAircraftATA["Sum"] = TransposedMessageCountbyAircraftATA.sum(axis=1)
+
+    # sort the dataframe by the values of sum, and from the topvalues2 the user chooses
+    TransposedMessageCountbyAircraftATA = TransposedMessageCountbyAircraftATA.sort_values("Sum").tail(Topvalues2)
+
+    # create a final dataframe for plotting without the new column created before
+    TransposedMessageCountbyAircraftATAfinalPLOT = TransposedMessageCountbyAircraftATA.drop(["Sum"], axis=1)
+    print(TransposedMessageCountbyAircraftATAfinalPLOT)
+    chart_b_df_json = TransposedMessageCountbyAircraftATAfinalPLOT.to_json(orient='records')
+    return chart_b_df_json
+
+
+# for reference -> http://localhost:8000/Landing_Chart_B/15/11-11-2020/11-17-2020
+@app.post("/Landing_Chart_B/{​top_n}​/{​from_dt}​/{​to_dt}​")
+async def get_Chart_B(top_n: int,from_dt: str, to_dt: str):
+    MDCdataDF_chartb = connect_db_MDCdata_chartb(from_dt, to_dt)
+    Topvalues2 = top_n
+    # groups the data by Aircraft and Main ATA, produces a count of values in each ata by counting entries in Equation ID
+    MessageCountbyAircraftATA = MDCdataDF_chartb[["aircraftno", "ATA Main", "Equation ID"]].groupby(
+        ["aircraftno", "ATA Main"]).count()
+
+    # transpose the indexes. where the ATA label becomes the column and the aircraft is row. counts are middle
+    TransposedMessageCountbyAircraftATA = MessageCountbyAircraftATA["Equation ID"].unstack()
+
+    # fill Null values with 0
+    TransposedMessageCountbyAircraftATA.fillna(value=0, inplace=True)
+
+    # sum all the counts by row, plus create a new column called sum
+    TransposedMessageCountbyAircraftATA["Sum"] = TransposedMessageCountbyAircraftATA.sum(axis=1)
+
+    # sort the dataframe by the values of sum, and from the topvalues2 the user chooses
+    TransposedMessageCountbyAircraftATA = TransposedMessageCountbyAircraftATA.sort_values("Sum").tail(Topvalues2)
+
+    # create a final dataframe for plotting without the new column created before
+    TransposedMessageCountbyAircraftATAfinalPLOT = TransposedMessageCountbyAircraftATA.drop(["Sum"], axis=1)
+    print(TransposedMessageCountbyAircraftATAfinalPLOT)
+    chart_b_df_json = TransposedMessageCountbyAircraftATAfinalPLOT.to_json(orient='records')
+    return chart_b_df_json
 
 #### Corelation Stored Proc Call
 def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
@@ -1877,3 +2257,4 @@ async def get_eqIData(all:str):
     report_ata_main_sql_df = connect_database_for_ata_main(all)
     report_ata_main_sql_df_json = report_ata_main_sql_df.to_json(orient='records')
     return report_ata_main_sql_df_json
+
