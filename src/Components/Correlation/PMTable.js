@@ -344,7 +344,7 @@ if (data){
         maintCanc: item["Maintenance Cancellations"],   
         maintDel: item["Maintenance Delays"],  
         inspection: item["Inspection"],  
-        campType: item["Camp Type"],   
+        campType: item["CampType"],   
         MRB: item["MRB"],   
         discrepancy: item["Discrepancy"],  
         corActions: item["Corrective Action"], 
