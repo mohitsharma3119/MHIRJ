@@ -42,7 +42,7 @@ const FlagReport = (props) => {
     },
     {
       name: 'code', 
-      label: 'B1-code',
+      label: 'B1-Equation',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -101,7 +101,7 @@ const FlagReport = (props) => {
     },
     {
       name: 'dateTo', 
-      label: 'Equation Description',
+      label: 'Date To',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -147,16 +147,16 @@ const FlagReport = (props) => {
       props?.data?.map((item => {
         data.push(
           {
-            MSN: item["MSN"], 
+            MSN: item["AC SN"], 
             ATA: item["ATA"], 
-            code: item["B1-code"], 
+            code: item["B1-Equation"], 
             LRU: item["LRU"],  
             message: item["Message"],  
             type: item["Type"],  
             FDE: item["Potential FDE"],  
             dateFrom: item["Date From"],   
             dateTo: item["Date To"],   
-            action: item["SKW action WIP"],  
+            action: item["SKW WIP"],  
             input: item["ISE Input"],  
             iseRecAct: item["ISE Rec Act"],  
           }
