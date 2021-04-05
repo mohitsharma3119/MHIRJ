@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Chart1() {
+export default function Scatter1() {
   const classes = useStyles();
   const ChartJsImage = require('chartjs-to-image');
   const [chartData1, setChartData1] = useState({});
@@ -136,7 +136,7 @@ const [data_chart1, setData_chart1] = useState({
     <div className={classes.root}>
       <Grid container spacing={12}>
       <Grid item xs={12}>
-      <Paper className={classes.paper}>
+      {/* <Paper className={classes.paper}>
       <Scatter
                     id="chart1"
                     data={chartData2}
@@ -144,30 +144,14 @@ const [data_chart1, setData_chart1] = useState({
                       scales: {
                         xAxes: [{
                             type: 'linear',
-                            scaleLabel: {
-                              display: true,
-                              labelString: '# of MDC Messages- Last 7 days',
-                                  fontStyle: 'bold',
-                                  fontColor: '#001C3E'
-                                
-                            },
                             position: 'bottom'
                         }],
-                        yAxes: [ {
-                          display: true,
-                          scaleLabel: {
-                            display: true,
-                            labelString: '# of MX Actions- Last 7 days',
-                            fontStyle: 'bold',
-                                  fontColor: '#001C3E'
-                          }
-                        } ],
                       title: { display: true, text: 'Scatter Plot', fontSize: 20 },
                       legend: { display: true, position: 'right' }
                     }}}
                   />
-      </Paper>
-      {/* <form className={classes.root1} noValidate autoComplete="off">
+      </Paper> */}
+      <form className={classes.root1} noValidate autoComplete="off">
             <div>
               <TextField  onChange= {(e)=>handle(e)} value={data_chart1.select_date} id="select_date" label=" SELECT DATE " type="date" defaultValue="2017-05-24" className={classes.textField} InputLabelProps={{ shrink: true, }} /></div>
             <br></br>
@@ -184,8 +168,24 @@ const [data_chart1, setData_chart1] = useState({
                         scales: {
                           xAxes: [{
                             type: 'linear',
-                            position: 'bottom'
+                            position: 'bottom',
+                            scaleLabel: {
+                              display: true,
+                              labelString: '# of MDC Messages- Last 7 days',
+                                  fontStyle: 'bold',
+                                  fontColor: '#001C3E'
+                                
+                            },
                           }],
+                          yAxes: [ {
+                            display: true,
+                            scaleLabel: {
+                              display: true,
+                              labelString: '# of MX Actions- Last 7 days',
+                              fontStyle: 'bold',
+                                    fontColor: '#001C3E'
+                            }
+                          } ],
                           title: { display: true, text: 'Scatter Plot', fontSize: 20 },
                           legend: { display: true, position: 'right' }
                         }
@@ -195,7 +195,7 @@ const [data_chart1, setData_chart1] = useState({
                  
                     
                </Paper>
-      */}
+     
      
           {/* <Paper className={classes.paper}>
             <Scatter
