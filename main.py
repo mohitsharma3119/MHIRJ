@@ -1832,7 +1832,7 @@ def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
         sql += "	AND mdc_ata_Main IN " +  ata                                                           
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
+        conn = pyodbc.connect(driver='{ODBC Driver 17 for SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
                               user='mhirj-admin', password='KaranCool123')
         corelation_df = pd.read_sql(sql, conn)
         conn.close()
@@ -1860,7 +1860,7 @@ def connect_database_for_corelation_pid(p_id):
     print(sql)
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
+        conn = pyodbc.connect(driver='{ODBC Driver 17 for SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
                               user='mhirj-admin', password='KaranCool123')
         corelation_df = pd.read_sql(sql, conn)
         print('query successful')
@@ -1874,7 +1874,7 @@ def connect_database_for_corelation_pid(p_id):
 async def get_CorelationDataPID(p_id: str):
     corelation_df = connect_database_for_corelation_pid(p_id)
     print('corelation func :',corelation_df)
-    #corelation_df_json = corelation_df.to_json(orient='records')
+    corelation_df_json = corelation_df.to_json(orient='records')
     return corelation_df
 
 def connect_database_for_eqId(all):
