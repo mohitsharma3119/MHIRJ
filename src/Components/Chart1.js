@@ -130,6 +130,7 @@ export default function Chart1() {
                       // maxTicksLimit: 10,
                       beginAtZero: false
                     },
+                    
                     gridLines: {
                       display: true
                     }
@@ -141,6 +142,13 @@ export default function Chart1() {
                     ticks: {
                      
                       beginAtZero: true
+                    },
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Total Number of Messages',
+                          fontStyle: 'bold',
+                          fontColor: '#001C3E'
+                        
                     },
                     gridLines: {
                       display: false

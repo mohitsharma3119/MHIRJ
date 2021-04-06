@@ -53,7 +53,7 @@ export default function Chart1() {
         labels:pmMessage,
         datasets: [
           {
-            label:"Fleet Status- Last 7 days",
+            label:"mdcMessage",
             data:pmMessage,
             backgroundColor: "#d8e4f0",
             borderWidth: 2,
@@ -104,7 +104,7 @@ const [data_chart1, setData_chart1] = useState({
           labels:mdcMessage,
           datasets: [
             {
-              label:"Fleet Status- Last 7 days",
+              label:"mdcMessage",
               data: mdcMessage,
               backgroundColor: "#d8e4f0",
               borderWidth: 2,
@@ -144,30 +144,14 @@ const [data_chart1, setData_chart1] = useState({
                       scales: {
                         xAxes: [{
                             type: 'linear',
-                            scaleLabel: {
-                              display: true,
-                              labelString: '# of MDC Messages- Last 7 days',
-                                  fontStyle: 'bold',
-                                  fontColor: '#001C3E'
-                                
-                            },
                             position: 'bottom'
                         }],
-                        yAxes: [ {
-                          display: true,
-                          scaleLabel: {
-                            display: true,
-                            labelString: '# of MX Actions- Last 7 days',
-                            fontStyle: 'bold',
-                                  fontColor: '#001C3E'
-                          }
-                        } ],
                       title: { display: true, text: 'Scatter Plot', fontSize: 20 },
                       legend: { display: true, position: 'right' }
                     }}}
                   />
       </Paper>
-      {/* <form className={classes.root1} noValidate autoComplete="off">
+      <form className={classes.root1} noValidate autoComplete="off">
             <div>
               <TextField  onChange= {(e)=>handle(e)} value={data_chart1.select_date} id="select_date" label=" SELECT DATE " type="date" defaultValue="2017-05-24" className={classes.textField} InputLabelProps={{ shrink: true, }} /></div>
             <br></br>
@@ -195,7 +179,7 @@ const [data_chart1, setData_chart1] = useState({
                  
                     
                </Paper>
-      */}
+     
      
           {/* <Paper className={classes.paper}>
             <Scatter

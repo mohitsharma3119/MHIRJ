@@ -132,6 +132,13 @@ export default function Chart3() {
                       // maxTicksLimit: 10,
                       beginAtZero: true
                     },
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Occurence Per Day',
+                          fontStyle: 'bold',
+                          fontColor: '#001C3E'
+                        
+                    },
                     gridLines: {
                       display: true
                     }
@@ -142,6 +149,13 @@ export default function Chart3() {
                   {
                     ticks: {
                       beginAtZero: true
+                    },
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Occurence Dates',
+                          fontStyle: 'bold',
+                          fontColor: '#001C3E'
+                        
                     },
                     gridLines: {
                       display: true

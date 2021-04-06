@@ -140,6 +140,13 @@ export default function Chart2() {
                     ticks: {
                       beginAtZero: true
                     },
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'ATA ' +data_chart2.ata+ ' occurence in each AC',
+                          fontStyle: 'bold',
+                          fontColor: '#001C3E'
+                        
+                    },
                     gridLines: {
                       display: true
                     }

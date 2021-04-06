@@ -132,6 +132,13 @@ export default function Chart5() {
                       // maxTicksLimit: 10,
                       beginAtZero: true
                     },
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Intermittence',
+                          fontStyle: 'bold',
+                          fontColor: '#001C3E'
+                        
+                    },
                     gridLines: {
                       display: true
                     }
@@ -142,6 +149,14 @@ export default function Chart5() {
                   {
                     ticks: {
                       beginAtZero: true
+                    },
+                    scaleLabel: {
+                      display: true,
+                      labelString: 'Flight Leg',
+                          fontStyle: 'bold',
+                          fontColor: '#001C3E'
+                          
+                        
                     },
                     gridLines: {
                       display: true

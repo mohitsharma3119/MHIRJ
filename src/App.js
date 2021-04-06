@@ -42,6 +42,8 @@ import Chart2 from './Components/Chart2';
 import Chart3 from './Components/Chart3';
 import Chart4 from './Components/Chart4';
 import Chart5 from './Components/Chart5';
+import Scatter1 from './Components/Scatter1';
+import Stacked from './Components/Stacked';
 import Analysis from './Components/MdcMessages/GenerateReport/Analysis';
 import Report from './Components/MdcMessages/Reports/Report';
 import Correlation from './Components/Correlation/Correlation';
@@ -201,6 +203,7 @@ export default function MiniDrawer() {
   const [open, setOpen] = React.useState(false);
   const [page, setPage] = React.useState("main");
   const [openMDC, setOpenMDC] = React.useState(false);
+  const [openMAIN, setOpenMAIN] = React.useState(false);
   const [openGraphs, setOpenGraphs] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -216,6 +219,9 @@ export default function MiniDrawer() {
   };
   const handleClick = () => {
     setOpenMDC(!openMDC);
+  };
+  const handleMainClick = () => {
+    setOpenMAIN(!openMAIN);
   };
   const handleGraphsClick = () => {
     setOpenGraphs(!openGraphs);
@@ -270,16 +276,41 @@ export default function MiniDrawer() {
         <Divider />
         <List>
             
-              <ListItem>
+              <ListItem button onClick={handleMainClick} disablePadding>
               <Link to="/" style={{ textDecoration: 'none'}}> 
                 <ListItemIcon>
                   <InfoSharpIcon style={{ color:"#001c3e"}} />
                 </ListItemIcon> 
                 <Button variant="contained" color="#92A0AD">
                  <typography>Main</typography>
+                 {openMAIN ? <ExpandLess /> : <ExpandMore />}
                 </Button>
               </Link>
             </ListItem> 
+            <Collapse in={openMAIN} timeout="auto" unmountOnExit>
+
+            <List component="div" disablePadding>
+            <Link to="/Scatter1" style={{ textDecoration: 'none'}}>
+              <ListItem button className={classes.nested}>
+                <ListItemIcon>
+                  <TrendingUpSharpIcon style={{ color:"#001c3e"}} />
+                </ListItemIcon>
+                <ListItemText primary="SCATTER" style={{color:"#001c3e"}}/>
+              </ListItem>
+              </Link>
+            </List>
+
+            <List component="div" disablePadding>
+            <Link to="/Stacked" style={{ textDecoration: 'none'}}>
+              <ListItem button className={classes.nested}>
+                <ListItemIcon>
+                  <TrendingUpSharpIcon style={{ color:"#001c3e"}} />
+                </ListItemIcon>
+                <ListItemText primary="STACKED" style={{color:"#001c3e"}}/>
+              </ListItem>
+              </Link>
+            </List>
+            </Collapse>
           
             
             <ListItem button onClick={handleClick} disablePadding>
@@ -354,7 +385,7 @@ export default function MiniDrawer() {
                       </Link>
                     </List>
 
-                    <List component="div" disablePadding>
+                    {/* <List component="div" disablePadding>
                       <Link to="/Chart4" style={{ textDecoration: 'none' }}>
                         <ListItem button className={classes.nested_1}>
                           <ListItemIcon>
@@ -363,7 +394,7 @@ export default function MiniDrawer() {
                           <ListItemText primary="Top ATA in Reports" style={{ color: "#001c3e" }} />
                         </ListItem>
                       </Link>
-                    </List>
+                    </List> */}
 
                     <List component="div" disablePadding>
                       <Link to="/Chart5" style={{ textDecoration: 'none' }}>
@@ -447,6 +478,9 @@ export default function MiniDrawer() {
         <Switch>
           <Route exact path="/">
             <Home />
+          </Route>
+          <Route path="/Scatter1">
+            <Scatter1 />
           </Route>
           <Route path="/rawdata">
             <Rawdata />
