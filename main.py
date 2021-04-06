@@ -1,4 +1,5 @@
 # Importing libraries to the project
+#!/usr/bin/bash
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -1831,7 +1832,7 @@ def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
         sql += "	AND mdc_ata_Main IN " +  ata                                                           
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
+        conn = pyodbc.connect(driver='{ODBC Driver 17 for SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
                               user='mhirj-admin', password='KaranCool123')
         corelation_df = pd.read_sql(sql, conn)
         conn.close()
@@ -1847,6 +1848,34 @@ async def get_CorelationData(fromDate: str , toDate: str, equation_id:str, ata:s
     corelation_df_json = corelation_df.to_json(orient='records')
     return corelation_df_json
 
+def connect_database_for_corelation_pid(p_id):
+    
+    sql = """SELECT [mdc_ID], [EQ_ID], [aircraftno], [ATA_Description], [LRU], [DateAndTime], [MDC_Date], 
+	[MDC_MESSAGE], [EQ_DESCRIPTION], [CAS], [LRU_CODE], [LRU_NAME], [FAULT_LOGGED], [MDC_ATA], 
+	[mdc_ata_main], [mdc_ata_sub], [Status], [mdc_type]
+    FROM [dbo].[sample_corelation]
+    WHERE p_id = (%s)
+    ORDER BY MDC_Date""" %(p_id)
+
+    print(sql)
+
+    try:
+        conn = pyodbc.connect(driver='{ODBC Driver 17 for SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
+                              user='mhirj-admin', password='KaranCool123')
+        corelation_df = pd.read_sql(sql, conn)
+        print('query successful')
+        conn.close()
+        return corelation_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+@app.post("/corelation/{p_id}")
+async def get_CorelationDataPID(p_id: str):
+    corelation_df = connect_database_for_corelation_pid(p_id)
+    print('corelation func :',corelation_df)
+    corelation_df_json = corelation_df.to_json(orient='records')
+    return corelation_df
 
 def connect_database_for_eqId(all):
     sql = "SELECT DISTINCT Airline_MDC_Data.Equation_ID FROM Airline_MDC_Data"
