@@ -19,26 +19,25 @@ const CorrelationSubTable = (props) => {
   const [data, setData] = useState([]);
 
   useEffect(()=>{
-    /*http://localhost:8000/corelation/11-11-2020/11-12-2020/B1-008003/27*/
+    /*http://localhost:8000/corelation/29909*/
 
-    const path = 'http://localhost:8000/corelation/' + props.dateFrom + '/' + props.dateTo + '/' + props.EqID + '/' + props.ATAMain;
-    console.log(path);
-    console.log(props);
-    //const path = 'http://localhost:8000/corelation/2020-11-12/2020-12-13/('B1-005790','B1-005792','B1-005798','B1-005800')/('21','23','22','26','27','30','28')';
+    const path = 'http://localhost:8000/corelation/' + props.p_id;
     try{
       axios.post(path).then(function (res) {
         var data = JSON.parse(res.data);
         setData(data);
+        console.log(path,"path");
+        console.log(data,"resdata");
       });
     } catch (err) {
       console.error(err);
     } 
-  },[props.responseData])
+  },[props.p_id])
 
   const columns = [
   {
-    name: "p_id",
-    label: "p_id",
+    name: "mdc_ID",
+    label: "MDC ID",
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -47,8 +46,8 @@ const CorrelationSubTable = (props) => {
     }
   },
   {
-    name: 'operator', 
-    label: 'Operator',
+    name: 'EQ_ID', 
+    label: 'Equation ID',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -57,8 +56,8 @@ const CorrelationSubTable = (props) => {
     }
   },
   {
-    name: 'model', 
-    label: 'Model',
+    name: 'aircraftno', 
+    label: 'Aircraft Number',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -67,8 +66,8 @@ const CorrelationSubTable = (props) => {
     }
   },
   {
-    name: 'type', 
-    label: 'Type',
+    name: 'ATA_Description', 
+    label: 'ATA Description',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -77,8 +76,8 @@ const CorrelationSubTable = (props) => {
     }
   },
   {
-    name: 'serialNo', 
-    label: 'Serial_No',
+    name: 'LRU', 
+    label: 'LRU',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -87,8 +86,8 @@ const CorrelationSubTable = (props) => {
     }
   },
   {
-    name: 'date', 
-    label: 'Date',
+    name: 'DateAndTime', 
+    label: 'Date and Time',
     options: {
       filter: false,
       sort: true,
@@ -96,8 +95,8 @@ const CorrelationSubTable = (props) => {
     }
   },
   {
-    name: 'failureFlag', 
-    label: 'Failure Flag',
+    name: 'MDC_Date', 
+    label: 'MDC Date',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -106,8 +105,8 @@ const CorrelationSubTable = (props) => {
     }
   },
   {
-    name: 'maintTrans', 
-    label: 'MaintTrans',
+    name: 'MDC_MESSAGE', 
+    label: 'MDC Message',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -116,8 +115,8 @@ const CorrelationSubTable = (props) => {
     }
   },
   {
-    name: 'maintCanc', 
-    label: 'Maintenance Cancellations',
+    name: 'EQ_DESCRIPTION', 
+    label: 'Equation Description',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -126,8 +125,8 @@ const CorrelationSubTable = (props) => {
     }
     },
     {
-    name: 'maintDel', 
-    label: 'Maintenance Delays',
+    name: 'CAS', 
+    label: 'CAS',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -136,8 +135,8 @@ const CorrelationSubTable = (props) => {
     }
     },
     {
-    name: 'inspection', 
-    label: 'Inspection',
+    name: 'LRU_CODE', 
+    label: 'LRU Code',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -146,8 +145,8 @@ const CorrelationSubTable = (props) => {
     }
     },
     {
-    name: 'campType', 
-    label: 'Camp Type',
+    name: 'LRU_NAME', 
+    label: 'LRU Name',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -156,8 +155,8 @@ const CorrelationSubTable = (props) => {
     }
     },
     {
-    name: 'MRB', 
-    label: 'MRB',
+    name: 'FAULT_LOGGED', 
+    label: 'Fault Logged',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -166,8 +165,8 @@ const CorrelationSubTable = (props) => {
     }
     },
     {
-    name: 'discrepancy', 
-    label: 'Discrepancy',
+    name: 'MDC_ATA', 
+    label: 'MDC ATA',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -176,8 +175,8 @@ const CorrelationSubTable = (props) => {
     }
     },
     {
-    name: 'corActions', 
-    label: 'Corrective Action',
+    name: 'mdc_ata_main', 
+    label: 'MDC ATA MAIN',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -186,8 +185,8 @@ const CorrelationSubTable = (props) => {
     }
     },
     {
-    name: 'totalHours', 
-    label: 'AC Total Hours',
+    name: 'mdc_ata_sub', 
+    label: 'MDC ATA SUB',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -196,8 +195,8 @@ const CorrelationSubTable = (props) => {
     }
     },
     {
-    name: 'totalCycles', 
-    label: 'AC Total Cycles',
+    name: 'Status', 
+    label: 'Status',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -206,48 +205,8 @@ const CorrelationSubTable = (props) => {
     }
     },
     {
-    name: 'squawkSource', 
-    label: 'Squawk Source',
-    options: {
-      filter: true,
-      filterType: 'dropdown',
-      sort: true,
-      setCellProps: () => ({style: {whiteSpace:'nowrap'}})
-    }
-    },
-    {
-    name: 'ATA', 
-    label: 'ATA',
-    options: {
-      filter: true,
-      filterType: 'dropdown',
-      sort: true,
-      setCellProps: () => ({style: {whiteSpace:'nowrap'}})
-    }
-    },
-    {
-    name: 'station', 
-    label: 'Station',
-    options: {
-      filter: true,
-      filterType: 'dropdown',
-      sort: true,
-      setCellProps: () => ({style: {whiteSpace:'nowrap'}})
-    }
-    },
-    {
-    name: 'ATA_SUB', 
-    label: 'ATA SUB',
-    options: {
-      filter: true,
-      filterType: 'dropdown',
-      sort: true,
-      setCellProps: () => ({style: {whiteSpace:'nowrap'}})
-    }
-    },
-    {
-    name: 'ATA_Main', 
-    label: 'ATA Main',
+    name: 'mdc_type', 
+    label: 'MDC Type',
     options: {
       filter: true,
       filterType: 'dropdown',
@@ -258,37 +217,36 @@ const CorrelationSubTable = (props) => {
 ];
 
 const responseData = [];
+
 if (data){
   data.map((item => {
+    console.log(item,"item");
+    console.log(item.mdc_ID,"mdc_ID");
     responseData.push(
       {
-        p_id: item["p_id"], 
-        operator: item["Operator"], 
-        model: item["Model"], 
-        type: item["Type"],  
-        serialNo: item["Serial_No"],  
-        date: item["date"],  
-        failureFlag: item["Failure Flag"],  
-        maintTrans: item["Maint Trans"],   
-        maintCanc: item["Maintenance Cancellations"],   
-        maintDel: item["Maintenance Delays"],  
-        inspection: item["Inspection"],  
-        campType: item["Camp Type"],   
-        MRB: item["MRB"],   
-        discrepancy: item["Discrepancy"],  
-        corActions: item["Corrective Action"], 
-        totalHours: item["AC Total Hours"],  
-        totalCycles: item["AC Total Cycles"],  
-        squawkSource:  item["Squawk Source"],
-        ATA: item["ATA"],
-        station: item["Station"],
-        ATA_SUB: item["ATA_SUB"],
-        ATA_Main: item["ATA_Main"],
+        mdc_ID: item["mdc_ID"],
+        EQ_ID: item["EQ_ID"],
+        aircraftno: item["aircraftno"],
+        ATA_Description: item["ATA_Description"],
+        LRU: item["LRU"],
+        DateAndTime: item["DateAndTime"],
+        MDC_Date: item["MDC_Date"],
+        MDC_MESSAGE: item["MDC_MESSAGE"], 
+        EQ_DESCRIPTION: item["EQ_DESCRIPTION"],   
+        CAS: item["CAS"],
+        LRU_CODE: item["LRU_CODE"],
+        LRU_NAME: item["LRU_NAME"],  
+        FAULT_LOGGED: item["FAULT_LOGGED"],  
+        MDC_ATA: item["MDC_ATA"], 
+        mdc_ata_main: item["mdc_ata_main"],
+        mdc_ata_sub: item["mdc_ata_sub"],
+        Status: item["Status"],
+        mdc_type: item["mdc_type"],
       }
     );
-     return responseData
+    return responseData
+  }));
   }
-  ));
 
 const options = {
   filter: true,
@@ -320,7 +278,6 @@ const options = {
       />
   </div>
   );
-  }
 }
 
 export default CorrelationSubTable;
