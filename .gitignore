@@ -1,4 +1,5 @@
 __pycache__/*
+gunicorn*
 gunicorn-access.log
 gunicorn-error.log
 gunicorn-error.log.save
