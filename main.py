@@ -30,6 +30,8 @@ origins = [
     "http://localhost",
     "http://localhost:8000",
 ]
+"""Create a list of allowed origins ( as strings)
+"""
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -40,20 +42,14 @@ app.add_middleware(
 
 #####
 
-#datatobeanalyzed_df = pd.read_sql_query(sql_stmt, conn)
-
-#Datatobeanalyzed_path = r"C:\Users\User\MDCRawDataSKW2.csv"
-#Datatobeanalyzed_path = "./MdcRawDataTest_5000.csv"
-#MDCMessagesURL_path = r"C:\Users\User\MDCMessagesInputs.csv"
-#TopMessagesURL_path = r"C:\Users\User\TopMessagesSheet.csv"
 
 OutputTableHistory2 = pd.DataFrame()
 MDCeqns_arrayforgraphing = pd.DataFrame()
 
-hostname="mhirjserver.database.windows.net"
-db_name="MHIRJ"
-username="mhirj-admin"
-password="KaranCool123"
+hostname = "mhirjserver.database.windows.net"
+db_name = "MHIRJ"
+db_username = "mhirj-admin"
+db_password = "KaranCool123"
 
 CurrentFlightPhaseEnabled = 0
 MDCdataDF = pd.DataFrame()
@@ -69,42 +65,13 @@ def convert_array_to_tuple(array_list):
 
     return "(" + ', '.join('''{}'''.format(str(t[0])) for t in l2) + ")"
 
-"""
 
 
-
-try:
-    conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                       user='mhirj-admin', password='KaranCool123')
-except pyodbc.Error as err:
-    print("Couldn't connect to Server")
-    print("Error message:- "+err)
-
-
-cursor = conn.cursor()
-
-#SQL statement to get all rows from the database
-#sql_stmt = "SELECT * FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '"+from_date+"' AND '"+to_date+"'"
-
-records = cursor.execute(sql_stmt)
-
-#Reading Data from SQL database
-MDCdataDF = pd.DataFrame((tuple(t) for t in records), columns = ["Aircraft", "Tail", "Flight Leg No",
-                                                      "ATA Main","ATA Sub","ATA","ATA Description","LRU",
-                                                      "DateAndTime","MDC Message","Status","Flight Phase","Type",
-                                                      "Intermittent","Equation ID","Source","Diagnostic Data",
-                                                      "Data Used to Determine Msg","ID","Flight","airline_id","aircraftno"])
-
-
-
-# Reading CSV file
-#MDCdataDF = pd.read_csv(Datatobeanalyzed_path, encoding="utf8")
-"""
 def connect_to_fetch_all_ata(from_dt, to_dt):
     all_ata_query = "SELECT DISTINCT ATA_Main from Airline_MDC_Data WHERE DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
         all_ata_df = pd.read_sql(all_ata_query, conn)
 
         return all_ata_df
@@ -115,8 +82,8 @@ def connect_to_fetch_all_ata(from_dt, to_dt):
 def connect_to_fetch_all_eqids(from_dt, to_dt):
     all_ata_query = "SELECT DISTINCT Equation_ID from Airline_MDC_Data WHERE DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
         all_eqid_df = pd.read_sql(all_ata_query, conn)
 
         return all_eqid_df
@@ -208,8 +175,8 @@ def connect_database_MDCdata(ata, excl_eqid, airline_operator, include_current_m
                "Data Used to Determine Msg", "ID", "Flight", "airline_id", "aircraftno"]
     print(sql)
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
         MDCdataDF = pd.read_sql(sql, conn)
         MDCdataDF.columns = column_names
         return MDCdataDF
@@ -227,8 +194,8 @@ def connect_database_MDCdata2(ata, from_dt, to_dt, equation_id, bcode):
                "Data Used to Determine Msg", "ID", "Flight", "airline_id", "aircraftno"]
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=username, password=password)
         MDCdataDF = pd.read_sql(sql, conn)
         MDCdataDF.columns = column_names
         return MDCdataDF
@@ -241,8 +208,8 @@ def connect_database_MDCmessagesInputs():
     sql = "SELECT * FROM MDCMessagesInputs"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
         # add column names from csv file into dataframe
         MDCMessagesDF = pd.read_sql(sql, conn)
         return MDCMessagesDF
@@ -255,8 +222,8 @@ def connect_database_TopMessagesSheet():
     sql = "SELECT * FROM TopMessagesSheet"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
         TopMessagesDF = pd.read_sql(sql, conn)
         return TopMessagesDF
     except pyodbc.Error as err:
@@ -1683,15 +1650,17 @@ async def generateFlagReport(analysisType: str, occurences: int, legs: int, inte
             Report: A filtered and reorganized DataFrame containing the relevant information from the rows in the Passed report
         '''
         if ExcludeCurrentMessage == False:  # Show all, current and history
+            #DatesDF['DateAndTime'] = DatesDF['DateAndTime'].astype(str).str.rstrip('00000')
             DatesDF = DatesDF[["DateAndTime", "Equation ID", "Aircraft"]].copy()
 
         elif ExcludeCurrentMessage == True:  # Only show history
+            #DatesDF['DateAndTime'] = DatesDF['DateAndTime'].astype(str).str.rstrip('00000')
             DatesDF = DatesDF[["DateAndTime", "Equation ID", "Aircraft", "Flight Phase"]]
             # In the preprocessing for this Notebook, I changed NaNs to False.
             DatesDF = DatesDF.replace(False, np.nan).dropna(axis=0,
                                                             how='any')  # In the raw data, this is already blank. Could be a empty string or a NaN. Adjust according to raw data
             DatesDF = DatesDF[["DateAndTime", "Equation ID", "Aircraft"]].copy()
-
+        print(DatesDF['DateAndTime'])
         Report = Report.set_index(["AC SN", "B1-Equation"]).sort_index()
         print(Report)
 
@@ -1724,8 +1693,8 @@ def connect_database_for_chart1(n, aircraft_no, from_dt, to_dt):
     sql = "SELECT TOP "+str(n)+" Count(MDCMessagesInputs.Message), Airline_MDC_Data. Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA FROM Airline_MDC_Data INNER JOIN MDCMessagesInputs ON Airline_MDC_Data.ATA = MDCMessagesInputs.ATA WHERE Airline_MDC_Data.aircraftno = "+str(aircraft_no)+" AND Airline_MDC_Data.DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Airline_MDC_Data.Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA ORDER BY Count(MDCMessagesInputs.Message) DESC"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
         chart1_sql_df = pd.read_sql(sql, conn)
         #MDCdataDF.columns = column_names
         return chart1_sql_df
@@ -1749,8 +1718,8 @@ def connect_database_for_chart2(n, ata, from_dt, to_dt):
         sql = "SELECT TOP "+str(n)+" COUNT(ATA), aircraft FROM Airline_MDC_Data where ATA='"+ata+"' AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY ATA, Aircraft ORDER BY COUNT(ATA) DESC"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
         chart2_sql_df = pd.read_sql(sql, conn)
         # MDCdataDF.columns = column_names
         return chart2_sql_df
@@ -1773,8 +1742,8 @@ def connect_database_for_chart3(aircraft_no, equation_id, is_flight_phase_enable
         sql = "SELECT COUNT(*) AS OccurencesPerDay, cast(DateAndTime as date) AS Dates from Airline_MDC_Data WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY cast(DateAndTime as date)"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
         chart3_sql_df = pd.read_sql(sql, conn)
         # MDCdataDF.columns = column_names
         return chart3_sql_df
@@ -1797,8 +1766,8 @@ def connect_database_for_chart5(aircraft_no, equation_id, is_flight_phase_enable
         sql = "SELECT COUNT(Intermittent) AS OccurencesOfIntermittent, Flight_Leg_No FROM Airline_MDC_Data  WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Flight_Leg_No"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
         chart5_sql_df = pd.read_sql(sql, conn)
         # MDCdataDF.columns = column_names
         return chart5_sql_df
@@ -1814,26 +1783,333 @@ async def get_CharFiveData(aircraft_no:int, equation_id:str, is_flight_phase_ena
 
 
 
+
+#Landing Page Chart: Scatter Plot
+import datetime
+#import timedelta
+def connect_db_MDCdata_chartb(from_dt, to_dt):
+    sql = "SELECT * FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+    column_names = ["Aircraft", "Tail", "Flight Leg No",
+                    "ATA Main", "ATA Sub", "ATA", "ATA Description", "LRU",
+                    "DateAndTime", "MDC Message", "Status", "Flight Phase", "Type",
+                    "Intermittent", "Equation ID", "Source", "Diagnostic Data",
+                    "Data Used to Determine Msg", "ID", "Flight", "airline_id", "aircraftno"]
+    print(sql)
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
+        MDCdataDF_chartb = pd.read_sql(sql, conn)
+        MDCdataDF_chartb.columns = column_names
+        conn.close()
+        return MDCdataDF_chartb
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+def connect_database_MDCData_Filtered(date_entered):
+    date_entered_new = datetime.datetime.strptime(date_entered, '%m-%d-%Y')
+    backdate = date_entered_new - datetime.timedelta(days=1)
+    leading_date = date_entered_new - datetime.timedelta(days=8)
+    leading_date_formatted = datetime.datetime.strftime(leading_date, '%m-%d-%Y')
+    backdate_formatted = datetime.datetime.strftime(backdate, '%m-%d-%Y')
+    print(leading_date_formatted)
+    print(backdate_formatted)
+    sql = "SELECT * FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '" + backdate_formatted + "' AND '" + leading_date_formatted + "'"
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
+        # add column names from csv file into dataframe
+        MDCDataFiltered = pd.read_sql(sql, conn)
+        conn.close()
+        return MDCDataFiltered
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + err)
+
+def connect_database_PMData_Filtered(date_entered):
+    #global MXIDataDF
+    date_entered_new = datetime.datetime.strptime(date_entered, '%m-%d-%Y')
+    backdate = date_entered_new - datetime.timedelta(days=30)
+    leading_date = date_entered_new - datetime.timedelta(days=8)
+    leading_date_formatted = datetime.datetime.strftime(leading_date, '%m-%d-%Y')
+    backdate_formatted = datetime.datetime.strftime(backdate, '%m-%d-%Y')
+    print(leading_date_formatted)
+    print(backdate_formatted)
+    sql = "SELECT * FROM SKW_PM_NOV_2020_post_MHIRJ_filter WHERE SNAG_DATE BETWEEN '" + backdate_formatted + "' AND '" + leading_date_formatted + "'"
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
+        # add column names from csv file into dataframe
+        PMDataFiltered = pd.read_sql(sql, conn)
+        conn.close()
+        return PMDataFiltered
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + err)
+
+def connect_database_for_MDC_ScatterPlot(leading_date):
+    leading_date_n = datetime.datetime.strptime(leading_date, '%m-%d-%Y')
+    backdate = leading_date_n - datetime.timedelta(days = 7)
+    leading_date_formatted = datetime.datetime.strftime(leading_date_n, '%m-%d-%Y')
+    backdate_formatted = datetime.datetime.strftime(backdate, '%m-%d-%Y')
+    print(leading_date_formatted)
+    print(backdate_formatted)
+    sql = "SELECT COUNT(Airline_MDC_Data.MDC_Message) as '# of MDC Messages' FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '"+str(backdate_formatted)+"' AND '"+str(leading_date_formatted)+"' GROUP BY aircraftno"
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
+        MDC_ScatterPlot_sql_df = pd.read_sql(sql, conn)
+        conn.close()
+        return MDC_ScatterPlot_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+# for reference -> http://localhost:8000/Landing_Chart_MDC_Scatter/11-12-2020
+@app.post("/Landing_Chart_MDC_Scatter/{leading_date}")
+async def get_Chart_MDC_Scatter(leading_date: str):
+    MDC_ScatterPlot_sql_df = connect_database_for_MDC_ScatterPlot(leading_date)
+    MDC_ScatterPlot_sql_df_json = MDC_ScatterPlot_sql_df.to_json(orient='records')
+    return MDC_ScatterPlot_sql_df_json
+
+def connect_database_for_MDC_ScatterPlot_static():
+    """
+    leading_date_n = datetime.datetime.strptime(leading_date, '%m-%d-%Y')
+    backdate = leading_date_n - datetime.timedelta(days = 7)
+    leading_date_formatted = datetime.datetime.strftime(leading_date_n, '%m-%d-%Y')
+    backdate_formatted = datetime.datetime.strftime(backdate, '%m-%d-%Y')
+    print(leading_date_formatted)
+    print(backdate_formatted)
+    """
+    sql = "SELECT COUNT(Airline_MDC_Data.MDC_Message) as '# of MDC Messages' FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '11-5-2020' AND '11-12-2020' GROUP BY aircraftno"
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
+        MDC_ScatterPlot_sql_df = pd.read_sql(sql, conn)
+        conn.close()
+        return MDC_ScatterPlot_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+# for reference -> http://localhost:8000/Landing_Chart_MDC_Scatter
+@app.post("/Landing_Chart_MDC_Scatter")
+async def get_Chart_MDC_Scatter():
+    MDC_ScatterPlot_sql_df = connect_database_for_MDC_ScatterPlot_static()
+    MDC_ScatterPlot_sql_df_json = MDC_ScatterPlot_sql_df.to_json(orient='records')
+    return MDC_ScatterPlot_sql_df_json
+
+
+def connect_database_for_PM_ScatterPlot(leading_date):
+    leading_date_n = datetime.datetime.strptime(leading_date, '%m-%d-%Y')
+    backdate = leading_date_n - datetime.timedelta(days = 7)
+    leading_date_formatted = datetime.datetime.strftime(leading_date_n, '%m-%d-%Y')
+    backdate_formatted = datetime.datetime.strftime(backdate, '%m-%d-%Y')
+    print(leading_date_formatted)
+    print(backdate_formatted)
+    sql = "SELECT COUNT(CORRECTIVE_ACTION) as '# of MX Actions' FROM SKW_PM_NOV_2020_post_MHIRJ_filter WHERE SNAG_DATE BETWEEN '"+str(backdate_formatted)+"' AND '"+str(leading_date_formatted)+"' AND AC_MODEL = 'CRJ700' GROUP BY AC_SN"
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
+        PM_ScatterPlot_sql_df = pd.read_sql(sql, conn)
+        conn.close()
+        return PM_ScatterPlot_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+# for reference -> http://localhost:8000/Landing_Chart_PM_Scatter/11-12-2020
+@app.post("/Landing_Chart_PM_Scatter/{leading_date}")
+async def get_Chart_PM_Scatter(leading_date: str):
+    PM_ScatterPlot_sql_df = connect_database_for_PM_ScatterPlot(leading_date)
+    PM_ScatterPlot_sql_df_json = PM_ScatterPlot_sql_df.to_json(orient='records')
+    return PM_ScatterPlot_sql_df_json
+
+def connect_database_for_PM_ScatterPlot_static():
+    """
+    current_date = datetime.datetime.now()
+    leading_date_n = datetime.datetime.strptime(current_date, '%m-%d-%Y')
+    backdate = leading_date_n - datetime.timedelta(days = 7)
+    leading_date_formatted = datetime.datetime.strftime(leading_date_n, '%m-%d-%Y')
+    backdate_formatted = datetime.datetime.strftime(backdate, '%m-%d-%Y')
+    print(leading_date_formatted)
+    print(backdate_formatted)
+    """
+    sql = "SELECT COUNT(CORRECTIVE_ACTION) as '# of MX Actions' FROM SKW_PM_NOV_2020_post_MHIRJ_filter WHERE SNAG_DATE BETWEEN '11-5-2020' AND '11-12-2020' AND AC_MODEL = 'CRJ700' GROUP BY AC_SN"
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
+        PM_ScatterPlot_sql_df = pd.read_sql(sql, conn)
+        conn.close()
+        return PM_ScatterPlot_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+# for reference -> http://localhost:8000/Landing_Chart_PM_Scatter
+@app.post("/Landing_Chart_PM_Scatter")
+async def get_Chart_PM_Scatter_static():
+    PM_ScatterPlot_sql_df = connect_database_for_PM_ScatterPlot_static()
+    PM_ScatterPlot_sql_df_json = PM_ScatterPlot_sql_df.to_json(orient='records')
+    return PM_ScatterPlot_sql_df_json
+
+
+def connect_db_MDCdata_chartb_static():
+    sql = "SELECT * FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '11-5-2020' AND '11-12-2020'"
+    column_names = ["Aircraft", "Tail", "Flight Leg No",
+                    "ATA Main", "ATA Sub", "ATA", "ATA Description", "LRU",
+                    "DateAndTime", "MDC Message", "Status", "Flight Phase", "Type",
+                    "Intermittent", "Equation ID", "Source", "Diagnostic Data",
+                    "Data Used to Determine Msg", "ID", "Flight", "airline_id", "aircraftno"]
+    print(sql)
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
+        MDCdataDF_chartb = pd.read_sql(sql, conn)
+        MDCdataDF_chartb.columns = column_names
+        conn.close()
+        return MDCdataDF_chartb
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+# for reference -> http://localhost:8000/Landing_Chart_B
+@app.post("/Landing_Chart_B")
+async def get_Chart_B():
+    MDCdataDF_chartb = connect_db_MDCdata_chartb_static()
+    Topvalues2 = 10
+    # groups the data by Aircraft and Main ATA, produces a count of values in each ata by counting entries in Equation ID
+    MessageCountbyAircraftATA = MDCdataDF_chartb[["aircraftno", "ATA Main", "Equation ID"]].groupby(
+        ["aircraftno", "ATA Main"]).count()
+    # transpose the indexes. where the ATA label becomes the column and the aircraft is row. counts are middle
+    TransposedMessageCountbyAircraftATA = MessageCountbyAircraftATA["Equation ID"].unstack()
+    # fill Null values with 0
+    TransposedMessageCountbyAircraftATA.fillna(value=0, inplace=True)
+    # sum all the counts by row, plus create a new column called sum
+    TransposedMessageCountbyAircraftATA["Sum"] = TransposedMessageCountbyAircraftATA.sum(axis=1)
+    # sort the dataframe by the values of sum, and from the topvalues2 the user chooses
+    TransposedMessageCountbyAircraftATA = TransposedMessageCountbyAircraftATA.sort_values("Sum").tail(Topvalues2)
+    # create a final dataframe for plotting without the new column created before
+    TransposedMessageCountbyAircraftATAfinalPLOT = TransposedMessageCountbyAircraftATA.drop(["Sum"], axis=1)
+    print(TransposedMessageCountbyAircraftATAfinalPLOT.columns)
+    chart_b_df_json = TransposedMessageCountbyAircraftATAfinalPLOT.to_json(orient='index')
+    return chart_b_df_json
+
+# for reference -> http://localhost:8000/Landing_Chart_B/15/11-11-2020/11-17-2020
+@app.post("/Landing_Chart_B/{top_n}/{from_dt}/{to_dt}")
+async def get_Chart_B(top_n: int,from_dt: str, to_dt: str):
+    MDCdataDF_chartb = connect_db_MDCdata_chartb(from_dt, to_dt)
+    Topvalues2 = top_n
+    # groups the data by Aircraft and Main ATA, produces a count of values in each ata by counting entries in Equation ID
+    MessageCountbyAircraftATA = MDCdataDF_chartb[["aircraftno", "ATA Main", "Equation ID"]].groupby(
+        ["aircraftno", "ATA Main"]).count()
+    # transpose the indexes. where the ATA label becomes the column and the aircraft is row. counts are middle
+    TransposedMessageCountbyAircraftATA = MessageCountbyAircraftATA["Equation ID"].unstack()
+    # fill Null values with 0
+    TransposedMessageCountbyAircraftATA.fillna(value=0, inplace=True)
+    # sum all the counts by row, plus create a new column called sum
+    TransposedMessageCountbyAircraftATA["Sum"] = TransposedMessageCountbyAircraftATA.sum(axis=1)
+    # sort the dataframe by the values of sum, and from the topvalues2 the user chooses
+    TransposedMessageCountbyAircraftATA = TransposedMessageCountbyAircraftATA.sort_values("Sum").tail(Topvalues2)
+    # create a final dataframe for plotting without the new column created before
+    TransposedMessageCountbyAircraftATAfinalPLOT = TransposedMessageCountbyAircraftATA.drop(["Sum"], axis=1)
+    print(TransposedMessageCountbyAircraftATAfinalPLOT)
+    chart_b_df_json = TransposedMessageCountbyAircraftATAfinalPLOT.to_json(orient='index')
+    return chart_b_df_json
+
+# #### Corelation Stored Proc Call
+# def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
+#     equation_id = str(tuple(equation_id.replace(")","").replace("(","").replace("'","").split(",")))
+#     ata = str(tuple(ata.replace(")","").replace("(","").replace("'","").split(",")))
+#     sql = ""
+#     sql += "SELECT distinct p_id ,Operator ,Model ,Type ,Serial_No ,N_No ,Date"
+#     sql += ",[Failure Flag] ,[Maint Trans] ,[Maintenance Cancellations] ,[Maintenance Delays] ,Inspection"
+#     sql += ",CampType ,MRB ,Discrepancy ,[Corrective Action] ,[AC Total Hours] ,[AC Total Cycles]"
+#     sql += ",[Squawk Source] ,ATA ,Station ,ATA_SUB ,ATA_Main"
+#     sql += " FROM dbo.sample_corelation "
+#     sql += "WHERE CONVERT(date,Date) between '" + from_dt + "'  AND '" + to_dt + "'"
+#     if equation_id:
+#         sql += " AND EQ_ID NOT IN " + equation_id
+#     if ata:
+#         sql += " AND mdc_ata_Main IN " + ata
+#     try:
+#         conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+#                               user=db_username, password=db_password)
+#         corelation_df = pd.read_sql(sql, conn)
+#         conn.close()
+#         return corelation_df
+#     except pyodbc.Error as err:
+#         print("Couldn't connect to Server")
+#         print("Error message:- " + str(err))
+# # for reference -> http://localhost:8000/corelation/11-11-2020/11-12-2020/B1-008003/27
+# @app.post("/corelation/{fromDate}/{toDate}/{equation_id}/{ata}")
+# async def get_CorelationData(fromDate: str , toDate: str, equation_id:str, ata:str):
+#     corelation_df = connect_database_for_corelation(fromDate, toDate, equation_id, ata)
+#     corelation_df_json = corelation_df.to_json(orient='records')
+#     return corelation_df_json
+#
+# """
+# #### Corelation Stored Proc Call
+# def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
+#
+#     sql = "EXEC corelation '"+from_dt+"','"+to_dt+"','"+equation_id+"','"+str(ata)+"'"
+#
+#     try:
+#         conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
+#                               user='mhirj-admin', password='KaranCool123')
+#         corelation_df = pd.read_sql(sql, conn)
+#         conn.close()
+#         return corelation_df
+#     except pyodbc.Error as err:
+#         print("Couldn't connect to Server")
+#         print("Error message:- " + str(err))
+#
+# # for reference -> http://localhost:8000/corelation/11-11-2020/11-12-2020/B1-008003/27
+# @app.post("/corelation/{fromDate}/{toDate}/{equation_id}/{ata}")
+# async def get_CorelationData(fromDate: str , toDate: str, equation_id:str, ata:int):
+#     corelation_df = connect_database_for_corelation(fromDate, toDate, equation_id, ata)
+#     corelation_df_json = corelation_df.to_json(orient='records')
+#     return corelation_df_json
+# """
+
+
 #### Corelation Stored Proc Call
 def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
+    equation_id = str(tuple(equation_id.replace(")", "").replace("(", "").replace("'", "").split(",")))
+    ata = str(tuple(ata.replace(")", "").replace("(", "").replace("'", "").split(",")))
+    sql = ''
 
     equation_id = str(tuple(equation_id.replace(")","").replace("(","").replace("'","").split(",")))
     ata = str(tuple(ata.replace(")","").replace("(","").replace("'","").split(",")))
     sql =''
+
     sql += "SELECT distinct p_id ,Operator ,Model ,Type ,Serial_No ,N_No ,Date										"
     sql += "      ,[Failure Flag] ,[Maint Trans] ,[Maintenance Cancellations] ,[Maintenance Delays] ,Inspection             "
     sql += "      ,CampType ,MRB ,Discrepancy ,[Corrective Action] ,[AC Total Hours] ,[AC Total Cycles]                   "
     sql += "      ,[Squawk Source] ,ATA ,Station ,ATA_SUB ,ATA_Main                                                   "
     sql += "  FROM dbo.sample_corelation                                                                            "
+
+    sql += "WHERE CONVERT(date,Date) between '" + from_dt + "'  AND '" + to_dt + "'"
+    if equation_id:
+        sql += "	AND EQ_ID NOT IN " + equation_id
+    if ata:
+        sql += "	AND mdc_ata_Main IN " + ata
+
+    try:
+        conn = pyodbc.connect(driver='{ODBC Driver 17 for SQL Server}', host=hostname,
+                              database=db_name,
+                              user=db_username, password=db_password)
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
     sql += "WHERE CONVERT(date,Date) between '" + from_dt + "'  AND '" + to_dt + "'"                                              
     if equation_id:                                                                                              
         sql += "	AND EQ_ID NOT IN " + equation_id 
     if 	ata:                                                                                      
-        sql += "	AND mdc_ata_Main IN " +  ata                                                           
+        sql += "	AND mdc_ata_Main IN " +  ata
 
     try:
         conn = pyodbc.connect(driver='{ODBC Driver 17 for SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
                               user='mhirj-admin', password='KaranCool123')
+
         corelation_df = pd.read_sql(sql, conn)
         conn.close()
         return corelation_df
@@ -1841,9 +2117,14 @@ def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
         print("Couldn't connect to Server")
         print("Error message:- " + str(err))
 
+
 # for reference -> http://localhost:8000/corelation/11-11-2020/11-12-2020/B1-008003/27
 @app.post("/corelation/{fromDate}/{toDate}/{equation_id}/{ata}")
+
+# async def get_CorelationData(fromDate: str, toDate: str, equation_id: str, ata: str):
+
 async def get_CorelationData(fromDate: str , toDate: str, equation_id:str, ata:str):
+
     corelation_df = connect_database_for_corelation(fromDate, toDate, equation_id, ata)
     corelation_df_json = corelation_df.to_json(orient='records')
     return corelation_df_json
@@ -1877,12 +2158,43 @@ async def get_CorelationDataPID(p_id: str):
     corelation_df_json = corelation_df.to_json(orient='records')
     return corelation_df
 
+def connect_database_for_corelation_pid(p_id):
+    sql = """SELECT [mdc_ID], [EQ_ID], [aircraftno], [ATA_Description], [LRU], [DateAndTime], [MDC_Date], 
+	[MDC_MESSAGE], [EQ_DESCRIPTION], [CAS], [LRU_CODE], [LRU_NAME], [FAULT_LOGGED], [MDC_ATA], 
+	[mdc_ata_main], [mdc_ata_sub], [Status], [mdc_type]
+    FROM [dbo].[sample_corelation]
+    WHERE p_id = (%s)
+    ORDER BY MDC_Date""" % (p_id)
+
+    print(sql)
+
+    try:
+        conn = pyodbc.connect(driver='{ODBC Driver 17 for SQL Server}', host=hostname,
+                              database=db_name,
+                              user=db_username, password=db_password)
+        corelation_df = pd.read_sql(sql, conn)
+        print('query successful')
+        conn.close()
+        return corelation_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+
+@app.post("/corelation/{p_id}")
+async def get_CorelationDataPID(p_id: str):
+    corelation_df = connect_database_for_corelation_pid(p_id)
+    print('corelation func :', corelation_df)
+    corelation_df_json = corelation_df.to_json(orient='records')
+    return corelation_df
+
+
 def connect_database_for_eqId(all):
     sql = "SELECT DISTINCT Airline_MDC_Data.Equation_ID FROM Airline_MDC_Data"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
         report_eqId_sql_df = pd.read_sql(sql, conn)
         #MDCdataDF.columns = column_names
         return report_eqId_sql_df
@@ -1902,8 +2214,8 @@ def connect_database_for_ata_main(all):
     sql = "SELECT DISTINCT Airline_MDC_Data.ATA_Main FROM Airline_MDC_Data"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
         report_ata_main_sql_df = pd.read_sql(sql, conn)
         #MDCdataDF.columns = column_names
         return report_ata_main_sql_df
@@ -1918,3 +2230,75 @@ async def get_eqIData(all:str):
     report_ata_main_sql_df = connect_database_for_ata_main(all)
     report_ata_main_sql_df_json = report_ata_main_sql_df.to_json(orient='records')
     return report_ata_main_sql_df_json
+
+
+## Landing Page Chart - Scatter Plot
+def connect_database_for_scatter_plot():
+
+    sql = "EXEC Getaircraftstatsv2"
+
+    print(sql)
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
+        scatter_chart_sql_df = pd.read_sql(sql, conn)
+        conn.close()
+        return scatter_chart_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+@app.post("/scatter_chart_MDC_PM")
+async def get_ScatterChart_MDC_PM_Data():
+    scatter_chart_sql_df = connect_database_for_scatter_plot()
+    scatter_chart_sql_df_json = scatter_chart_sql_df.to_json(orient='records')
+    return scatter_chart_sql_df_json
+
+
+def connect_database_for_scatter_plot_v2(start_date):
+
+    sql = "EXEC Getaircraftstatsv2 '"+start_date+"'"
+    print(sql)
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
+        scatter_chart_sql_df = pd.read_sql(sql, conn)
+        conn.close()
+        return scatter_chart_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+#For reference -> http://localhost:8000/scatter_chart_MDC_PM_Data/2020-11-12
+@app.post("/scatter_chart_MDC_PM/{start_date}")
+async def get_ScatterChart_MDC_PM_Data(start_date:str):
+    scatter_chart_sql_df = connect_database_for_scatter_plot_v2(start_date)
+    scatter_chart_sql_df_json = scatter_chart_sql_df.to_json(orient='records')
+    return scatter_chart_sql_df_json
+
+
+## Landing Page Chart - StackedBar Chart
+def connect_database_for_stacked_plot():
+
+    sql = "EXEC Getlandingpagechart"
+
+    print(sql)
+    try:
+        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+                              user=db_username, password=db_password)
+        stacked_chart_sql_df = pd.read_sql(sql, conn)
+        conn.close()
+        return stacked_chart_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+@app.post("/stackedbar_chart_MDCmessages")
+async def get_stackedbar_Chart_MDC_PM_Data():
+    stacked_chart_sql_df = connect_database_for_stacked_plot()
+    stacked_chart_sql_df_json = stacked_chart_sql_df.to_json(orient='records')
+    return stacked_chart_sql_df_json
+
+
+
+@app.get("/test/{one_id}")
+def test_api(one_id: int):
+    return{"one_id": "Just a test"}
