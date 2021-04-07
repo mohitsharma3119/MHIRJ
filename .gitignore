@@ -1,0 +1,8 @@
+__pycache__/*
+gunicorn-access.log
+gunicorn-error.log
+gunicorn-error.log.save
+gunicorn-error.log.save.1
+gunicorn.py
+my_env/
+
