@@ -32,43 +32,6 @@ export default function Scatter1() {
   const classes = useStyles();
   const ChartJsImage = require('chartjs-to-image');
   const [chartData1, setChartData1] = useState({});
-  const [chartData2, setChartData2] = useState({});
-
-  let pmMessage = [];
-
-  const path='http://localhost:8000/scatter_chart_MDC_PM'
-  
-  axios.post(path)
-    .then(res => {
-      //console.log(res,"response");
-      
-      for (const dataObj of JSON.parse(res.data)) {
-        let mdc = parseInt(dataObj. MDC_Message_Cnt)
-        let pm = parseInt(dataObj.MX_actions)
-        pmMessage.push({"x": mdc, "y": pm})
-        
-      }
-      //console.log(mdcMessage);
-      setChartData2({
-        labels:pmMessage,
-        datasets: [
-          {
-            label:"Fleet Status- Last 7 days",
-            data:pmMessage,
-            backgroundColor: "#d8e4f0",
-            borderWidth: 2,
-            borderColor: "black",
-            pointRadius: 5
-          }
-        ]
-      });
-    })
-    .catch(err => {
-      //console.log(err);
-    });
- 
- 
-  
 
  function save(e) {
     //save to png
