@@ -2047,11 +2047,11 @@ def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
         print("Couldn't connect to Server")
         print("Error message:- " + str(err))
 
-    sql += "WHERE CONVERT(date,Date) between '" + from_dt + "'  AND '" + to_dt + "'"                                              
-    if equation_id:                                                                                              
-        sql += "	AND EQ_ID NOT IN " + equation_id 
-    if 	ata:                                                                                      
-        sql += "	AND mdc_ata_Main IN " +  ata
+#     sql += "WHERE CONVERT(date,Date) between '" + from_dt + "'  AND '" + to_dt + "'"                                              
+#     if equation_id:                                                                                              
+#         sql += "	AND EQ_ID NOT IN " + equation_id 
+#     if 	ata:                                                                                      
+#         sql += "	AND mdc_ata_Main IN " +  ata
 
     try:
         conn = pyodbc.connect(driver='{ODBC Driver 17 for SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
