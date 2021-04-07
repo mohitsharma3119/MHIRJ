@@ -368,8 +368,8 @@ const options = {
   fixedHeader: true,
   expandableRows: true,
   renderExpandableRow: (rowData, rowMeta) => {
-    console.log(rowData, rowMeta);
-    return (
+    console.log(rowData, rowMeta, "row data");
+    return (    
     //   <TableRow>
     //   <TableCell />
     //   <TableCell colSpan={2}>
@@ -384,21 +384,20 @@ const options = {
     <TableRow>
         <TableCell colSpan={rowData.length+1}>
         <CorrelationSubTable
-      responseData = {responseData}
-      p_id = {rowData[0]}
-      dateFrom = {dateFrom}
-      dateTo = {dateTo}
-      EqID = {EqID}
-      ATAMain = {ATAMain}
-    />
+          p_id = {rowData[0]}
+          //p_id = "4322"
+          dateFrom = {dateFrom}
+          dateTo = {dateTo}
+          EqID = {EqID}
+          ATAMain = {ATAMain}
+        />
         </TableCell>
-        </TableRow>
-    
+    </TableRow>
     );
   },
   fixedSelectColumn: true,
   downloadOptions: {
-    filename: 'Correlation Report from ' + dateFrom + ' to ' + dateTo + '.csv',
+    filename: 'PM Report from ' + dateFrom + ' to ' + dateTo + '.csv',
     separator: ',',
   },
   draggableColumns: {
