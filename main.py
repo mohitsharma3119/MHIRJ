@@ -2014,61 +2014,6 @@ async def get_Chart_B(top_n: int,from_dt: str, to_dt: str):
     chart_b_df_json = TransposedMessageCountbyAircraftATAfinalPLOT.to_json(orient='index')
     return chart_b_df_json
 
-# #### Corelation Stored Proc Call
-# def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
-#     equation_id = str(tuple(equation_id.replace(")","").replace("(","").replace("'","").split(",")))
-#     ata = str(tuple(ata.replace(")","").replace("(","").replace("'","").split(",")))
-#     sql = ""
-#     sql += "SELECT distinct p_id ,Operator ,Model ,Type ,Serial_No ,N_No ,Date"
-#     sql += ",[Failure Flag] ,[Maint Trans] ,[Maintenance Cancellations] ,[Maintenance Delays] ,Inspection"
-#     sql += ",CampType ,MRB ,Discrepancy ,[Corrective Action] ,[AC Total Hours] ,[AC Total Cycles]"
-#     sql += ",[Squawk Source] ,ATA ,Station ,ATA_SUB ,ATA_Main"
-#     sql += " FROM dbo.sample_corelation "
-#     sql += "WHERE CONVERT(date,Date) between '" + from_dt + "'  AND '" + to_dt + "'"
-#     if equation_id:
-#         sql += " AND EQ_ID NOT IN " + equation_id
-#     if ata:
-#         sql += " AND mdc_ata_Main IN " + ata
-#     try:
-#         conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
-#                               user=db_username, password=db_password)
-#         corelation_df = pd.read_sql(sql, conn)
-#         conn.close()
-#         return corelation_df
-#     except pyodbc.Error as err:
-#         print("Couldn't connect to Server")
-#         print("Error message:- " + str(err))
-# # for reference -> http://localhost:8000/corelation/11-11-2020/11-12-2020/B1-008003/27
-# @app.post("/corelation/{fromDate}/{toDate}/{equation_id}/{ata}")
-# async def get_CorelationData(fromDate: str , toDate: str, equation_id:str, ata:str):
-#     corelation_df = connect_database_for_corelation(fromDate, toDate, equation_id, ata)
-#     corelation_df_json = corelation_df.to_json(orient='records')
-#     return corelation_df_json
-#
-# """
-# #### Corelation Stored Proc Call
-# def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
-#
-#     sql = "EXEC corelation '"+from_dt+"','"+to_dt+"','"+equation_id+"','"+str(ata)+"'"
-#
-#     try:
-#         conn = pyodbc.connect(driver='{SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-#                               user='mhirj-admin', password='KaranCool123')
-#         corelation_df = pd.read_sql(sql, conn)
-#         conn.close()
-#         return corelation_df
-#     except pyodbc.Error as err:
-#         print("Couldn't connect to Server")
-#         print("Error message:- " + str(err))
-#
-# # for reference -> http://localhost:8000/corelation/11-11-2020/11-12-2020/B1-008003/27
-# @app.post("/corelation/{fromDate}/{toDate}/{equation_id}/{ata}")
-# async def get_CorelationData(fromDate: str , toDate: str, equation_id:str, ata:int):
-#     corelation_df = connect_database_for_corelation(fromDate, toDate, equation_id, ata)
-#     corelation_df_json = corelation_df.to_json(orient='records')
-#     return corelation_df_json
-# """
-
 
 #### Corelation Stored Proc Call
 def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
@@ -2078,15 +2023,17 @@ def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
 
     equation_id = str(tuple(equation_id.replace(")","").replace("(","").replace("'","").split(",")))
     ata = str(tuple(ata.replace(")","").replace("(","").replace("'","").split(",")))
-    sql =''
+    sql =""
 
-    sql += "SELECT distinct p_id ,Operator ,Model ,Type ,Serial_No ,N_No ,Date										"
-    sql += "      ,[Failure Flag] ,[Maint Trans] ,[Maintenance Cancellations] ,[Maintenance Delays] ,Inspection             "
-    sql += "      ,CampType ,MRB ,Discrepancy ,[Corrective Action] ,[AC Total Hours] ,[AC Total Cycles]                   "
-    sql += "      ,[Squawk Source] ,ATA ,Station ,ATA_SUB ,ATA_Main                                                   "
-    sql += "  FROM dbo.sample_corelation                                                                            "
+    sql += "SELECT distinct p_id ,Operator ,Model ,Type ,Serial_No ,N_No ,Date"
+    sql += ",[Failure Flag] ,[Maint Trans] ,[Maintenance Cancellations] ,[Maintenance Delays] ,Inspection"
+    sql += ",CampType ,MRB ,Discrepancy ,[Corrective Action] ,[AC Total Hours] ,[AC Total Cycles]"
+    sql += ",[Squawk Source] ,ATA ,Station ,ATA_SUB ,ATA_Main"
+    sql += "FROM dbo.sample_corelation"
 
     sql += "WHERE CONVERT(date,Date) between '" + from_dt + "'  AND '" + to_dt + "'"
+
+
     if equation_id:
         sql += "	AND EQ_ID NOT IN " + equation_id
     if ata:
@@ -2100,11 +2047,11 @@ def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
         print("Couldn't connect to Server")
         print("Error message:- " + str(err))
 
-    sql += "WHERE CONVERT(date,Date) between '" + from_dt + "'  AND '" + to_dt + "'"                                              
-    if equation_id:                                                                                              
-        sql += "	AND EQ_ID NOT IN " + equation_id 
-    if 	ata:                                                                                      
-        sql += "	AND mdc_ata_Main IN " +  ata
+#     sql += "WHERE CONVERT(date,Date) between '" + from_dt + "'  AND '" + to_dt + "'"                                              
+#     if equation_id:                                                                                              
+#         sql += "	AND EQ_ID NOT IN " + equation_id 
+#     if 	ata:                                                                                      
+#         sql += "	AND mdc_ata_Main IN " +  ata
 
     try:
         conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
@@ -2156,7 +2103,7 @@ async def get_CorelationDataPID(p_id: str):
     corelation_df = connect_database_for_corelation_pid(p_id)
     print('corelation func :',corelation_df)
     corelation_df_json = corelation_df.to_json(orient='records')
-    return corelation_df
+    return corelation_df_json
 
 def connect_database_for_corelation_pid(p_id):
     sql = """SELECT [mdc_ID], [EQ_ID], [aircraftno], [ATA_Description], [LRU], [DateAndTime], [MDC_Date], 
