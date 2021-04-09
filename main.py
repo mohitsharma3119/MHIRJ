@@ -45,7 +45,7 @@ app.add_middleware(
 
 OutputTableHistory2 = pd.DataFrame()
 MDCeqns_arrayforgraphing = pd.DataFrame()
-
+db_driver = "ODBC Driver 17 for SQL Server"
 hostname = "mhirjserver.database.windows.net"
 db_name = "MHIRJ"
 db_username = "mhirj-admin"
@@ -70,7 +70,7 @@ def convert_array_to_tuple(array_list):
 def connect_to_fetch_all_ata(from_dt, to_dt):
     all_ata_query = "SELECT DISTINCT ATA_Main from Airline_MDC_Data WHERE DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         all_ata_df = pd.read_sql(all_ata_query, conn)
 
@@ -82,7 +82,7 @@ def connect_to_fetch_all_ata(from_dt, to_dt):
 def connect_to_fetch_all_eqids(from_dt, to_dt):
     all_ata_query = "SELECT DISTINCT Equation_ID from Airline_MDC_Data WHERE DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         all_eqid_df = pd.read_sql(all_ata_query, conn)
 
@@ -175,7 +175,7 @@ def connect_database_MDCdata(ata, excl_eqid, airline_operator, include_current_m
                "Data Used to Determine Msg", "ID", "Flight", "airline_id", "aircraftno"]
     print(sql)
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         MDCdataDF = pd.read_sql(sql, conn)
         MDCdataDF.columns = column_names
@@ -208,7 +208,7 @@ def connect_database_MDCmessagesInputs():
     sql = "SELECT * FROM MDCMessagesInputs"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         # add column names from csv file into dataframe
         MDCMessagesDF = pd.read_sql(sql, conn)
@@ -222,7 +222,7 @@ def connect_database_TopMessagesSheet():
     sql = "SELECT * FROM TopMessagesSheet"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         TopMessagesDF = pd.read_sql(sql, conn)
         return TopMessagesDF
@@ -1693,7 +1693,7 @@ def connect_database_for_chart1(n, aircraft_no, from_dt, to_dt):
     sql = "SELECT TOP "+str(n)+" Count(MDCMessagesInputs.Message), Airline_MDC_Data. Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA FROM Airline_MDC_Data INNER JOIN MDCMessagesInputs ON Airline_MDC_Data.ATA = MDCMessagesInputs.ATA WHERE Airline_MDC_Data.aircraftno = "+str(aircraft_no)+" AND Airline_MDC_Data.DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Airline_MDC_Data.Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA ORDER BY Count(MDCMessagesInputs.Message) DESC"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         chart1_sql_df = pd.read_sql(sql, conn)
         #MDCdataDF.columns = column_names
@@ -1718,7 +1718,7 @@ def connect_database_for_chart2(n, ata, from_dt, to_dt):
         sql = "SELECT TOP "+str(n)+" COUNT(ATA), aircraft FROM Airline_MDC_Data where ATA='"+ata+"' AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY ATA, Aircraft ORDER BY COUNT(ATA) DESC"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         chart2_sql_df = pd.read_sql(sql, conn)
         # MDCdataDF.columns = column_names
@@ -1742,7 +1742,7 @@ def connect_database_for_chart3(aircraft_no, equation_id, is_flight_phase_enable
         sql = "SELECT COUNT(*) AS OccurencesPerDay, cast(DateAndTime as date) AS Dates from Airline_MDC_Data WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY cast(DateAndTime as date)"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         chart3_sql_df = pd.read_sql(sql, conn)
         # MDCdataDF.columns = column_names
@@ -1766,7 +1766,7 @@ def connect_database_for_chart5(aircraft_no, equation_id, is_flight_phase_enable
         sql = "SELECT COUNT(Intermittent) AS OccurencesOfIntermittent, Flight_Leg_No FROM Airline_MDC_Data  WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Flight_Leg_No"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         chart5_sql_df = pd.read_sql(sql, conn)
         # MDCdataDF.columns = column_names
@@ -1816,7 +1816,7 @@ def connect_database_MDCData_Filtered(date_entered):
     print(backdate_formatted)
     sql = "SELECT * FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '" + backdate_formatted + "' AND '" + leading_date_formatted + "'"
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         # add column names from csv file into dataframe
         MDCDataFiltered = pd.read_sql(sql, conn)
@@ -1837,7 +1837,7 @@ def connect_database_PMData_Filtered(date_entered):
     print(backdate_formatted)
     sql = "SELECT * FROM SKW_PM_NOV_2020_post_MHIRJ_filter WHERE SNAG_DATE BETWEEN '" + backdate_formatted + "' AND '" + leading_date_formatted + "'"
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         # add column names from csv file into dataframe
         PMDataFiltered = pd.read_sql(sql, conn)
@@ -1856,7 +1856,7 @@ def connect_database_for_MDC_ScatterPlot(leading_date):
     print(backdate_formatted)
     sql = "SELECT COUNT(Airline_MDC_Data.MDC_Message) as '# of MDC Messages' FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '"+str(backdate_formatted)+"' AND '"+str(leading_date_formatted)+"' GROUP BY aircraftno"
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         MDC_ScatterPlot_sql_df = pd.read_sql(sql, conn)
         conn.close()
@@ -1883,7 +1883,7 @@ def connect_database_for_MDC_ScatterPlot_static():
     """
     sql = "SELECT COUNT(Airline_MDC_Data.MDC_Message) as '# of MDC Messages' FROM Airline_MDC_Data WHERE DateAndTime BETWEEN '11-5-2020' AND '11-12-2020' GROUP BY aircraftno"
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         MDC_ScatterPlot_sql_df = pd.read_sql(sql, conn)
         conn.close()
@@ -1908,7 +1908,7 @@ def connect_database_for_PM_ScatterPlot(leading_date):
     print(backdate_formatted)
     sql = "SELECT COUNT(CORRECTIVE_ACTION) as '# of MX Actions' FROM SKW_PM_NOV_2020_post_MHIRJ_filter WHERE SNAG_DATE BETWEEN '"+str(backdate_formatted)+"' AND '"+str(leading_date_formatted)+"' AND AC_MODEL = 'CRJ700' GROUP BY AC_SN"
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         PM_ScatterPlot_sql_df = pd.read_sql(sql, conn)
         conn.close()
@@ -1935,7 +1935,7 @@ def connect_database_for_PM_ScatterPlot_static():
     """
     sql = "SELECT COUNT(CORRECTIVE_ACTION) as '# of MX Actions' FROM SKW_PM_NOV_2020_post_MHIRJ_filter WHERE SNAG_DATE BETWEEN '11-5-2020' AND '11-12-2020' AND AC_MODEL = 'CRJ700' GROUP BY AC_SN"
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         PM_ScatterPlot_sql_df = pd.read_sql(sql, conn)
         conn.close()
@@ -1960,7 +1960,7 @@ def connect_db_MDCdata_chartb_static():
                     "Data Used to Determine Msg", "ID", "Flight", "airline_id", "aircraftno"]
     print(sql)
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         MDCdataDF_chartb = pd.read_sql(sql, conn)
         MDCdataDF_chartb.columns = column_names
@@ -2093,7 +2093,7 @@ def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
         sql += "	AND mdc_ata_Main IN " + ata
 
     try:
-        conn = pyodbc.connect(driver='{ODBC Driver 17 for SQL Server}', host=hostname,
+        conn = pyodbc.connect(driver=db_driver, host=hostname,
                               database=db_name,
                               user=db_username, password=db_password)
     except pyodbc.Error as err:
@@ -2107,8 +2107,8 @@ def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
         sql += "	AND mdc_ata_Main IN " +  ata
 
     try:
-        conn = pyodbc.connect(driver='{ODBC Driver 17 for SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
+                              user=db_username, password=db_password)
 
         corelation_df = pd.read_sql(sql, conn)
         conn.close()
@@ -2141,8 +2141,8 @@ def connect_database_for_corelation_pid(p_id):
     print(sql)
 
     try:
-        conn = pyodbc.connect(driver='{ODBC Driver 17 for SQL Server}', host='mhirjserver.database.windows.net', database='MHIRJ',
-                              user='mhirj-admin', password='KaranCool123')
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
+                              user=db_username, password=db_password)
         corelation_df = pd.read_sql(sql, conn)
         print('query successful')
         conn.close()
@@ -2169,7 +2169,7 @@ def connect_database_for_corelation_pid(p_id):
     print(sql)
 
     try:
-        conn = pyodbc.connect(driver='{ODBC Driver 17 for SQL Server}', host=hostname,
+        conn = pyodbc.connect(driver=db_driver, host=hostname,
                               database=db_name,
                               user=db_username, password=db_password)
         corelation_df = pd.read_sql(sql, conn)
@@ -2186,14 +2186,14 @@ async def get_CorelationDataPID(p_id: str):
     corelation_df = connect_database_for_corelation_pid(p_id)
     print('corelation func :', corelation_df)
     corelation_df_json = corelation_df.to_json(orient='records')
-    return corelation_df
+    return corelation_df_json
 
 
 def connect_database_for_eqId(all):
     sql = "SELECT DISTINCT Airline_MDC_Data.Equation_ID FROM Airline_MDC_Data"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         report_eqId_sql_df = pd.read_sql(sql, conn)
         #MDCdataDF.columns = column_names
@@ -2214,7 +2214,7 @@ def connect_database_for_ata_main(all):
     sql = "SELECT DISTINCT Airline_MDC_Data.ATA_Main FROM Airline_MDC_Data"
 
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         report_ata_main_sql_df = pd.read_sql(sql, conn)
         #MDCdataDF.columns = column_names
@@ -2239,7 +2239,7 @@ def connect_database_for_scatter_plot():
 
     print(sql)
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         scatter_chart_sql_df = pd.read_sql(sql, conn)
         conn.close()
@@ -2259,7 +2259,7 @@ def connect_database_for_scatter_plot_v2(start_date):
     sql = "EXEC Getaircraftstatsv2 '"+start_date+"'"
     print(sql)
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         scatter_chart_sql_df = pd.read_sql(sql, conn)
         conn.close()
@@ -2283,7 +2283,7 @@ def connect_database_for_stacked_plot():
 
     print(sql)
     try:
-        conn = pyodbc.connect(driver='{SQL Server}', host=hostname, database=db_name,
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         stacked_chart_sql_df = pd.read_sql(sql, conn)
         conn.close()
@@ -2296,6 +2296,27 @@ async def get_stackedbar_Chart_MDC_PM_Data():
     stacked_chart_sql_df = connect_database_for_stacked_plot()
     stacked_chart_sql_df_json = stacked_chart_sql_df.to_json(orient='records')
     return stacked_chart_sql_df_json
+
+def connect_database_for_stacked_plot_v2(start_date, end_date, top_value):
+
+    sql = "EXEC Getlandingpagechart2 '"+start_date+"','"+end_date+"',"+str(top_value)+""
+    print(sql)
+    try:
+        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
+                              user=db_username, password=db_password)
+        stackedbarv2_chart_sql_df = pd.read_sql(sql, conn)
+        conn.close()
+        return stackedbarv2_chart_sql_df
+    except pyodbc.Error as err:
+        print("Couldn't connect to Server")
+        print("Error message:- " + str(err))
+
+#For reference -> http://localhost:8000/stacked_chart_MDC_PM_Data/2020-11-12/2020-11-13/15
+@app.post("/stacked_chart_MDC_PM/{start_date}/{end_date}/{top_value}")
+async def get_Stacked_Chart_MDC_PM_Data(start_date:str,end_date:str,top_value:int):
+    stackedbarv2_sql_df = connect_database_for_stacked_plot_v2(start_date,end_date,top_value)
+    stackedbarv2_chart_sql_df_json = stackedbarv2_sql_df.to_json(orient='records')
+    return stackedbarv2_chart_sql_df_json
 
 
 
