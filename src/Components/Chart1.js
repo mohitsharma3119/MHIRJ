@@ -100,7 +100,7 @@ export default function Chart1() {
       <Grid container spacing={12}>
       <Grid item xs={12}>
           <form  className={classes.root1}>
-            <div><h1 style={{color:"#001C3E"}}>MESSAGE OCCURENCE FOR AIRCRAFT</h1></div>  
+            <div><h1 style={{color:"#001C3E", textAlign: "center" }}>MESSAGE OCCURENCE FOR AIRCRAFT</h1></div>  
             <div> <TextField onChange= {(e)=>handle(e)} id="aircraft_no" value={data_chart1.aircraft_no} label="Aicraft to study" defaultValue=" " variant="outlined" /></div>
             <br></br>
             <div> <TextField onChange= {(e)=>handle(e)} id="top_value" value={data_chart1.top_value} label="Top Values" defaultValue=" " variant="outlined" /></div>
