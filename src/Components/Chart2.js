@@ -98,7 +98,7 @@ export default function Chart2() {
         <Grid item xs={12}>
 
           <form className={classes.root1} noValidate autoComplete="off">
-          <div><h1 style={{color:"#001C3E"}}>TOP AIRCRAFT BY ATA</h1></div>   
+          <div><h1 style={{color:"#001C3E" , textAlign: "center" }}>TOP AIRCRAFT BY ATA</h1></div>   
             <div> <TextField onChange= {(e)=>handle_chart2(e)} id="ata" value={data_chart2.ata} label="ATA" defaultValue=" " variant="outlined" /></div>
             <br></br>
             <div> <TextField onChange= {(e)=>handle_chart2(e)} id="top_value" value={data_chart2.top_value} label="Top Values" defaultValue=" " variant="outlined" /></div>

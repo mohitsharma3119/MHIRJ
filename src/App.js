@@ -55,39 +55,7 @@ import TrendingUpSharpIcon from '@material-ui/icons/TrendingUpSharp';
 
 const drawerWidth = 300;
 
-// const theme = createMuiTheme({
-//     palette: {
-//       primary: {
-//         main: "#044269",
-//         light: "#416d97",
-//         dark: "#001c3e",
-//       },
-//       secondary: {
-//         main: "#c5d3e0",
-//         light: "#d8e4f0",
-//       },
-//       default: {
-//         light: "#f3f2f1",
-//         main: "#e0e0e0",
-//         dark: "#92A0AD",
-//       },
-//       success: {
-//         main: "#044269",
-//       },
-//       text: {
-//         primary: "#272727",
-//         secondary: "#757575",
-//         title1: "#044269",
-//         title2: "#2c3942",
-//       },
-//       background: {
-//         tabContent: "#f3f2f1",
-//       },
-//       typography: {
-//       useNextVariants: true,
-//     },
-//   }
-// });
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -423,40 +391,6 @@ export default function MiniDrawer() {
 
           </Collapse>
 
-          
-            
-            
-          
-            
-            
-              {/* <ListItem>
-              <Link to="/mdc" style={{ textDecoration: 'none' }}>
-                <ListItemIcon>
-                <TableChartSharpIcon style={{ color:"#001c3e"}} />
-                </ListItemIcon>
-                <Button variant="contained" color="#001c3e" open={open} onClick={handleClick}>
-                 MDC Messages
-                </Button>
-                <ListItem>
-                </ListItem>
-                </Link>
-                </ListItem> */}
-
-                
-            
-            
-              {/* <ListItem>
-              <Link to="/pm" style={{ textDecoration: 'none' }}>
-                <ListItemIcon>
-                <TableChartSharpIcon style={{ color:"#001c3e"}}/>
-                </ListItemIcon>
-                <Button variant="contained" color="#d8e4f0">
-                PM Messages
-                </Button>
-                </Link>
-                </ListItem> */}
-            
-            
               <ListItem >
               <Link to="/corr" style={{ textDecoration: 'none' }}>
                 <ListItemIcon>
@@ -482,6 +416,10 @@ export default function MiniDrawer() {
           <Route path="/Scatter1">
             <Scatter1 />
           </Route>
+ 
+           <Route path="/Stacked">
+              <Stacked />
+            </Route>
           <Route path="/rawdata">
             <Rawdata />
           </Route>
@@ -501,9 +439,9 @@ export default function MiniDrawer() {
             <Chart3 />
           </Route>
 
-          <Route path="/Chart4">
-            <Chart4 />
-          </Route>
+//           <Route path="/Chart4">
+//             <Chart4 />
+//           </Route>
 
           <Route path="/Chart5">
             <Chart5 />
