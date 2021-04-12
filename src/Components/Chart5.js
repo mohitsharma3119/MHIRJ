@@ -99,7 +99,7 @@ export default function Chart5() {
         <Grid item xs={12}>
 
           <form className={classes.root1} noValidate autoComplete="off">
-          <div><h1 style={{color:"#001C3E"}}>INTERMITTENCE FLIGHT LEG TREND FOR AIRCRAFT</h1></div>   
+          <div><h1 style={{color:"#001C3E", textAlign: "center" }}>INTERMITTENCE FLIGHT LEG TREND FOR AIRCRAFT</h1></div>   
             <div> <TextField onChange= {(e)=>handle_chart5(e)} id="aircraft_no" value={data_chart5.aircraft_no} label="Aircraft No" defaultValue=" " variant="outlined" /></div>
             <br></br>
             <div> <TextField onChange= {(e)=>handle_chart5(e)} id="equation_id" value={data_chart5.equation_id} label="Equation ID" defaultValue=" " variant="outlined" /></div>
