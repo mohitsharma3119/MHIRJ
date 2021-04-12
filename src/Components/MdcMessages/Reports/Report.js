@@ -105,7 +105,7 @@ const Report = (props) => {
       if (report.analysis !== "both") {
         /*http://localhost:8000/GenerateReport/history/2/2/2/3/('31','22','24','23')/('B1-007553','B1-005970')/skw/0/2020-11-18/2020-11-22*/
 
-        const path = 'http://localhost:8000/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
+        const path = 'http://40.82.160.131/api/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
         consecutiveDays + '/' + ata + '/' + eqid + '/'+ operator + '/' + messages + '/' + fromDate + '/' + toDate;
 
         try{
@@ -161,7 +161,7 @@ const Report = (props) => {
       http://127.0.0.1:8000/GenerateReport/history/2/2/2/8/('32','22')/('B1-007553', 'B1-246748')/skw/1/2020-11-11/2020-11-12/('10214','B1-005815'), ('10214','B1-005831')
       */
       
-      const flagPath = 'http://localhost:8000/GenerateReport/' + flagConditions.analysis + '/' + flagConditions.occurences + '/' + 
+      const flagPath = 'http://40.82.160.131/api/GenerateReport/' + flagConditions.analysis + '/' + flagConditions.occurences + '/' + 
       flagConditions.legs + '/' + flagConditions.intermittent + '/' + flagConditions.days + '/' + flagConditions.HistAta + '/' + 
       flagConditions.HistExEqID + '/'+ flagConditions.operator + '/' + flagConditions.messages + '/' + flagConditions.fromDate + '/' + 
       flagConditions.toDate + '/' + flagConditions.flagList;

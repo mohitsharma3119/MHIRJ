@@ -90,8 +90,7 @@ const PMTable = (props) => {
   const handleGeneratePMTable = ()=> {
   /*http://localhost:8000/corelation/11-11-2020/11-12-2020/B1-008003/27*/
 
-  const path = 'http://localhost:8000/corelation/' + dateFrom + '/' + dateTo + '/' + EqID + '/' + ATAMain;
-  //const path = 'http://localhost:8000/corelation/'+ dateFrom + '/' + dateTo + '/B1-008003/27';
+  const path = 'http://40.82.160.131/api/corelation/' + dateFrom + '/' + dateTo + '/' + EqID + '/' + ATAMain;
   console.log(path);
   try{
     axios.post(path).then(function (res) {
@@ -325,10 +324,6 @@ const columns = [
     },
 ];
 
-// useEffect( () => {
-  
-// }, []);
-
 if (data){
   data.map((item => {
     responseData.push(
@@ -370,17 +365,6 @@ const options = {
   renderExpandableRow: (rowData, rowMeta) => {
     console.log(rowData, rowMeta, "row data");
     return (    
-    //   <TableRow>
-    //   <TableCell />
-    //   <TableCell colSpan={2}>
-    //     <CorrelationSubTable
-    //       responseData = {responseData}
-    //       p_id = {rowData[0]}
-    //       dateFrom = {dateFrom}
-    //       dateTo = {dateTo}
-    //     />
-    //    </TableCell>
-    // </TableRow>
     <TableRow>
         <TableCell colSpan={rowData.length+1}>
         <CorrelationSubTable
