@@ -230,16 +230,43 @@ def connect_database_TopMessagesSheet():
         print("Couldn't connect to Server")
         print("Error message:- " + err)
 
+# @app.post("/MDCRawData/{ATAMain_list}/{exclude_EqID_list}/{airline_operator}/{include_current_message}/{fromDate}/{toDate}")
+# async def get_MDCRawData(ATAMain_list:str, exclude_EqID_list:str, airline_operator:str, include_current_message:int, fromDate: str , toDate: str):
+#
+#     c = connect_database_MDCdata(ATAMain_list, exclude_EqID_list, airline_operator, include_current_message, fromDate, toDate)
+#     #print(c['DateAndTime'].astype('datetime64[s]'))
+#     #c['DateAndTime'] = c['DateAndTime'].astype('datetime64[s]')
+#     c['DateAndTime'] = c['DateAndTime'].str.strip(':00.0000000')
+#     MDCdataDF_json = c.to_json(orient='records')
+#     return MDCdataDF_json
+#    return jsonify(MDCdataDF_json1)
+
+
 @app.post("/MDCRawData/{ATAMain_list}/{exclude_EqID_list}/{airline_operator}/{include_current_message}/{fromDate}/{toDate}")
 async def get_MDCRawData(ATAMain_list:str, exclude_EqID_list:str, airline_operator:str, include_current_message:int, fromDate: str , toDate: str):
-
     c = connect_database_MDCdata(ATAMain_list, exclude_EqID_list, airline_operator, include_current_message, fromDate, toDate)
     #print(c['DateAndTime'].astype('datetime64[s]'))
     #c['DateAndTime'] = c['DateAndTime'].astype('datetime64[s]')
-    c['DateAndTime'] = c['DateAndTime'].str.strip(':00.0000000')
+    print(c['DateAndTime'])
+    print(type(c['DateAndTime']))
+    #c['DateAndTime'] = (c['DateAndTime'].to_string()).strip(':00.0000000') #.str.strip(':00.0000000')
+    #print(c['DateAndTime'])
     MDCdataDF_json = c.to_json(orient='records')
     return MDCdataDF_json
-#    return jsonify(MDCdataDF_json1)
+
+
+# @app.post("/MDCRawData/{ATAMain_list}/{exclude_EqID_list}/{airline_operator}/{include_current_message}/{fromDate}/{toDate}")
+# async def get_MDCRawData(ATAMain_list:str, exclude_EqID_list:str, airline_operator:str, include_current_message:int, fromDate: str , toDate: str):
+#
+#     c = connect_database_MDCdata(ATAMain_list, exclude_EqID_list, airline_operator, include_current_message, fromDate, toDate)
+#     #print(c['DateAndTime'].astype('datetime64[s]'))
+#     #c['DateAndTime'] = c['DateAndTime'].astype('datetime64[s]')
+#     print(type(c['DateAndTime']))
+#     c['DateAndTime'] = c['DateAndTime'].to_string().strip(':00.0000000')
+#     MDCdataDF_json = c.to_json(orient='records')
+#     return MDCdataDF_json
+
+
 
 
 
@@ -2156,6 +2183,7 @@ async def get_eqIData(all:str):
     report_eqId_sql_df = connect_database_for_eqId(all)
     report_eqId_sql_df_json = report_eqId_sql_df.to_json(orient='records')
     return report_eqId_sql_df_json
+
 
 def connect_database_for_ata_main(all):
     sql = "SELECT DISTINCT Airline_MDC_Data.ATA_Main FROM Airline_MDC_Data"
