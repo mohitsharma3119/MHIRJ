@@ -25,13 +25,9 @@ const useStyles = makeStyles((theme) => ({
     form:{
       '& .MuiTextField-root': {
         margin: theme.spacing(1),
-        // width: '25ch',
-        // marginBottom:20,
     },
   },
   paper: {
-    // margin: 'auto',
-    // width: '1200px',
     margin: '20px auto 23px 20px',
     width: '92vw',
   },
@@ -171,7 +167,7 @@ const [reportConditions, setReportConditions] = useState(
       fromDate: dateFrom,
       toDate: dateTo,
     });
-    console.log(reportConditions);
+    //console.log(reportConditions);
   }    
 
   return (

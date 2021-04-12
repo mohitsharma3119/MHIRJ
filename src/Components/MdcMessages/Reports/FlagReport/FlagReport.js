@@ -15,9 +15,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FlagReport = (props) => {
-  const history = useHistory();
-  // const [flagConditions, setFlagConditions] = useState(history.location.state.flagConditions);
-  // const [flagData, setFlagData] = useState(history.location.state.flagData);
 
   const columns = [
     {
@@ -143,7 +140,6 @@ const FlagReport = (props) => {
 
     let data = [];
   
-    // history.location.state.flagData?.map((item => {
       props?.data?.map((item => {
         data.push(
           {

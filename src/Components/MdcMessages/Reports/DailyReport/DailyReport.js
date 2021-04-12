@@ -197,9 +197,7 @@ const DailyReport = (props) => {
     ];
 
     let data = [];
-    // if (props.data){
       props.data?.map((item => {
-        // console.log(item["AC SN"]); 
         data.push(
           {
             date: item["Date"], 
@@ -225,7 +223,6 @@ const DailyReport = (props) => {
         return data;
       }
       ));
-    // }
   
     const options = {
       filter: true,

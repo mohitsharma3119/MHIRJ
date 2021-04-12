@@ -1,7 +1,5 @@
 import React, {useState,useEffect} from 'react';
 import MUIDataTable from "mui-datatables";
-import {MuiThemeProvider, createMuiTheme} from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
 
@@ -21,7 +19,7 @@ const CorrelationSubTable = (props) => {
   useEffect(()=>{
     /*http://localhost:8000/corelation/29909*/
 
-    const path = 'http://localhost:8000/corelation/' + props.p_id;
+    const path = 'http://40.82.160.131/api/corelation/' + props.p_id;
     try{
       axios.post(path).then(function (res) {
         var data = JSON.parse(res.data);
