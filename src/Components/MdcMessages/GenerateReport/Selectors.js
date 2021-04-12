@@ -64,7 +64,8 @@ export const ATAMainSelector = (props) => {
   const [ATAMain, setATAMain] = React.useState([]);
   const [ATAMainList,setATAMainList] = useState([]);
   useEffect(() => {
-    const path = 'http://localhost:8000/GenerateReport/ata_main/ALL'
+    //const path = 'http://localhost:8000/GenerateReport/ata_main/ALL'
+    const path = 'http://40.82.160.131/GenerateReport/ata_main/ALL'
 
     try{
       axios.post(path).then(function (res) {
