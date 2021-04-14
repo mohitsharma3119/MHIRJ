@@ -2075,23 +2075,6 @@ def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
         print("Couldn't connect to Server")
         print("Error message:- " + str(err))
 
-#     sql += "WHERE CONVERT(date,Date) between '" + from_dt + "'  AND '" + to_dt + "'"                                              
-#     if equation_id:                                                                                              
-#         sql += "	AND EQ_ID NOT IN " + equation_id 
-#     if 	ata:                                                                                      
-#         sql += "	AND mdc_ata_Main IN " +  ata
-
-    try:
-        conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
-                              user=db_username, password=db_password)
-
-        corelation_df = pd.read_sql(sql, conn)
-        conn.close()
-        return corelation_df
-    except pyodbc.Error as err:
-        print("Couldn't connect to Server")
-        print("Error message:- " + str(err))
-
 
 # for reference -> http://localhost:8000/corelation/11-11-2020/11-12-2020/B1-008003/27
 @app.post("/api/corelation/{fromDate}/{toDate}/{equation_id}/{ata}")
