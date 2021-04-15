@@ -3,6 +3,8 @@ import MUIDataTable from "mui-datatables";
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+//Date Imports
+import {DateConverter} from '../../../Helper/Helper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -240,7 +242,7 @@ const RawDataTable = (props) => {
             ATA: item["ATA"],  
             ATADesc: item["Ata Description"],  
             LRU: item["LRU"],   
-            date: item["DateAndTime"],   
+            date: DateConverter(item["DateAndTime"]),   
             MDCMessages: item["MDC Message"],  
             status: item["Status"],  
             phase: item["Flight Phase"],  

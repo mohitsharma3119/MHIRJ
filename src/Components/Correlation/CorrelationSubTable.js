@@ -2,6 +2,8 @@ import React, {useState,useEffect} from 'react';
 import MUIDataTable from "mui-datatables";
 import { makeStyles } from '@material-ui/core/styles';
 import axios from 'axios';
+//Date Imports
+import {DateConverter} from '../Helper/Helper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -227,8 +229,8 @@ if (data){
         aircraftno: item["aircraftno"],
         ATA_Description: item["ATA_Description"],
         LRU: item["LRU"],
-        DateAndTime: item["DateAndTime"],
-        MDC_Date: item["MDC_Date"],
+        DateAndTime: DateConverter(item["DateAndTime"]),
+        MDC_Date: DateConverter(item["MDC_Date"]),
         MDC_MESSAGE: item["MDC_MESSAGE"], 
         EQ_DESCRIPTION: item["EQ_DESCRIPTION"],   
         CAS: item["CAS"],
