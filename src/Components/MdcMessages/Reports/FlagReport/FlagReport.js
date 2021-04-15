@@ -4,6 +4,8 @@ import {MuiThemeProvider, createMuiTheme} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import { useHistory } from "react-router-dom";
+//Date Imports
+import {DateConverter} from '../../../Helper/Helper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -150,8 +152,8 @@ const FlagReport = (props) => {
             message: item["Message"],  
             type: item["Type"],  
             FDE: item["Potential FDE"],  
-            dateFrom: item["Date From"],   
-            dateTo: item["Date To"],   
+            dateFrom: DateConverter(item["Date From"]),   
+            dateTo: DateConverter(item["Date To"]),   
             action: item["SKW WIP"],  
             input: item["ISE Input"],  
             iseRecAct: item["ISE Rec Act"],  

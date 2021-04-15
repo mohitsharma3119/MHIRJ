@@ -11,6 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import CorrelationSubTable from './CorrelationSubTable';
+//Date Imports
+import {DateConverter} from '../Helper/Helper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -333,7 +335,7 @@ if (data){
         model: item["Model"], 
         type: item["Type"],  
         serialNo: item["Serial_No"],  
-        date: item["date"],  
+        date: DateConverter(item["date"]),  
         failureFlag: item["Failure Flag"],  
         maintTrans: item["Maint Trans"],   
         maintCanc: item["Maintenance Cancellations"],   

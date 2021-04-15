@@ -3,6 +3,7 @@ import MUIDataTable from "mui-datatables";
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import {DateConverter} from '../../../Helper/Helper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -200,7 +201,7 @@ const DailyReport = (props) => {
       props.data?.map((item => {
         data.push(
           {
-            date: item["Date"], 
+            date: DateConverter(item["Date"]), 
             ACSN: item["AC SN"], 
             EICASMessages: item["EICAS Message"], 
             mdcMessages: item["MDC Message"],  
