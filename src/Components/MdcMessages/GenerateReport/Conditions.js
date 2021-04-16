@@ -167,7 +167,6 @@ const [reportConditions, setReportConditions] = useState(
       fromDate: dateFrom,
       toDate: dateTo,
     });
-    //console.log(reportConditions);
   }    
 
   return (

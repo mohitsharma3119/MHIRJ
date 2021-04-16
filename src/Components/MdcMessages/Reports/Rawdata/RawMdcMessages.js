@@ -12,30 +12,38 @@ import axios from 'axios';
 
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
+root: {
+  flexGrow: 1,
+},
   form:{
     '& .MuiTextField-root': {
       margin: theme.spacing(1),
-      // width: '25ch',
-      // marginBottom:20,
   },
 },
-  paper: {
-    margin: '50px auto 20px',
-    width: '92vw',
-  },
-  card:{
-    backgroundColor: "#C5D3E0",
-    textAlign: 'center',
-    justify: 'center',
-    padding: '5px',
-  },
-  Grid:{
-    margin: 'auto',
-    padding:'20px 20px 20px 50px',
-  },
+paper: {
+  // margin: 'auto',
+  // width: '1200px',
+  margin: '50px auto 23px 20px',
+  width: '92vw',
+},
+container: {
+  padding: '10px 40px',
+},
+Grid:{
+  padding:'20px 5px 20px 30px',
+  margin: 'auto',
+},
+card:{
+  backgroundColor: "#C5D3E0",
+  textAlign: 'center',
+  justify: 'center',
+  padding: '5px',
+},
+formLabel:{
+  fontWeight: 'bold',
+  color: 'black',
+  marginBottom: '20px',
+},
   button:{
     margin:'50px 30px',
     // height:'40px',
@@ -57,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const RawMdcMessages = () => {
+  const [loading, setLoading] = useState(true);
   const classes = useStyles();
 
   // ----- States and handle Functions for Date  ----- 
@@ -75,6 +84,8 @@ const [airline, setAilineType] = useState();
 const [ATAMain, setATAMain] = React.useState('');
 const [messagesChoice, setIncludeMessages] = React.useState('');
 const [EqID, setEqID] = React.useState('');
+const [rawData, setRawData] = React.useState('');
+const [RDValue,setRDValue] = useState(0);
 
 const handleAirlineChange = (Airline) => {
   setAilineType(Airline);
@@ -93,7 +104,6 @@ const handleEqIDChange = (eqIDList) => {
 };
 
 // ----- States and handle Functions for Generate Report  ----- 
-
 const [rawDataConditions, setRawDataConditions] = React.useState(
   {
     operator: '',
@@ -104,56 +114,49 @@ const [rawDataConditions, setRawDataConditions] = React.useState(
     toDate: '',
   }
  );
-const [rawData, setRawData] = React.useState('');
-const [isValid, setIsValid] = React.useState(false);
 
 const handleGenerateReport = (event) => {
-
   setRawDataConditions(
-      {
-        operator: airline,
-        ata: ATAMain,
-        eqID: EqID,
-        messages: messagesChoice,
-        fromDate: dateFrom,
-        toDate: dateTo,
-      },
-    );
+    {
+      operator: airline,
+      ata: ATAMain,
+      eqID: EqID,
+      messages: messagesChoice,
+      fromDate: dateFrom,
+      toDate: dateTo,
+    },
+  );
+  setRawData([]);
+  setRDValue(1);
+  setLoading(true);
+  }
 
-    let flag = isValid;
-    for (const item in rawDataConditions) {
-      if (Object.hasOwnProperty.call(rawDataConditions, item)) {
-        const element = rawDataConditions[item];
-        if ( element !== false ) {
-          flag = true;
-        } else {
-          flag = false;
-          break;
-        }
-      }
-    }
-    setIsValid(flag);
-}
+useEffect(() => {
+  let flag = false;
+ Object.values(rawDataConditions).map(item => {
+   if (item === "" || item === "('')"){
+     flag = true;
+     setLoading(false);
+   }
+ });
 
-useEffect(()=>{
-  if (isValid === true) {  
+ if (flag === false) {  
     ///MDCRawData/{ATAMain_list}/{exclude_EqID_list}/{fromDate}/{toDate}"
     //http://localhost:8000/MDCRawData/('32','22')/('B1-007553','B1-246748')/skw/0/2020-11-05/2020-11-12
     
     const path = 'http://40.82.160.131/api/MDCRawData/' + rawDataConditions.ata + '/' + rawDataConditions.eqID + '/' + rawDataConditions.operator + 
     '/' + rawDataConditions.messages + '/' + rawDataConditions.fromDate + '/' + rawDataConditions.toDate;
 
-    try{
+
       axios.post(path).then(function (res) {
-        // console.log(res);
         var data = JSON.parse(res.data);
           setRawData(data);
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  }
-},[rawDataConditions])
+      }).catch(function (err){
+            console.log(err);
+            setLoading(false);
+          })
+      }
+  },[rawDataConditions]);
 
   return (
     <div className={classes.root}>   
@@ -200,10 +203,15 @@ useEffect(()=>{
           </Grid>
      </Paper>
      </form>
-     <RawDataTable
-       data = {rawData}
-       rawDataConditions = {rawDataConditions}
-     />
+     {rawData !== "" && rawData !== "undefined" && RDValue === 1 &&
+        <>
+          <RawDataTable
+            data = {rawData}
+            rawDataConditions = {rawDataConditions}
+            loading = {loading}
+          />
+      </>
+     }
     </div> 
   );
 };

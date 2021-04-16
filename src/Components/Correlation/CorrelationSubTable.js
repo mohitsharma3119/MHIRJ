@@ -17,11 +17,13 @@ const useStyles = makeStyles((theme) => ({
 const CorrelationSubTable = (props) => {
   const classes = useStyles();
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(()=>{
     /*http://localhost:8000/corelation/29909*/
 
     const path = 'http://40.82.160.131/api/corelation/' + props.p_id;
+
     try{
       axios.post(path).then(function (res) {
         var data = JSON.parse(res.data);
@@ -31,6 +33,7 @@ const CorrelationSubTable = (props) => {
       });
     } catch (err) {
       console.error(err);
+      setLoading(false);
     } 
   },[props.p_id])
 
@@ -261,6 +264,11 @@ const options = {
   draggableColumns: {
     enabled: false,
     transitionTime: 300,
+  },
+  textLabels: {
+    body: {
+        noMatch: loading ? 'Please wait, loading data ...' : "Sorry, there is no matching data to display"
+    },
   },
   elevation: 3,
   rowsPerPage: 20,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import MUIDataTable from "mui-datatables";
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const RawDataTable = (props) => {
+
   const columns = [
     {
       name: "aircraft",
@@ -229,7 +230,6 @@ const RawDataTable = (props) => {
     ];
 
     let data = [];
-  
     if (props.data.map != null){
       props.data.map((item => {
         data.push(
@@ -240,7 +240,7 @@ const RawDataTable = (props) => {
             ATAMain: item["ATA Main"],  
             ATASub: item["ATA Sub"],  
             ATA: item["ATA"],  
-            ATADesc: item["Ata Description"],  
+            ATADesc: item["ATA Description"],  
             LRU: item["LRU"],   
             date: DateConverter(item["DateAndTime"]),   
             MDCMessages: item["MDC Message"],  
@@ -274,6 +274,11 @@ const RawDataTable = (props) => {
       draggableColumns: {
         enabled: false,
         transitionTime: 300,
+      },
+      textLabels: {
+        body: {
+            noMatch: props.loading ? 'Please wait, loading data ...' : "Sorry, there is no matching data to display"
+        },
       },
       elevation: 4,
       rowsPerPage: 20,
