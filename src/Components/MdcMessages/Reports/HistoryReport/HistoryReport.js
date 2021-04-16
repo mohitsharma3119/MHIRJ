@@ -179,7 +179,7 @@ const HistoryReport = (props) => {
      },
      {
       name: 'topMessage', 
-      label: 'Known Top Message - Recommended Documents	MHIRJ ISE',
+      label: 'Known Top Message - Recommended Documents	MHIRJ',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -189,7 +189,7 @@ const HistoryReport = (props) => {
      },
      {
       name: 'recommendation', 
-      label: 'MHIRJ ISE Recommendation',
+      label: 'MHIRJ Recommendation',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -209,7 +209,7 @@ const HistoryReport = (props) => {
      },
      {
       name: 'input', 
-      label: 'MHIRJ ISE Input',
+      label: 'MHIRJ Input',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -220,7 +220,7 @@ const HistoryReport = (props) => {
     ];
 
     let data = [];
-      props?.data?.map((item => {
+      props.data?.map((item => {
         data.push(
           {
             ACSN: item["AC SN"], 
@@ -265,6 +265,11 @@ const HistoryReport = (props) => {
         enabled: false,
         transitionTime: 300,
       },
+      textLabels: {
+        body: {
+            noMatch: props.loading ? 'Please wait, loading data ...' : "Sorry, there is no matching data to display"
+        },
+    },
       elevation: 4,
       rowsPerPage: 20,
       rowsPerPageOptions: [20,50],

@@ -120,7 +120,7 @@ const FlagReport = (props) => {
      },
      {
       name: 'input', 
-      label: 'ISE Input',
+      label: 'Input',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -130,7 +130,7 @@ const FlagReport = (props) => {
      },
      {
       name: 'iseRecAct', 
-      label: 'ISE Rec Act',
+      label: 'Rec Act',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -177,6 +177,11 @@ const FlagReport = (props) => {
         enabled: false,
         transitionTime: 300,
       },
+      textLabels: {
+        body: {
+            noMatch: props.loading ? 'Please wait, loading data ...' : "Sorry, there is no matching data to display"
+        },
+    },
       elevation: 4,
       rowsPerPage: 25,
       rowsPerPageOptions: [25,50],
