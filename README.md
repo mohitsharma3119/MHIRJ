@@ -1,13 +1,20 @@
 ##   MHIRJ Capstone Project
 
 ## Capstone Groups : Planet Data and Tech Team
-  Juliana Claussen\   
-  Dinika Srinivas Rao\  
-  Raymiljit Kaur\  
-  Mary Ofunmwengbe Erhabor\  
-  Hardik Vineshkumar Modi\  
-  Mohit Sharma\  
-  Lovish Gulati\  
+  Juliana Claussen
+
+  Dinika Srinivas Rao
+
+  Raymiljit Kaur
+
+  Mary Ofunmwengbe Erhabor
+
+  Hardik Vineshkumar Modi
+
+  Mohit Sharma
+
+  Lovish Gulati
+    
   Karan Gajjar         
 
 ## Scope
