@@ -207,26 +207,6 @@ const RawDataTable = (props) => {
        setCellProps: () => ({style: {whiteSpace:'nowrap'}})
       }
      },
-    //  {
-    //   name: 'airlineID', 
-    //   label: 'Airline ID',
-    //   options: {
-    //    filter: true,
-    //    filterType: 'dropdown',
-    //    sort: true,
-    //    setCellProps: () => ({style: {whiteSpace:'nowrap'}})
-    //   }
-    //  },
-    //  {
-    //   name: 'aircraftno', 
-    //   label: 'Aircraft No',
-    //   options: {
-    //    filter: true,
-    //    filterType: 'dropdown',
-    //    sort: true,
-    //    setCellProps: () => ({style: {whiteSpace:'nowrap'}})
-    //   }
-    //  },
     ];
 
     let data = [];

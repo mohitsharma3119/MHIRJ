@@ -21,8 +21,6 @@ root: {
   },
 },
 paper: {
-  // margin: 'auto',
-  // width: '1200px',
   margin: '50px auto 23px 20px',
   width: '92vw',
 },
@@ -46,7 +44,6 @@ formLabel:{
 },
   button:{
     margin:'50px 30px',
-    // height:'40px',
     padding: '10px',
     backgroundColor:"#C5D3E0",
   },
@@ -141,9 +138,6 @@ useEffect(() => {
  });
 
  if (flag === false) {  
-    ///MDCRawData/{ATAMain_list}/{exclude_EqID_list}/{fromDate}/{toDate}"
-    //http://localhost:8000/MDCRawData/('32','22')/('B1-007553','B1-246748')/skw/0/2020-11-05/2020-11-12
-    
     const path = 'http://40.82.160.131/api/MDCRawData/' + rawDataConditions.ata + '/' + rawDataConditions.eqID + '/' + rawDataConditions.operator + 
     '/' + rawDataConditions.messages + '/' + rawDataConditions.fromDate + '/' + rawDataConditions.toDate;
 

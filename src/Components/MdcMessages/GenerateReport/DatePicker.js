@@ -1,8 +1,6 @@
 import React,{useState,Fragment} from 'react';
-//$ npm i --save date-fns@next @date-io/date-fns
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
-//$ npm install @material-ui/pickers
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker
@@ -30,7 +28,6 @@ const DatePicker = (props) => {
         <KeyboardDatePicker 
           style={{margin: "12px 10px 10px"}}
           autoOk={true}
-          //showTodayButton={true}
             value={selectedDate}
             format="YYYY-MM-DD"
             inputValue={inputValue}

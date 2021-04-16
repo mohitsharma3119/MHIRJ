@@ -21,13 +21,9 @@ const useStyles = makeStyles((theme) => ({
     form:{
       '& .MuiTextField-root': {
         margin: theme.spacing(1),
-        // width: '25ch',
-        // marginBottom:20,
     },
   },
   paper: {
-    // margin: 'auto',
-    // width: '1200px',
     margin: '20px auto 23px 20px',
     width: '92vw',
   },
@@ -35,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
     padding: '20px 40px',
   },
   button:{
-    //margin:'40px auto',
     height: '50px',
     width:'100%',
     backgroundColor:"#C5D3E0",
@@ -69,7 +64,6 @@ const PMTable = (props) => {
   const [ATAMain, setATAMain] = useState();
   const [EqID, setEqID] = useState('');
   const [data, setData] = useState([]);
-  //const [responseData,setResponseData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [PMValue,setPMValue] = useState(0);
 
@@ -110,11 +104,8 @@ const PMTable = (props) => {
         setLoading(false);
       }
     });
-    if (flag === false) {  
-      /*http://localhost:8000/corelation/11-11-2020/11-12-2020/B1-008003/27*/
-      
+    if (flag === false) {      
         const path = 'http://40.82.160.131/api/corelation/' + PMConditions.dateFrom + '/' + PMConditions.dateTo + '/' + PMConditions.EqID + '/' + PMConditions.ATAMain;
-          console.log(path);
           axios.post(path).then(function (res) {
             var data = JSON.parse(res.data);
             setData(data);
@@ -386,13 +377,11 @@ const options = {
   fixedHeader: true,
   expandableRows: true,
   renderExpandableRow: (rowData, rowMeta) => {
-    console.log(rowData, rowMeta, "row data");
     return (    
     <TableRow>
         <TableCell colSpan={rowData.length+1}>
         <CorrelationSubTable
           p_id = {rowData[0]}
-          //p_id = "4322"
           dateFrom = {dateFrom}
           dateTo = {dateTo}
           EqID = {EqID}
