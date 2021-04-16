@@ -2,13 +2,10 @@ import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import {OccurencesInput,LegsInput,IntermittentInput,DaysInput} from './AnalysisInput';
-//import AnalysisType from './AnalysisType';
 import Paper from '@material-ui/core/Paper';
-//import ReportType from './ReportType';
 import DatePicker from './DatePicker';
 import {AirlineOperatorSelector,ATAMainSelector,MessagesSelector,EqIDSelector} from './Selectors';
 import Report from '../Reports/Report';
-import { useHistory } from "react-router-dom";
 //Radio Button Imports
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';

@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
     margin:'0px 50px 15px 0px',
     backgroundColor:"#C5D3E0",
     width: '89%',
-    // height: '51px',
   },
 }));
 
@@ -45,8 +44,6 @@ const Report = (props) => {
   const [flagList,setFlagList] = useState('');
   const [flag,setFlag] = useState(false);
   const [flagConditions,setFlagConditions] = useState('');
-  
-
   const [loadingDaily, setLoadingDaily] = useState(true);
   const [loadingHistory, setLoadingHistory] = useState(true);
   const [loadingFlag, setLoadingFlag] = useState(true);
@@ -71,11 +68,9 @@ const Report = (props) => {
           else if (report.analysis === "history"){
             setLoadingHistory(false);
           }
-          // setLoading(false);
         }
       }
       setFlag(flag);
-      console.log(flag);
       
     if (flag === false){
       localStorage.setItem("last",JSON.stringify(props.reportConditions)); 
@@ -90,8 +85,6 @@ const Report = (props) => {
   }, [props.reportConditions]);
 
   useEffect( () => {
-    //if (report.ata !== null && report.ata !== undefined &&  report.ata !== ''){
-      console.log(report.analysis);
       if (report.analysis === "daily"){
         setDailyValue(1);
         setDailyReportData([]);
@@ -103,10 +96,6 @@ const Report = (props) => {
         setLoadingHistory(true);
       }
     if (flag === false){
-      /* Using useEffect so that axios can run only on the first render 
-      http://localhost:8000/"/GenerateReport/{analysisType}/{occurences}/{legs}/{intermittent}/{consecutiveDays}/{ata}/{exclude_EqID}/{airline_operator}/{include_current_message}/{fromDate}/{toDate}") 
-      Example of Daily Path: http://localhost:8000/GenerateReport/daily/2/2/3/0/SKW/28/0/2020-11-14/2020-11-15 */
-
       const {analysis, occurences, legs, intermittent} = report;
       let consecutiveDays;
       if (report.analysis === "daily") {
@@ -123,12 +112,8 @@ const Report = (props) => {
       const toDate = report.toDate;
 
       if (report.analysis !== "both") {
-        /*http://localhost:8000/GenerateReport/history/2/2/2/3/('31','22','24','23')/('B1-007553','B1-005970')/skw/0/2020-11-18/2020-11-22*/
-
         const path = 'http://40.82.160.131/api/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
         consecutiveDays + '/' + ata + '/' + eqid + '/'+ operator + '/' + messages + '/' + fromDate + '/' + toDate;
-
-          console.log(path);
 
           axios.post(path).then(function (res){
             var data = JSON.parse(res.data);
@@ -142,7 +127,6 @@ const Report = (props) => {
             }           
           }).catch(function (err){
             console.log(err);
-            //setLoading(false);
             if (report.analysis === "daily"){
               setLoadingDaily(false);
             }
@@ -161,7 +145,6 @@ const Report = (props) => {
       }
     }
   }, [report]);
-
 
   const handleGenerateFlagReport = (event) => {
     setFlagConditions(
@@ -187,22 +170,14 @@ const Report = (props) => {
 
   useEffect(() => {
     let flag = false;
-    console.log(flagConditions,"D");
     Object.values(flagConditions).map(item => {
       if (item === "" || item === undefined || item === "('')"){
-        console.log(item);
         flag = true;
         setLoadingFlag(false);
       }
     });
 
-    if (flag === false) {  
-      /*
-      const path = 'http://localhost:8000/GenerateReport/{analysisType}/{occurences}/{legs}/{intermittent}/{consecutiveDays}/{ata}/
-      {exclude_EqID}/{airline_operator}/{include_current_message}/{fromDate}/{toDate}/{acsn,bcode}';
-      http://127.0.0.1:8000/GenerateReport/history/2/2/2/8/('32','22')/('B1-007553', 'B1-246748')/skw/1/2020-11-11/2020-11-12/('10214','B1-005815'), ('10214','B1-005831')
-      */
-      
+    if (flag === false) {        
       const flagPath = 'http://40.82.160.131/api/GenerateReport/' + flagConditions.analysis + '/' + flagConditions.occurences + '/' + 
       flagConditions.legs + '/' + flagConditions.intermittent + '/' + flagConditions.days + '/' + flagConditions.HistAta + '/' + 
       flagConditions.HistExEqID + '/'+ flagConditions.operator + '/' + flagConditions.messages + '/' + flagConditions.fromDate + '/' + 

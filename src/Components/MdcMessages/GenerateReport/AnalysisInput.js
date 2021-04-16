@@ -12,7 +12,6 @@ export const OccurencesInput = (props) => {
 
   return(
     <TextField
-      // id="outlined-number"
       label="Max Allowed Occurences"
       type="number"
       onChange = {handleOccurencesChange}
@@ -35,7 +34,6 @@ export const LegsInput = (props) => {
 
   return(
     <TextField
-    // id="outlined-number"
     label="Max Consecutive Legs"
     type="number"
     onChange = {handleLegsChange}
@@ -57,7 +55,6 @@ export const IntermittentInput = (props) => {
   };
   return(
     <TextField
-      // id="outlined-number"
       label="Max Allowed Intermittent"
       type="number"
       onChange = {handleIntermittentChange}
@@ -91,7 +88,6 @@ export const DaysInput = (props) => {
   return(
     <TextField
       {...disabled}
-      // id="outlined-number"
       label="Max Consecutive Days"
       type="number"
       onChange = {handleDaysChange}

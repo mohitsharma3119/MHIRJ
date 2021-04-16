@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
     margin:'0px 30px 15px 0px',
     backgroundColor:"#C5D3E0",
     width: '100%',
-    // height: '51px',
   },
 }));
 
@@ -24,8 +23,6 @@ const HistoryReport = (props) => {
   const [rowsSelectedState, setRowsSelected] = useState([]);
 
   const HandleMultipleRowSelect = (rowsSelectedData, allRows, rowsSelected) => {
-    //Data index to get the row no matter the sorting or filtering;
-    //console.log(rowsSelectedData,allRows,rowsSelected);
     setRowsSelected(rowsSelected);
     let FlagArray = [];
     Object(rowsSelected).map((item => {

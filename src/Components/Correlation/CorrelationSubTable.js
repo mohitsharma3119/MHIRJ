@@ -20,16 +20,12 @@ const CorrelationSubTable = (props) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(()=>{
-    /*http://localhost:8000/corelation/29909*/
-
     const path = 'http://40.82.160.131/api/corelation/' + props.p_id;
 
     try{
       axios.post(path).then(function (res) {
         var data = JSON.parse(res.data);
         setData(data);
-        console.log(path,"path");
-        console.log(data,"resdata");
       });
     } catch (err) {
       console.error(err);
@@ -223,8 +219,6 @@ const responseData = [];
 
 if (data){
   data.map((item => {
-    console.log(item,"item");
-    console.log(item.mdc_ID,"mdc_ID");
     responseData.push(
       {
         mdc_ID: item["mdc_ID"],
