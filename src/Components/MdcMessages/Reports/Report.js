@@ -52,7 +52,6 @@ const Report = (props) => {
   const [loadingFlag, setLoadingFlag] = useState(true);
 
   const HandleMultipleRowSelectReport = (flagList) => {
-    console.log(flagList);
     setFlagList(flagList);
   }
 
@@ -181,7 +180,6 @@ const Report = (props) => {
         flagList: flagList,
       },
     );
-    console.log(flagList);
     setFlagData([]);
     setLoadingFlag(true);
     setFlagValue(1);
@@ -189,8 +187,10 @@ const Report = (props) => {
 
   useEffect(() => {
     let flag = false;
+    console.log(flagConditions,"D");
     Object.values(flagConditions).map(item => {
-      if (item === ""){
+      if (item === "" || item === undefined || item === "('')"){
+        console.log(item);
         flag = true;
         setLoadingFlag(false);
       }

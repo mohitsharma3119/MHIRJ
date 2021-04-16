@@ -142,7 +142,7 @@ const FlagReport = (props) => {
 
     let data = [];
   
-      props?.data?.map((item => {
+      props.data?.map((item => {
         data.push(
           {
             MSN: item["AC SN"], 
