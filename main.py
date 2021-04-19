@@ -132,41 +132,41 @@ def connect_database_MDCdata(ata, excl_eqid, airline_operator, include_current_m
         print(all_eqid_str)
 
 
-    if include_current_message == 0:    # If we do not include current message
+    if include_current_message == 0:    # If we do not include current message = exclude null flight phase and null intermittents
         if ata == 'ALL' and excl_eqid == 'NONE':
             sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(all_ata_str) + " AND Equation_ID IN " + str(
                 all_eqid_str) + " AND airline_id = " + str(
-                airline_id) + " AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+                airline_id) + " AND flight_phase IS NOT NULL AND Intermittent IS NOT NULL AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
         elif excl_eqid == 'NONE':
             sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(ata) + " AND Equation_ID IN " + str(
                 all_eqid_str) + " AND airline_id = " + str(
-                airline_id) + " AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+                airline_id) + " AND flight_phase IS NOT NULL AND Intermittent IS NOT NULL AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
         elif ata == 'ALL':
             sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(all_ata_str) + " AND Equation_ID NOT IN " + str(
                 excl_eqid) + " AND airline_id = " + str(
-                airline_id) + " AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+                airline_id) + " AND flight_phase IS NOT NULL AND Intermittent IS NOT NULL AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
         else:
             sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(ata) + " AND Equation_ID NOT IN " + str(
                 excl_eqid) + " AND airline_id = " + str(
-                airline_id) + " AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+                airline_id) + " AND flight_phase IS NOT NULL AND Intermittent IS NOT NULL AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
 
     elif include_current_message == 1:
         if ata == 'ALL' and excl_eqid =='NONE':
             sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(all_ata_str) + " AND Equation_ID IN " + str(
                 all_eqid_str) + " AND airline_id = " + str(
-                airline_id) + " AND flight_phase IS NULL AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+                airline_id) + " AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
         elif ata == 'ALL':
             sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(all_ata_str) + " AND Equation_ID NOT IN " + str(
                 excl_eqid) + " AND airline_id = " + str(
-                airline_id) + " AND flight_phase IS NULL AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+                airline_id) + " AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
         elif excl_eqid == 'NONE':
             sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(ata) + " AND Equation_ID IN " + str(
                 all_eqid_str) + " AND airline_id = " + str(
-                airline_id) + " AND flight_phase IS NULL AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+                airline_id) + " AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
         else:
             sql = "SELECT * FROM Airline_MDC_Data WHERE ATA_Main IN " + str(ata) + " AND Equation_ID NOT IN " + str(
                 excl_eqid) + " AND airline_id = " + str(
-                airline_id) + " AND flight_phase IS NULL AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
+                airline_id) + " AND DateAndTime BETWEEN '" + from_dt + "' AND '" + to_dt + "'"
 
     column_names = ["Aircraft", "Tail", "Flight Leg No",
                "ATA Main", "ATA Sub", "ATA", "ATA Description", "LRU",
@@ -296,6 +296,7 @@ async def generateReport(analysisType: str, occurences: int, legs: int, intermit
         CurrentFlightPhaseEnabled = 1
     else:
         CurrentFlightPhaseEnabled = 0  # 1 or 0, 1 includes current phase, 0 does not include current phase
+
     MaxAllowedOccurances = occurences  # flag for Total number of occurences -> T
     MaxAllowedConsecLegs = legs  # flag for consecutive legs -> CF
     MaxAllowedIntermittent = intermittent  # flag for intermittent values ->IM
@@ -594,7 +595,7 @@ async def generateReport(analysisType: str, occurences: int, legs: int, intermit
             by=["Date", "Type", "Priority"])
 
         OutputTableDaily_json = OutputTableDaily.to_json(orient = 'records')
-        OutputTableDaily.to_csv("OutputTableDaily.csv")
+        #OutputTableDaily.to_csv("OutputTableDaily.csv")
 
         return OutputTableDaily_json
 
@@ -916,7 +917,7 @@ async def generateReport(analysisType: str, occurences: int, legs: int, intermit
         global OutputTableHistory
         OutputTableHistory = pd.DataFrame(data=MAINtable_array, columns=TitlesArrayHistory).fillna(" ").sort_values(
             by=["Type", "Priority"])
-        OutputTableHistory.to_csv("OutputTableHistory.csv")
+        #OutputTableHistory.to_csv("OutputTableHistory.csv")
         OutputTableHistory_json = OutputTableHistory.to_json(orient = 'records')
         return OutputTableHistory_json
 
@@ -1745,9 +1746,9 @@ async def get_ChartwoData(top_values:int, ata:str, fromDate: str , toDate: str):
 ## Chart 3
 def connect_database_for_chart3(aircraft_no, equation_id, is_flight_phase_enabled, from_dt, to_dt):
     if is_flight_phase_enabled == 0: # Flight phase is NOT enabled
-        sql = "SELECT COUNT(*) AS OccurencesPerDay, cast(DateAndTime as date) AS Dates from Airline_MDC_Data WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NOT NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY cast(DateAndTime as date)"
+        sql = "SELECT COUNT(*) AS OccurencesPerDay, cast(DateAndTime as VARCHAR) AS Dates from Airline_MDC_Data WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NOT NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY cast(DateAndTime as DATE)"
     elif is_flight_phase_enabled == 1:
-        sql = "SELECT COUNT(*) AS OccurencesPerDay, cast(DateAndTime as date) AS Dates from Airline_MDC_Data WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY cast(DateAndTime as date)"
+        sql = "SELECT COUNT(*) AS OccurencesPerDay, cast(DateAndTime as VARCHAR) AS Dates from Airline_MDC_Data WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY cast(DateAndTime as DATE)"
 
     try:
         conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
