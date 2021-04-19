@@ -1700,7 +1700,7 @@ async def generateFlagReport(analysisType: str, occurences: int, legs: int, inte
 # Plots
 ## Chart 1
 def connect_database_for_chart1(n, aircraft_no, from_dt, to_dt):
-    sql = "SELECT TOP "+str(n)+" Count(MDCMessagesInputs.Message) AS "'total_message'", Airline_MDC_Data. Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA FROM Airline_MDC_Data INNER JOIN MDCMessagesInputs ON Airline_MDC_Data.ATA = MDCMessagesInputs.ATA WHERE Airline_MDC_Data.aircraftno = "+str(aircraft_no)+" AND Airline_MDC_Data.DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Airline_MDC_Data.Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA ORDER BY Count(MDCMessagesInputs.Message) DESC"
+    sql = "SELECT DISTINCT TOP "+str(n)+" Count(MDCMessagesInputs.Message) AS "'total_message'", Airline_MDC_Data. Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA FROM Airline_MDC_Data INNER JOIN MDCMessagesInputs ON Airline_MDC_Data.ATA = MDCMessagesInputs.ATA WHERE Airline_MDC_Data.aircraftno = "+str(aircraft_no)+" AND Airline_MDC_Data.DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Airline_MDC_Data.Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA ORDER BY Count(MDCMessagesInputs.Message) DESC"
 
     try:
         conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
@@ -1722,15 +1722,17 @@ async def get_ChartOneData(top_n:int, aircraftNo:int, fromDate: str , toDate: st
 ## Chart 2
 def connect_database_for_chart2(n, ata, from_dt, to_dt):
     if len(ata) == 2:
-        sql = "SELECT TOP "+str(n)+" COUNT(ATA_Main) AS "'ataOcc'", aircraft FROM Airline_MDC_Data where ATA_Main='"+ata+"' AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY ATA_Main, Aircraft ORDER BY COUNT(ATA_Main) DESC"
+        sql = "SELECT DISTINCT TOP "+str(n)+" COUNT(ATA_Main) AS "'ataOcc'", aircraft FROM Airline_MDC_Data where ATA_Main='"+ata+"' AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY ATA_Main, Aircraft ORDER BY COUNT(ATA_Main) DESC"
     elif len(ata) == 5:
-        sql = "SELECT TOP "+str(n)+" COUNT(ATA) AS "'ataOcc'", aircraft FROM Airline_MDC_Data where ATA='"+ata+"' AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY ATA, Aircraft ORDER BY COUNT(ATA) DESC"
+        sql = "SELECT DISTINCT TOP "+str(n)+" COUNT(ATA) AS "'ataOcc'", aircraft FROM Airline_MDC_Data where ATA='"+ata+"' AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY ATA, Aircraft ORDER BY COUNT(ATA) DESC"
 
+    print(sql)
     try:
         conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         chart2_sql_df = pd.read_sql(sql, conn)
         # MDCdataDF.columns = column_names
+        conn.close()
         return chart2_sql_df
     except pyodbc.Error as err:
         print("Couldn't connect to Server")
@@ -1746,15 +1748,16 @@ async def get_ChartwoData(top_values:int, ata:str, fromDate: str , toDate: str):
 ## Chart 3
 def connect_database_for_chart3(aircraft_no, equation_id, is_flight_phase_enabled, from_dt, to_dt):
     if is_flight_phase_enabled == 0: # Flight phase is NOT enabled
-        sql = "SELECT COUNT(*) AS OccurencesPerDay, cast(DateAndTime as VARCHAR) AS Dates from Airline_MDC_Data WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NOT NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY cast(DateAndTime as DATE)"
+        sql = "SELECT COUNT(*) AS OccurencesPerDay, cast(DateAndTime as DATE) AS Dates from Airline_MDC_Data WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NOT NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY cast(DateAndTime as DATE)"
     elif is_flight_phase_enabled == 1:
-        sql = "SELECT COUNT(*) AS OccurencesPerDay, cast(DateAndTime as VARCHAR) AS Dates from Airline_MDC_Data WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY cast(DateAndTime as DATE)"
-
+        sql = "SELECT COUNT(*) AS OccurencesPerDay, cast(DateAndTime as DATE) AS Dates from Airline_MDC_Data WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY cast(DateAndTime as DATE)"
+    print(sql)
     try:
         conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         chart3_sql_df = pd.read_sql(sql, conn)
         # MDCdataDF.columns = column_names
+        conn.close()
         return chart3_sql_df
     except pyodbc.Error as err:
         print("Couldn't connect to Server")
@@ -1773,12 +1776,13 @@ def connect_database_for_chart5(aircraft_no, equation_id, is_flight_phase_enable
         sql = "SELECT COUNT(Intermittent) AS OccurencesOfIntermittent, Flight_Leg_No FROM Airline_MDC_Data  WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NOT NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Flight_Leg_No"
     elif is_flight_phase_enabled == 1:
         sql = "SELECT COUNT(Intermittent) AS OccurencesOfIntermittent, Flight_Leg_No FROM Airline_MDC_Data  WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Flight_Leg_No"
-
+    print(sql)
     try:
         conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
                               user=db_username, password=db_password)
         chart5_sql_df = pd.read_sql(sql, conn)
         # MDCdataDF.columns = column_names
+        conn.close()
         return chart5_sql_df
     except pyodbc.Error as err:
         print("Couldn't connect to Server")
@@ -1925,9 +1929,9 @@ async def get_ScatterChart_MDC_PM_Data():
     return scatter_chart_sql_df_json
 
 
-def connect_database_for_scatter_plot_v2(start_date):
+def connect_database_for_scatter_plot_v2(from_date, to_date):
 
-    sql = "EXEC Getaircraftstatsv2 '"+start_date+"'"
+    sql = "EXEC Getaircraftstatsv2 '"+from_date+"', '"+to_date+"'"
     print(sql)
     try:
         conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
@@ -1940,9 +1944,9 @@ def connect_database_for_scatter_plot_v2(start_date):
         print("Error message:- " + str(err))
 
 #For reference -> http://localhost:8000/scatter_chart_MDC_PM_Data/2020-11-12
-@app.post("/api/scatter_chart_MDC_PM/{start_date}")
-async def get_ScatterChart_MDC_PM_Data(start_date:str):
-    scatter_chart_sql_df = connect_database_for_scatter_plot_v2(start_date)
+@app.post("/api/scatter_chart_MDC_PM/{from_date}/{to_date}")
+async def get_ScatterChart_MDC_PM_Data(from_date:str, to_date:str):
+    scatter_chart_sql_df = connect_database_for_scatter_plot_v2(from_date, to_date)
     scatter_chart_sql_df_json = scatter_chart_sql_df.to_json(orient='records')
     return scatter_chart_sql_df_json
 
