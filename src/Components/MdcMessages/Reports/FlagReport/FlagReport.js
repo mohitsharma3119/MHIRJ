@@ -140,7 +140,6 @@ const FlagReport = (props) => {
     ];
 
     let data = [];
-  
       props.data?.map((item => {
         data.push(
           {
@@ -182,9 +181,10 @@ const FlagReport = (props) => {
         },
     },
       elevation: 4,
-      rowsPerPage: 25,
-      rowsPerPageOptions: [25,50],
+      rowsPerPage: 7,
+      rowsPerPageOptions: [7,20,50],
       selectToolbarPlacement:"none",
+      tableBodyHeight: props.loading === true || data.length === 0 ? '160px' : `${80+data.length*60}px`
     };
 
     const theme = createMuiTheme({

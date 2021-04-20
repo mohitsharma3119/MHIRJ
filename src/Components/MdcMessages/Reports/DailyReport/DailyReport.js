@@ -37,8 +37,8 @@ const DailyReport = (props) => {
       }
     },
     {
-      name: 'EICASMessages', 
-      label: 'EICAS Messages',
+      name: 'EICASRelated', 
+      label: 'EICAS Related',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -137,7 +137,7 @@ const DailyReport = (props) => {
      },
      {
       name: 'reasons', 
-      label: 'Reasons for flag',
+      label: 'Reasons For Flag',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -157,7 +157,7 @@ const DailyReport = (props) => {
      },
      {
       name: 'topMessage', 
-      label: 'Known Top Message - Recommended Documents	MHIRJ',
+      label: 'MHIRJ Known Message',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -167,7 +167,7 @@ const DailyReport = (props) => {
      },
      {
       name: 'recommendation', 
-      label: 'MHIRJ Recommendation',
+      label: 'MHIRJ Recommended Action',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -177,7 +177,7 @@ const DailyReport = (props) => {
      },
      {
       name: 'comments', 
-      label: 'Additional Comments',
+      label: 'MHIRJ Additional Comment',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -203,7 +203,7 @@ const DailyReport = (props) => {
           {
             date: DateConverter(item["Date"]), 
             ACSN: item["AC SN"], 
-            EICASMessages: item["EICAS Message"], 
+            EICASRelated: item["EICAS Message"], 
             mdcMessages: item["MDC Message"],  
             LRU: item["LRU"],  
             ATA: item["ATA"],  
@@ -245,9 +245,10 @@ const DailyReport = (props) => {
         },
     },
       elevation: 4,
-      rowsPerPage: 20,
-      rowsPerPageOptions: [20, 50],
+      rowsPerPage: 7,
+      rowsPerPageOptions: [7,20,50],
       selectToolbarPlacement:"none",
+      tableBodyHeight: props.loading === true || data.length === 0 ? '200px' : '500px'
     };
 
     const theme = createMuiTheme({

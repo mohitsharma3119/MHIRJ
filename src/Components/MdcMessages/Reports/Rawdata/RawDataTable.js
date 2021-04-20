@@ -210,9 +210,8 @@ const RawDataTable = (props) => {
     ];
 
     let data = [];
-    if (props.data.map != null){
-      props.data.map((item => {
-        data.push(
+    props.data?.map((item => {
+      data.push(
           {
             aircraft: item["Aircraft"], 
             tail: item["Tail"], 
@@ -237,9 +236,7 @@ const RawDataTable = (props) => {
           }
         );
         return data;
-      }
-      ));
-    }  
+      }));
 
     const options = {
       filter: true,
@@ -261,9 +258,10 @@ const RawDataTable = (props) => {
         },
       },
       elevation: 4,
-      rowsPerPage: 20,
-      rowsPerPageOptions: [20,50],
+      rowsPerPage: 7,
+      rowsPerPageOptions: [7,20,50],
       selectToolbarPlacement:"none",
+      tableBodyHeight: props.loading === true || data.length === 0 ? '200px' : '500px'
     };
 
     const theme = createMuiTheme({

@@ -7,6 +7,13 @@ export const DateConverter = (date) => {
   return formatted;
 }
 
+export const DateConverterCorrelation = (date) => {
+  var t = moment(date);
+  var formatted = t.format('LL');
+  return formatted;
+}
+
+
 const Helper = () => {
 
 }
