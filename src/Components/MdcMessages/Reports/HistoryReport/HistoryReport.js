@@ -47,7 +47,7 @@ const HistoryReport = (props) => {
     },
     {
       name: 'EICASMessages', 
-      label: 'EICAS Messages',
+      label: 'EICAS Related',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -156,7 +156,7 @@ const HistoryReport = (props) => {
      },
      {
       name: 'reasons', 
-      label: 'Reasons for flag',
+      label: 'Reasons For Flag',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -176,7 +176,7 @@ const HistoryReport = (props) => {
      },
      {
       name: 'topMessage', 
-      label: 'Known Top Message - Recommended Documents	MHIRJ',
+      label: 'MHIRJ Known Message',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -186,7 +186,7 @@ const HistoryReport = (props) => {
      },
      {
       name: 'recommendation', 
-      label: 'MHIRJ Recommendation',
+      label: 'MHIRJ Recommended Action',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -196,7 +196,7 @@ const HistoryReport = (props) => {
      },
      {
       name: 'comments', 
-      label: 'Additional Comments',
+      label: 'MHIRJ Additional Comment',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -268,9 +268,10 @@ const HistoryReport = (props) => {
         },
     },
       elevation: 4,
-      rowsPerPage: 20,
-      rowsPerPageOptions: [20,50],
+      rowsPerPage: 7,
+      rowsPerPageOptions: [7,20,50],
       selectToolbarPlacement:"none",
+      tableBodyHeight: props.loading === true || data.length === 0 ? '200px' : '500px'
     };
 
     const theme = createMuiTheme({

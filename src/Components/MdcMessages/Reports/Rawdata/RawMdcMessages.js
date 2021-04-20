@@ -63,6 +63,7 @@ formLabel:{
 
 const RawMdcMessages = () => {
   const [loading, setLoading] = useState(true);
+  const [RDValue,setRDValue] = useState(0);
   const classes = useStyles();
 
   // ----- States and handle Functions for Date  ----- 
@@ -82,7 +83,7 @@ const [ATAMain, setATAMain] = React.useState('');
 const [messagesChoice, setIncludeMessages] = React.useState('');
 const [EqID, setEqID] = React.useState('');
 const [rawData, setRawData] = React.useState('');
-const [RDValue,setRDValue] = useState(0);
+const [flag,setFlag] = useState(false);
 
 const handleAirlineChange = (Airline) => {
   setAilineType(Airline);
@@ -141,10 +142,10 @@ useEffect(() => {
     const path = 'http://40.82.160.131/api/MDCRawData/' + rawDataConditions.ata + '/' + rawDataConditions.eqID + '/' + rawDataConditions.operator + 
     '/' + rawDataConditions.messages + '/' + rawDataConditions.fromDate + '/' + rawDataConditions.toDate;
 
-
       axios.post(path).then(function (res) {
         var data = JSON.parse(res.data);
           setRawData(data);
+          setLoading(false);
       }).catch(function (err){
             console.log(err);
             setLoading(false);
