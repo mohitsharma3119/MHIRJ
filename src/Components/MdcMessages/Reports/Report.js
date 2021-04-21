@@ -118,8 +118,6 @@ const Report = (props) => {
         const path = 'http://40.82.160.131/api/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
         consecutiveDays + '/' + ata + '/' + eqid + '/'+ operator + '/' + messages + '/' + fromDate + '/' + toDate;
 
-        console.log(path);
-
           axios.post(path).then(function (res){
             var data = JSON.parse(res.data);
             if (report.analysis === "daily") {
