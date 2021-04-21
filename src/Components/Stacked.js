@@ -51,8 +51,8 @@ export default function Stacked() {
     // let ata_main = [];
     // let msg = [];
 
-    const path = 'http://localhost:8000/Landing_Chart_B/' + data_chart1.top_value + '/' + data_chart1.from_date + '/' + data_chart1.to_date;
-  //const path = 'http://40.82.160.131/api/Landing_Chart_B/' + data_chart1.top_value + '/' + data_chart1.from_date + '/' + data_chart1.to_date;
+    //const path = 'http://localhost:8000/Landing_Chart_B/' + data_chart1.top_value + '/' + data_chart1.from_date + '/' + data_chart1.to_date;
+  const path = 'http://40.82.160.131/api/Landing_Chart_B/' + data_chart1.top_value + '/' + data_chart1.from_date + '/' + data_chart1.to_date;
 
 
     axios.post(path)

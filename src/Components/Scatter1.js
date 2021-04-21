@@ -50,8 +50,8 @@ export default function Scatter1() {
   function submit(e) {
     e.preventDefault();
 
-    const path = 'http://localhost:8000/scatter_chart_MDC_PM/' + data_chart1.from_date + '/' + data_chart1.to_date;
-    //const path = 'http://40.82.160.131/api/scatter_chart_MDC_PM/' + data_chart1.select_date;
+    //const path = 'http://localhost:8000/scatter_chart_MDC_PM/' + data_chart1.from_date + '/' + data_chart1.to_date;
+    const path = 'http://40.82.160.131/api/scatter_chart_MDC_PM/' + data_chart1.from_date + '/' + data_chart1.to_date;
 
 
     //console.log(path);

@@ -1,8 +1,10 @@
-import React from 'react';
+import React,{useState} from 'react';
 import MUIDataTable from "mui-datatables";
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+//Date Imports
+import {DateConverter} from '../../../Helper/Helper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -14,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const RawDataTable = (props) => {
+
   const columns = [
     {
       name: "aircraft",
@@ -204,33 +207,11 @@ const RawDataTable = (props) => {
        setCellProps: () => ({style: {whiteSpace:'nowrap'}})
       }
      },
-    //  {
-    //   name: 'airlineID', 
-    //   label: 'Airline ID',
-    //   options: {
-    //    filter: true,
-    //    filterType: 'dropdown',
-    //    sort: true,
-    //    setCellProps: () => ({style: {whiteSpace:'nowrap'}})
-    //   }
-    //  },
-    //  {
-    //   name: 'aircraftno', 
-    //   label: 'Aircraft No',
-    //   options: {
-    //    filter: true,
-    //    filterType: 'dropdown',
-    //    sort: true,
-    //    setCellProps: () => ({style: {whiteSpace:'nowrap'}})
-    //   }
-    //  },
     ];
 
     let data = [];
-  
-    if (props.data.map != null){
-      props.data.map((item => {
-        data.push(
+    props.data?.map((item => {
+      data.push(
           {
             aircraft: item["Aircraft"], 
             tail: item["Tail"], 
@@ -238,9 +219,9 @@ const RawDataTable = (props) => {
             ATAMain: item["ATA Main"],  
             ATASub: item["ATA Sub"],  
             ATA: item["ATA"],  
-            ATADesc: item["Ata Description"],  
+            ATADesc: item["ATA Description"],  
             LRU: item["LRU"],   
-            date: item["DateAndTime"],   
+            date: DateConverter(item["DateAndTime"]),   
             MDCMessages: item["MDC Message"],  
             status: item["Status"],  
             phase: item["Flight Phase"],  
@@ -255,9 +236,7 @@ const RawDataTable = (props) => {
           }
         );
         return data;
-      }
-      ));
-    }  
+      }));
 
     const options = {
       filter: true,
@@ -273,10 +252,16 @@ const RawDataTable = (props) => {
         enabled: false,
         transitionTime: 300,
       },
+      textLabels: {
+        body: {
+            noMatch: props.loading ? 'Please wait, loading data ...' : "Sorry, there is no matching data to display"
+        },
+      },
       elevation: 4,
-      rowsPerPage: 20,
-      rowsPerPageOptions: [20,50],
+      rowsPerPage: 7,
+      rowsPerPageOptions: [7,20,50],
       selectToolbarPlacement:"none",
+      tableBodyHeight: props.loading === true || data.length === 0 ? '200px' : '500px'
     };
 
     const theme = createMuiTheme({

@@ -3,7 +3,8 @@ import MUIDataTable from "mui-datatables";
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import { useHistory } from "react-router-dom";
+//Date Imports
+import {DateConverter} from '../../../Helper/Helper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,9 +16,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FlagReport = (props) => {
-  const history = useHistory();
-  // const [flagConditions, setFlagConditions] = useState(history.location.state.flagConditions);
-  // const [flagData, setFlagData] = useState(history.location.state.flagData);
 
   const columns = [
     {
@@ -121,7 +119,7 @@ const FlagReport = (props) => {
      },
      {
       name: 'input', 
-      label: 'ISE Input',
+      label: 'Input',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -131,7 +129,7 @@ const FlagReport = (props) => {
      },
      {
       name: 'iseRecAct', 
-      label: 'ISE Rec Act',
+      label: 'Rec Act',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -142,9 +140,7 @@ const FlagReport = (props) => {
     ];
 
     let data = [];
-  
-    // history.location.state.flagData?.map((item => {
-      props?.data?.map((item => {
+      props.data?.map((item => {
         data.push(
           {
             MSN: item["AC SN"], 
@@ -154,8 +150,8 @@ const FlagReport = (props) => {
             message: item["Message"],  
             type: item["Type"],  
             FDE: item["Potential FDE"],  
-            dateFrom: item["Date From"],   
-            dateTo: item["Date To"],   
+            dateFrom: DateConverter(item["Date From"]),   
+            dateTo: DateConverter(item["Date To"]),   
             action: item["SKW WIP"],  
             input: item["ISE Input"],  
             iseRecAct: item["ISE Rec Act"],  
@@ -179,10 +175,16 @@ const FlagReport = (props) => {
         enabled: false,
         transitionTime: 300,
       },
+      textLabels: {
+        body: {
+            noMatch: props.loading ? 'Please wait, loading data ...' : "Sorry, there is no matching data to display"
+        },
+    },
       elevation: 4,
-      rowsPerPage: 25,
-      rowsPerPageOptions: [25,50],
+      rowsPerPage: 7,
+      rowsPerPageOptions: [7,20,50],
       selectToolbarPlacement:"none",
+      tableBodyHeight: props.loading === true || data.length === 0 ? '160px' : `${80+data.length*60}px`
     };
 
     const theme = createMuiTheme({

@@ -32,8 +32,8 @@ export default function Chart1() {
   let aircraftno_scatter = [];
 
   useEffect(() => {
-    const path = 'http://localhost:8000/Landing_Chart_B'
-   // const path = 'http://40.82.160.131/api/Landing_Chart_B'
+    //const path = 'http://localhost:8000/Landing_Chart_B'
+    const path = 'http://40.82.160.131/api/Landing_Chart_B'
 
 
     axios.post(path)
@@ -124,8 +124,8 @@ export default function Chart1() {
     //  console.log(msg);
 
 
-    const path1 = 'http://localhost:8000/scatter_chart_MDC_PM'
-    //const path1 = 'http://40.82.160.131/api/scatter_chart_MDC_PM'
+    //const path1 = 'http://localhost:8000/scatter_chart_MDC_PM'
+    const path1 = 'http://40.82.160.131/api/scatter_chart_MDC_PM'
 
 
     axios.post(path1).then(res => {

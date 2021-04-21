@@ -15,7 +15,6 @@ const useStyles = makeStyles((theme) => ({
     margin:'0px 30px 15px 0px',
     backgroundColor:"#C5D3E0",
     width: '100%',
-    // height: '51px',
   },
 }));
 
@@ -24,8 +23,6 @@ const HistoryReport = (props) => {
   const [rowsSelectedState, setRowsSelected] = useState([]);
 
   const HandleMultipleRowSelect = (rowsSelectedData, allRows, rowsSelected) => {
-    //Data index to get the row no matter the sorting or filtering;
-    //console.log(rowsSelectedData,allRows,rowsSelected);
     setRowsSelected(rowsSelected);
     let FlagArray = [];
     Object(rowsSelected).map((item => {
@@ -50,7 +47,7 @@ const HistoryReport = (props) => {
     },
     {
       name: 'EICASMessages', 
-      label: 'EICAS Messages',
+      label: 'EICAS Related',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -159,7 +156,7 @@ const HistoryReport = (props) => {
      },
      {
       name: 'reasons', 
-      label: 'Reasons for flag',
+      label: 'Reasons For Flag',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -179,7 +176,7 @@ const HistoryReport = (props) => {
      },
      {
       name: 'topMessage', 
-      label: 'Known Top Message - Recommended Documents	MHIRJ ISE',
+      label: 'MHIRJ Known Message',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -189,7 +186,7 @@ const HistoryReport = (props) => {
      },
      {
       name: 'recommendation', 
-      label: 'MHIRJ ISE Recommendation',
+      label: 'MHIRJ Recommended Action',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -199,7 +196,7 @@ const HistoryReport = (props) => {
      },
      {
       name: 'comments', 
-      label: 'Additional Comments',
+      label: 'MHIRJ Additional Comment',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -209,7 +206,7 @@ const HistoryReport = (props) => {
      },
      {
       name: 'input', 
-      label: 'MHIRJ ISE Input',
+      label: 'MHIRJ Input',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -220,7 +217,7 @@ const HistoryReport = (props) => {
     ];
 
     let data = [];
-      props?.data?.map((item => {
+      props.data?.map((item => {
         data.push(
           {
             ACSN: item["AC SN"], 
@@ -265,10 +262,16 @@ const HistoryReport = (props) => {
         enabled: false,
         transitionTime: 300,
       },
+      textLabels: {
+        body: {
+            noMatch: props.loading ? 'Please wait, loading data ...' : "Sorry, there is no matching data to display"
+        },
+    },
       elevation: 4,
-      rowsPerPage: 20,
-      rowsPerPageOptions: [20,50],
+      rowsPerPage: 7,
+      rowsPerPageOptions: [7,20,50],
       selectToolbarPlacement:"none",
+      tableBodyHeight: props.loading === true || data.length === 0 ? '200px' : '500px'
     };
 
     const theme = createMuiTheme({

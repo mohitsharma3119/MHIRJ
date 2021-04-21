@@ -11,6 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import CorrelationSubTable from './CorrelationSubTable';
+//Date Imports
+import {DateConverter} from '../Helper/Helper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,13 +21,9 @@ const useStyles = makeStyles((theme) => ({
     form:{
       '& .MuiTextField-root': {
         margin: theme.spacing(1),
-        // width: '25ch',
-        // marginBottom:20,
     },
   },
   paper: {
-    // margin: 'auto',
-    // width: '1200px',
     margin: '20px auto 23px 20px',
     width: '92vw',
   },
@@ -33,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
     padding: '20px 40px',
   },
   button:{
-    //margin:'40px auto',
     height: '50px',
     width:'100%',
     backgroundColor:"#C5D3E0",
@@ -67,41 +64,58 @@ const PMTable = (props) => {
   const [ATAMain, setATAMain] = useState();
   const [EqID, setEqID] = useState('');
   const [data, setData] = useState([]);
-  const [responseData,setResponseData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [PMValue,setPMValue] = useState(0);
 
   const handleDateFrom = (date) => {
     setDateFrom(date);
-    console.log(date);
   };
 
   const handleDateTo = (date) => {
     setDateTo(date);
-    console.log(date);
   };
   const handleATAChange = (ATA) => {
     setATAMain(ATA);
-    console.log(ATA);
   };
   const handleEqIDChange = (eqIDList) => {
     setEqID(eqIDList);
-    console.log(eqIDList);
   };
 
+  const [PMConditions,setPMConditions] = useState('');
   const handleGeneratePMTable = ()=> {
-  /*http://localhost:8000/corelation/11-11-2020/11-12-2020/B1-008003/27*/
+    setPMConditions(
+    {         
+      dateFrom: dateFrom,
+      dateTo: dateTo,
+      EqID: EqID,
+      ATAMain: ATAMain,
+    },
+    )
+  setData([]);
+  setPMValue(1);
+  setLoading(true);
+}
 
-  const path = 'http://localhost:8000/corelation/' + dateFrom + '/' + dateTo + '/' + EqID + '/' + ATAMain;
-  //const path = 'http://localhost:8000/corelation/'+ dateFrom + '/' + dateTo + '/B1-008003/27';
-  console.log(path);
-  try{
-    axios.post(path).then(function (res) {
-      var data = JSON.parse(res.data);
-      setData(data);
+  useEffect(() => {
+     let flag = false;
+    Object.values(PMConditions).map(item => {
+      if (item === "" || item === "('')"){
+        flag = true;
+        setLoading(false);
+      }
     });
-  } catch (err) {
-    console.error(err);
-  } 
-  }
+    if (flag === false) {      
+        const path = 'http://40.82.160.131/api/corelation/' + PMConditions.dateFrom + '/' + PMConditions.dateTo + '/' + PMConditions.EqID + '/' + PMConditions.ATAMain;
+          axios.post(path).then(function (res) {
+            var data = JSON.parse(res.data);
+            setData(data);
+            setLoading(false);
+          }).catch(function (err){
+            console.log(err);
+            setLoading(false);
+          })
+      }
+  },[PMConditions]);
 
 const columns = [
   {
@@ -324,12 +338,7 @@ const columns = [
     }
     },
 ];
-
-// useEffect( () => {
-  
-// }, []);
-
-if (data){
+  let responseData = [];
   data.map((item => {
     responseData.push(
       {
@@ -338,7 +347,7 @@ if (data){
         model: item["Model"], 
         type: item["Type"],  
         serialNo: item["Serial_No"],  
-        date: item["date"],  
+        date: DateConverter(item["date"]),  
         failureFlag: item["Failure Flag"],  
         maintTrans: item["Maint Trans"],   
         maintCanc: item["Maintenance Cancellations"],   
@@ -358,7 +367,7 @@ if (data){
       }
     );
      return responseData
-  }
+   }
   ));
 
 const options = {
@@ -368,37 +377,28 @@ const options = {
   fixedHeader: true,
   expandableRows: true,
   renderExpandableRow: (rowData, rowMeta) => {
-    console.log(rowData, rowMeta);
-    return (
-    //   <TableRow>
-    //   <TableCell />
-    //   <TableCell colSpan={2}>
-    //     <CorrelationSubTable
-    //       responseData = {responseData}
-    //       p_id = {rowData[0]}
-    //       dateFrom = {dateFrom}
-    //       dateTo = {dateTo}
-    //     />
-    //    </TableCell>
-    // </TableRow>
+    return (    
     <TableRow>
         <TableCell colSpan={rowData.length+1}>
         <CorrelationSubTable
-      responseData = {responseData}
-      p_id = {rowData[0]}
-      dateFrom = {dateFrom}
-      dateTo = {dateTo}
-      EqID = {EqID}
-      ATAMain = {ATAMain}
-    />
+          p_id = {rowData[0]}
+          dateFrom = {dateFrom}
+          dateTo = {dateTo}
+          EqID = {EqID}
+          ATAMain = {ATAMain}
+        />
         </TableCell>
-        </TableRow>
-    
+    </TableRow>
     );
   },
+  textLabels: {
+    body: {
+        noMatch: loading ? 'Please wait, loading data ...' : "Sorry, there is no matching data to display"
+    },
+},
   fixedSelectColumn: true,
   downloadOptions: {
-    filename: 'Correlation Report from ' + dateFrom + ' to ' + dateTo + '.csv',
+    filename: 'PM Report from ' + dateFrom + ' to ' + dateTo + '.csv',
     separator: ',',
   },
   draggableColumns: {
@@ -457,7 +457,9 @@ const theme = createMuiTheme({
           </Grid>      
           </div>
       </Paper>
-        <Grid className={classes.TableGrid} container spacing={3}> 
+    {data !== "" && data !== "undefined" && PMValue === 1 &&
+      <>
+      <Grid className={classes.TableGrid} container spacing={3}> 
           <Grid item xs={12}>
             <MuiThemeProvider theme={theme}>
               <MUIDataTable
@@ -469,10 +471,11 @@ const theme = createMuiTheme({
             </MuiThemeProvider> 
           </Grid> 
         </Grid> 
+      </>
+    }
   </div>
   );
   }
-}
 
 export default PMTable;
 

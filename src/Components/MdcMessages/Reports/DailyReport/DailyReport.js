@@ -3,6 +3,7 @@ import MUIDataTable from "mui-datatables";
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import {DateConverter} from '../../../Helper/Helper';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,8 +37,8 @@ const DailyReport = (props) => {
       }
     },
     {
-      name: 'EICASMessages', 
-      label: 'EICAS Messages',
+      name: 'EICASRelated', 
+      label: 'EICAS Related',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -136,7 +137,7 @@ const DailyReport = (props) => {
      },
      {
       name: 'reasons', 
-      label: 'Reasons for flag',
+      label: 'Reasons For Flag',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -156,7 +157,7 @@ const DailyReport = (props) => {
      },
      {
       name: 'topMessage', 
-      label: 'Known Top Message - Recommended Documents	MHIRJ ISE',
+      label: 'MHIRJ Known Message',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -166,7 +167,7 @@ const DailyReport = (props) => {
      },
      {
       name: 'recommendation', 
-      label: 'MHIRJ ISE Recommendation',
+      label: 'MHIRJ Recommended Action',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -176,7 +177,7 @@ const DailyReport = (props) => {
      },
      {
       name: 'comments', 
-      label: 'Additional Comments',
+      label: 'MHIRJ Additional Comment',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -186,7 +187,7 @@ const DailyReport = (props) => {
      },
      {
       name: 'input', 
-      label: 'MHIRJ ISE Input',
+      label: 'MHIRJ Input',
       options: {
        filter: true,
        filterType: 'dropdown',
@@ -197,14 +198,12 @@ const DailyReport = (props) => {
     ];
 
     let data = [];
-    // if (props.data){
       props.data?.map((item => {
-        // console.log(item["AC SN"]); 
         data.push(
           {
-            date: item["Date"], 
+            date: DateConverter(item["Date"]), 
             ACSN: item["AC SN"], 
-            EICASMessages: item["EICAS Message"], 
+            EICASRelated: item["EICAS Message"], 
             mdcMessages: item["MDC Message"],  
             LRU: item["LRU"],  
             ATA: item["ATA"],  
@@ -225,7 +224,6 @@ const DailyReport = (props) => {
         return data;
       }
       ));
-    // }
   
     const options = {
       filter: true,
@@ -241,10 +239,16 @@ const DailyReport = (props) => {
         enabled: false,
         transitionTime: 300,
       },
+      textLabels: {
+        body: {
+            noMatch: props.loading ? ' Please wait, loading data ...' : "Sorry, there is no matching data to display"
+        },
+    },
       elevation: 4,
-      rowsPerPage: 20,
-      rowsPerPageOptions: [20, 50],
+      rowsPerPage: 7,
+      rowsPerPageOptions: [7,20,50],
       selectToolbarPlacement:"none",
+      tableBodyHeight: props.loading === true || data.length === 0 ? '200px' : '500px'
     };
 
     const theme = createMuiTheme({
