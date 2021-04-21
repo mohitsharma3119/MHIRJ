@@ -34,8 +34,6 @@ import {
   Link
 } from "react-router-dom";
 import Home from './Components/Home';
-// import MDC from './Components/MDC';
-// import PM from './Components/PM';
 import Corr from './Components/Corr';
 import Chart1 from './Components/Chart1';
 import Chart2 from './Components/Chart2';
@@ -48,59 +46,22 @@ import Analysis from './Components/MdcMessages/GenerateReport/Analysis';
 import Report from './Components/MdcMessages/Reports/Report';
 import Correlation from './Components/Correlation/Correlation';
 import FlagReport from './Components/MdcMessages/Reports/FlagReport/FlagReport';
-// import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import TimelineSharpIcon from '@material-ui/icons/TimelineSharp';
 import Rawdata from './Components/MdcMessages/Reports/Rawdata/RawMdcMessages';
 import TrendingUpSharpIcon from '@material-ui/icons/TrendingUpSharp';
 
-const drawerWidth = 300;
-
-// const theme = createMuiTheme({
-//     palette: {
-//       primary: {
-//         main: "#044269",
-//         light: "#416d97",
-//         dark: "#001c3e",
-//       },
-//       secondary: {
-//         main: "#c5d3e0",
-//         light: "#d8e4f0",
-//       },
-//       default: {
-//         light: "#f3f2f1",
-//         main: "#e0e0e0",
-//         dark: "#92A0AD",
-//       },
-//       success: {
-//         main: "#044269",
-//       },
-//       text: {
-//         primary: "#272727",
-//         secondary: "#757575",
-//         title1: "#044269",
-//         title2: "#2c3942",
-//       },
-//       background: {
-//         tabContent: "#f3f2f1",
-//       },
-//       typography: {
-//       useNextVariants: true,
-//     },
-//   }
-// });
-
-
+const drawerWidth = 330;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-    
+
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
-      
+
     }),
     backgroundColor: "#c5d3e0",
   },
@@ -119,13 +80,13 @@ const useStyles = makeStyles((theme) => ({
   },
   hide: {
     display: 'none',
-    
+
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
     whiteSpace: 'nowrap',
-    
+
   },
   drawerOpen: {
     width: drawerWidth,
@@ -134,8 +95,6 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
     backgroundColor: "#c5d3e0",
-    
-    
   },
   drawerClose: {
     transition: theme.transitions.create('width', {
@@ -148,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(8) + 1,
     },
     backgroundColor: "#c5d3e0",
-   
+
   },
   toolbar: {
     display: 'flex',
@@ -159,39 +118,32 @@ const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
     height: "78px",
     backgroundColor: "#f3f2f1",
-    
-    
   },
   content: {
     flexGrow: -1,
-   padding: theme.spacing(0),
-    
+    padding: theme.spacing(0),
+
   },
   tabContent: {
     width: "100%",
     padding: "15px 5px 15px 20px",
-  
-    
   },
   icon: {
     paddingRight: "10px",
     width: "30px",
     height: "50px",
-    color:"#001c3e",
-  
+    color: "#001c3e",
+
   },
   typography: {
     useNextVariants: true,
-    color: "#272727", 
-    
+    color: "#272727",
   },
   nested: {
     paddingLeft: theme.spacing(3),
   },
   nested_1: {
-  
-      paddingLeft: theme.spacing(4),
-    
+    paddingLeft: theme.spacing(3),
   },
 }));
 
@@ -213,7 +165,6 @@ export default function MiniDrawer() {
     setOpen(false);
   };
   const handleOnClick = (page) => {
-    
     setPage(page);
 
   };
@@ -230,162 +181,153 @@ export default function MiniDrawer() {
 
     <div className={classes.root}>
       <Router>
-      <CssBaseline />
-      <AppBar
-        color="primary"
-        position="fixed"
-        className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
-        })}
-      >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            className={clsx(classes.menuButton, {
-              [classes.hide]: open,
-            })}
-          >
-            <MenuIcon />
-          </IconButton>
-          <img src={mhirjLogoColored} style={{ height: 78, width: 150 }} />
-          <typography style={{color:"#001c3e", fontSize:"24px", fontFamily:"Times New Roman"}}>MDC Trend Analysis Tool</typography>
-
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        className={clsx(classes.drawer, {
-          [classes.drawerOpen]: open,
-          [classes.drawerClose]: !open,
-        })}
-        classes={{
-          paper: clsx({
+        <CssBaseline />
+        <AppBar
+          color="primary"
+          position="fixed"
+          className={clsx(classes.appBar, {
+            [classes.appBarShift]: open,
+          })}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              className={clsx(classes.menuButton, {
+                [classes.hide]: open,
+              })}>
+              <MenuIcon />
+            </IconButton>
+            <img src={mhirjLogoColored} style={{ height: 78, width: 150 }} />
+            <typography style={{ color: "#001c3e", fontSize: "24px", fontFamily: "Times New Roman" }}>MDC Trend Analysis Tool</typography>
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          variant="permanent"
+          className={clsx(classes.drawer, {
             [classes.drawerOpen]: open,
             [classes.drawerClose]: !open,
-          }),
-        }}
-      >
-        <div className={classes.toolbar}>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronRightIcon style={{ color:"#001c3e"}} /> : <ChevronLeftIcon style={{ color:"#001c3e"}} />}
-          </IconButton>
-        </div>
-        <Divider />
-        <List>
-            
-              <ListItem button onClick={handleMainClick} disablePadding>
-              <Link to="/" style={{ textDecoration: 'none'}}> 
+          })}
+          classes={{
+            paper: clsx({
+              [classes.drawerOpen]: open,
+              [classes.drawerClose]: !open,
+            }),
+          }}>
+          <div className={classes.toolbar}>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === 'rtl' ? <ChevronRightIcon style={{ color: "#001c3e" }} /> : <ChevronLeftIcon style={{ color: "#001c3e" }} />}
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            <ListItem button onClick={handleMainClick} disablePadding>
+              <Link to="/" style={{ textDecoration: 'none' }}>
                 <ListItemIcon>
-                  <InfoSharpIcon style={{ color:"#001c3e"}} />
-                </ListItemIcon> 
+                  <InfoSharpIcon style={{ color: "#001c3e" }} />
+                </ListItemIcon>
                 <Button variant="contained" color="#92A0AD">
-                 <typography>Main</typography>
-                 {openMAIN ? <ExpandLess /> : <ExpandMore />}
+                  <typography>Main</typography>
+                  {openMAIN ? <ExpandLess /> : <ExpandMore />}
                 </Button>
               </Link>
-            </ListItem> 
+            </ListItem>
             <Collapse in={openMAIN} timeout="auto" unmountOnExit>
 
-            <List component="div" disablePadding>
-            <Link to="/Scatter1" style={{ textDecoration: 'none'}}>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <TrendingUpSharpIcon style={{ color:"#001c3e"}} />
-                </ListItemIcon>
-                <ListItemText primary="SCATTER" style={{color:"#001c3e"}}/>
-              </ListItem>
-              </Link>
-            </List>
+              <List component="div" disablePadding>
+                <Link to="/Scatter1" style={{ textDecoration: 'none' }}>
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                      <TrendingUpSharpIcon style={{ color: "#001c3e" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="SCATTER" style={{ color: "#001c3e" }} />
+                  </ListItem>
+                </Link>
+              </List>
 
-            <List component="div" disablePadding>
-            <Link to="/Stacked" style={{ textDecoration: 'none'}}>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <TrendingUpSharpIcon style={{ color:"#001c3e"}} />
-                </ListItemIcon>
-                <ListItemText primary="STACKED" style={{color:"#001c3e"}}/>
-              </ListItem>
-              </Link>
-            </List>
+              <List component="div" disablePadding>
+                <Link to="/Stacked" style={{ textDecoration: 'none' }}>
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                      <TrendingUpSharpIcon style={{ color: "#001c3e" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="STACKED" style={{ color: "#001c3e" }} />
+                  </ListItem>
+                </Link>
+              </List>
             </Collapse>
-          
-            
-            <ListItem button onClick={handleClick} disablePadding>
-            <ListItemIcon>
-               <TableChartSharpIcon style={{ color:"#001c3e"}} />
-            </ListItemIcon>
-            <Button variant="contained" color="#001c3e">
-            <typography>MDC</typography> 
-            {openMDC ? <ExpandLess /> : <ExpandMore />}
-            </Button>
-            </ListItem>
-           
 
+            <ListItem button onClick={handleClick} disablePadding>
+              <ListItemIcon>
+                <TableChartSharpIcon style={{ color: "#001c3e" }} />
+              </ListItemIcon>
+              <Button variant="contained" color="#001c3e">
+                <typography>MDC</typography>
+                {openMDC ? <ExpandLess /> : <ExpandMore />}
+              </Button>
+            </ListItem>
 
             <Collapse in={openMDC} timeout="auto" unmountOnExit>
-            
-            <List component="div" disablePadding>
-            <Link to="/analysis" style={{ textDecoration: 'none'}}>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <TrendingUpSharpIcon style={{ color:"#001c3e"}} />
-                </ListItemIcon>
-                <ListItemText primary="ANALYSIS" style={{color:"#001c3e"}}/>
-              </ListItem>
-              </Link>
-            </List>
-            
 
-            <List component="div" disablePadding>
-            
-              <ListItem button className={classes.nested} button onClick={handleGraphsClick}>
-                <ListItemIcon>
-                  <TimelineSharpIcon style={{ color:"#001c3e"}} />
-                </ListItemIcon>
-                <Button color="#001c3e" style={{fontSize: "16px"}}>
-                <typography>Graphs </typography>
-                {openGraphs ? <ExpandLess /> : <ExpandMore />}
-                </Button>
-              </ListItem>
+              <List component="div" disablePadding>
+                <Link to="/analysis" style={{ textDecoration: 'none' }}>
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                      <TrendingUpSharpIcon style={{ color: "#001c3e" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="ANALYSIS" style={{ color: "#001c3e" }} />
+                  </ListItem>
+                </Link>
+              </List>
 
-              <Collapse in={openGraphs} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                      <Link to="/Chart1" style={{ textDecoration: 'none' }}>
-                        <ListItem button className={classes.nested_1}>
-                          <ListItemIcon>
-                            <EqualizerSharpIcon style={{ color: "#001c3e" }} />
-                          </ListItemIcon>
-                          <ListItemText primary="Message Occurence for AC" style={{ color: "#001c3e" }} />
-                        </ListItem>
-                      </Link>
-                    </List>
+              <List component="div" disablePadding>
 
-                    <List component="div" disablePadding>
-                      <Link to="/Chart2" style={{ textDecoration: 'none' }}>
-                        <ListItem button className={classes.nested_1}>
-                          <ListItemIcon>
-                            <EqualizerSharpIcon style={{ color: "#001c3e" }} />
-                          </ListItemIcon>
-                          <ListItemText primary="Top AC by ATA" style={{ color: "#001c3e" }} />
-                        </ListItem>
-                      </Link>
-                    </List>
+                <ListItem button className={classes.nested} button onClick={handleGraphsClick}>
+                  <ListItemIcon>
+                    <TimelineSharpIcon style={{ color: "#001c3e" }} />
+                  </ListItemIcon>
+                  <Button color="#001c3e" style={{ fontSize: "16px" }}>
+                    <typography>Graphs </typography>
+                    {openGraphs ? <ExpandLess /> : <ExpandMore />}
+                  </Button>
+                </ListItem>
 
-                    <List component="div" disablePadding>
-                      <Link to="/Chart3" style={{ textDecoration: 'none' }}>
-                        <ListItem button className={classes.nested_1}>
-                          <ListItemIcon>
-                            <ShowChartSharpIcon style={{ color: "#001c3e" }} />
-                          </ListItemIcon>
-                          <ListItemText primary="Message Trends for AC" style={{ color: "#001c3e" }} />
-                        </ListItem>
-                      </Link>
-                    </List>
+                <Collapse in={openGraphs} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    <Link to="/Chart1" style={{ textDecoration: 'none' }}>
+                      <ListItem button className={classes.nested_1}>
+                        <ListItemIcon>
+                          <EqualizerSharpIcon style={{ color: "#001c3e" }} />
+                        </ListItemIcon>
+                        <ListItemText primary="Message Logged per Aircraft" style={{ color: "#001c3e" }} />
+                      </ListItem>
+                    </Link>
+                  </List>
 
-                    {/* <List component="div" disablePadding>
+                  <List component="div" disablePadding>
+                    <Link to="/Chart2" style={{ textDecoration: 'none' }}>
+                      <ListItem button className={classes.nested_1}>
+                        <ListItemIcon>
+                          <EqualizerSharpIcon style={{ color: "#001c3e" }} />
+                        </ListItemIcon>
+                        <ListItemText primary="Top Aircraft by ATA" style={{ color: "#001c3e" }} />
+                      </ListItem>
+                    </Link>
+                  </List>
+
+                  <List component="div" disablePadding>
+                    <Link to="/Chart3" style={{ textDecoration: 'none' }}>
+                      <ListItem button className={classes.nested_1}>
+                        <ListItemIcon>
+                          <ShowChartSharpIcon style={{ color: "#001c3e" }} />
+                        </ListItemIcon>
+                        <ListItemText primary="Message Trend by Aircraft" style={{ color: "#001c3e" }} />
+                      </ListItem>
+                    </Link>
+                  </List>
+
+                  {/* <List component="div" disablePadding>
                       <Link to="/Chart4" style={{ textDecoration: 'none' }}>
                         <ListItem button className={classes.nested_1}>
                           <ListItemIcon>
@@ -396,139 +338,99 @@ export default function MiniDrawer() {
                       </Link>
                     </List> */}
 
-                    <List component="div" disablePadding>
-                      <Link to="/Chart5" style={{ textDecoration: 'none' }}>
-                        <ListItem button className={classes.nested_1}>
-                          <ListItemIcon>
+                  <List component="div" disablePadding>
+                    <Link to="/Chart5" style={{ textDecoration: 'none' }}>
+                      <ListItem button className={classes.nested_1}>
+                        <ListItemIcon>
                           <ShowChartSharpIcon style={{ color: "#001c3e" }} />
-                          </ListItemIcon>
-                          <ListItemText primary="Intermittence Trend for AC" style={{ color: "#001c3e" }} />
-                        </ListItem>
-                      </Link>
-                    </List>
-              </Collapse>
-            </List>
-           
-           
-            <List component="div" disablePadding>
-            <Link to="/rawdata" style={{ textDecoration: 'none'}}> 
-                <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <TocSharpIcon style={{ color:"#001c3e"}} />
-                </ListItemIcon>
-                <ListItemText primary="RAW DATA"  style={{color:"#001c3e"}}/>
-              </ListItem>
-              </Link>
-            </List>
+                        </ListItemIcon>
+                        <ListItemText primary="Message Intermittency per Aircraft" style={{ color: "#001c3e" }} />
+                      </ListItem>
+                    </Link>
+                  </List>
+                </Collapse>
+              </List>
 
-          </Collapse>
 
-          
-            
-            
-          
-            
-            
-              {/* <ListItem>
-              <Link to="/mdc" style={{ textDecoration: 'none' }}>
-                <ListItemIcon>
-                <TableChartSharpIcon style={{ color:"#001c3e"}} />
-                </ListItemIcon>
-                <Button variant="contained" color="#001c3e" open={open} onClick={handleClick}>
-                 MDC Messages
-                </Button>
-                <ListItem>
-                </ListItem>
+              <List component="div" disablePadding>
+                <Link to="/rawdata" style={{ textDecoration: 'none' }}>
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                      <TocSharpIcon style={{ color: "#001c3e" }} />
+                    </ListItemIcon>
+                    <ListItemText primary="RAW DATA" style={{ color: "#001c3e" }} />
+                  </ListItem>
                 </Link>
-                </ListItem> */}
+              </List>
 
-                
-            
-            
-              {/* <ListItem>
-              <Link to="/pm" style={{ textDecoration: 'none' }}>
-                <ListItemIcon>
-                <TableChartSharpIcon style={{ color:"#001c3e"}}/>
-                </ListItemIcon>
-                <Button variant="contained" color="#d8e4f0">
-                PM Messages
-                </Button>
-                </Link>
-                </ListItem> */}
-            
-            
-              <ListItem >
+            </Collapse>
+
+            <ListItem >
               <Link to="/corr" style={{ textDecoration: 'none' }}>
                 <ListItemIcon>
-                <AssessmentSharpIcon style={{ color:"#001c3e"}}/>
+                  <AssessmentSharpIcon style={{ color: "#001c3e" }} />
                 </ListItemIcon>
                 <Button variant="contained" color="#d8e4f0">
-                <typography>Correlation</typography>
+                  <typography>Correlation</typography>
                 </Button>
-                </Link>
-                </ListItem>
-          
-        </List>
-        <Divider />
-        
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route path="/Scatter1">
-            <Scatter1 />
-          </Route>
-          <Route path="/rawdata">
-            <Rawdata />
-          </Route>
-          {/* <Route path="/graphs">
+              </Link>
+            </ListItem>
+
+          </List>
+          <Divider />
+
+        </Drawer>
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
+            <Route path="/Scatter1">
+              <Scatter1 />
+            </Route>
+            <Route path="/Stacked">
+              <Stacked />
+            </Route>
+            <Route path="/rawdata">
+              <Rawdata />
+            </Route>
+            {/* <Route path="/graphs">
             <Graphs />
           </Route> */}
-
-          <Route path="/Chart1">
-            <Chart1 />
-          </Route>
-
-          <Route path="/Chart2">
-            <Chart2 />
-          </Route>
-
-          <Route path="/Chart3">
-            <Chart3 />
-          </Route>
-
-          <Route path="/Chart4">
+            <Route path="/Chart1">
+              <Chart1 />
+            </Route>
+            <Route path="/Chart2">
+              <Chart2 />
+            </Route>
+            <Route path="/Chart3">
+              <Chart3 />
+            </Route>
+            {/* <Route path="/Chart4">
             <Chart4 />
-          </Route>
-
-          <Route path="/Chart5">
-            <Chart5 />
-          </Route>
-
-          <Route path="/analysis">
-            <Analysis />
-          </Route>
-          <Route path="/report">
-            <Report />
-          </Route>
-          <Route path="/flag">
-            <FlagReport />
-          </Route>
-          {/* <Route path="/pm">
-            <PM />
           </Route> */}
-          <Route path="/corr">
-            <Correlation />
-          </Route>
-        </Switch>  
-      </main>
-      
+            <Route path="/Chart5">
+              <Chart5 />
+            </Route>
+            <Route path="/analysis">
+              <Analysis />
+            </Route>
+            <Route path="/report">
+              <Report />
+            </Route>
+            <Route path="/flag">
+              <FlagReport />
+            </Route>
+            <Route path="/corr">
+              <Correlation />
+            </Route>
+          </Switch>
+        </main>
+
       </Router>
-      
+
     </div>
   );
 }
