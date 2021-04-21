@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Report = (props) => {
+const Report = (props) => {loc
   const classes = useStyles();
   const [report, setReport] = useState(props.reportConditions);
   const [dailyReportData, setDailyReportData] = useState([]);
@@ -112,11 +112,11 @@ const Report = (props) => {
       const toDate = report.toDate;
 
       if (report.analysis !== "both") {
-        const path = 'http://localhost:8000/api/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
-        consecutiveDays + '/' + ata + '/' + eqid + '/'+ operator + '/' + messages + '/' + fromDate + '/' + toDate;
-
-        //const path = 'http://40.82.160.131/api/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
+        //const path = 'http://localhost:8000/api/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
         //consecutiveDays + '/' + ata + '/' + eqid + '/'+ operator + '/' + messages + '/' + fromDate + '/' + toDate;
+
+        const path = 'http://40.82.160.131/api/GenerateReport/' + analysis + '/' + occurences + '/' + legs + '/' + intermittent + '/' +
+        consecutiveDays + '/' + ata + '/' + eqid + '/'+ operator + '/' + messages + '/' + fromDate + '/' + toDate;
 
         console.log(path);
 
