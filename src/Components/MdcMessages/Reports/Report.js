@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Report = (props) => {loc
+const Report = (props) => {
   const classes = useStyles();
   const [report, setReport] = useState(props.reportConditions);
   const [dailyReportData, setDailyReportData] = useState([]);
