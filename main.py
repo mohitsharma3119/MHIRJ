@@ -2018,24 +2018,27 @@ def connect_db_MDCdata_chartb(from_dt, to_dt):
 # for reference -> http://localhost:8000/Landing_Chart_B/15/11-11-2020/11-17-2020
 @app.post("/api/Landing_Chart_B/{top_n}/{from_dt}/{to_dt}")
 async def get_Chart_B(top_n: int,from_dt: str, to_dt: str):
-    MDCdataDF_chartb = connect_db_MDCdata_chartb(from_dt, to_dt)
-    Topvalues2 = top_n
-    # groups the data by Aircraft and Main ATA, produces a count of values in each ata by counting entries in Equation ID
-    MessageCountbyAircraftATA = MDCdataDF_chartb[["aircraftno", "ATA Main", "Equation ID"]].groupby(
-        ["aircraftno", "ATA Main"]).count()
-    # transpose the indexes. where the ATA label becomes the column and the aircraft is row. counts are middle
-    TransposedMessageCountbyAircraftATA = MessageCountbyAircraftATA["Equation ID"].unstack()
-    # fill Null values with 0
-    TransposedMessageCountbyAircraftATA.fillna(value=0, inplace=True)
-    # sum all the counts by row, plus create a new column called sum
-    TransposedMessageCountbyAircraftATA["Sum"] = TransposedMessageCountbyAircraftATA.sum(axis=1)
-    # sort the dataframe by the values of sum, and from the topvalues2 the user chooses
-    TransposedMessageCountbyAircraftATA = TransposedMessageCountbyAircraftATA.sort_values("Sum").tail(Topvalues2)
-    # create a final dataframe for plotting without the new column created before
-    TransposedMessageCountbyAircraftATAfinalPLOT = TransposedMessageCountbyAircraftATA.drop(["Sum"], axis=1)
-    print(TransposedMessageCountbyAircraftATAfinalPLOT)
-    chart_b_df_json = TransposedMessageCountbyAircraftATAfinalPLOT.to_json(orient='index')
-    return chart_b_df_json
+	try:
+	    MDCdataDF_chartb = connect_db_MDCdata_chartb(from_dt, to_dt)
+	    Topvalues2 = top_n
+	    # groups the data by Aircraft and Main ATA, produces a count of values in each ata by counting entries in Equation ID
+	    MessageCountbyAircraftATA = MDCdataDF_chartb[["aircraftno", "ATA Main", "Equation ID"]].groupby(
+		["aircraftno", "ATA Main"]).count()
+	    # transpose the indexes. where the ATA label becomes the column and the aircraft is row. counts are middle
+	    TransposedMessageCountbyAircraftATA = MessageCountbyAircraftATA["Equation ID"].unstack()
+	    # fill Null values with 0
+	    TransposedMessageCountbyAircraftATA.fillna(value=0, inplace=True)
+	    # sum all the counts by row, plus create a new column called sum
+	    TransposedMessageCountbyAircraftATA["Sum"] = TransposedMessageCountbyAircraftATA.sum(axis=1)
+	    # sort the dataframe by the values of sum, and from the topvalues2 the user chooses
+	    TransposedMessageCountbyAircraftATA = TransposedMessageCountbyAircraftATA.sort_values("Sum").tail(Topvalues2)
+	    # create a final dataframe for plotting without the new column created before
+	    TransposedMessageCountbyAircraftATAfinalPLOT = TransposedMessageCountbyAircraftATA.drop(["Sum"], axis=1)
+	    print(TransposedMessageCountbyAircraftATAfinalPLOT)
+	    chart_b_df_json = TransposedMessageCountbyAircraftATAfinalPLOT.to_json(orient='index')
+	    return chart_b_df_json
+	except Exception as es :
+		print(es)
 
 
 """
