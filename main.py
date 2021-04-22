@@ -1700,7 +1700,7 @@ async def generateFlagReport(analysisType: str, occurences: int, legs: int, inte
 # Plots
 ## Chart 1
 def connect_database_for_chart1(n, aircraft_no, from_dt, to_dt):
-    sql = "SELECT DISTINCT TOP "+str(n)+" Count(MDCMessagesInputs.Message) AS "'total_message'", Airline_MDC_Data. Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA FROM Airline_MDC_Data INNER JOIN MDCMessagesInputs ON Airline_MDC_Data.ATA = MDCMessagesInputs.ATA WHERE Airline_MDC_Data.aircraftno = "+str(aircraft_no)+" AND Airline_MDC_Data.DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Airline_MDC_Data.Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA ORDER BY Count(MDCMessagesInputs.Message) DESC"
+    sql = "SELECT DISTINCT TOP "+str(n)+" Count(MDCMessagesInputs.Message) AS "'total_message'", Airline_MDC_Data. Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA FROM Airline_MDC_Data INNER JOIN MDCMessagesInputs ON Airline_MDC_Data.ATA = MDCMessagesInputs.ATA AND Airline_MDC_Data.Equation_ID = MDCMessagesInputs.Equation_ID WHERE Airline_MDC_Data.aircraftno = "+str(aircraft_no)+" AND Airline_MDC_Data.DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Airline_MDC_Data.Equation_ID, MDCMessagesInputs.Message, MDCMessagesInputs.EICAS, Airline_MDC_Data.LRU, Airline_MDC_Data.ATA ORDER BY Count(MDCMessagesInputs.Message) DESC"
 
     try:
         conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
@@ -1772,10 +1772,10 @@ async def get_CharThreeData(aircraft_no:int, equation_id:str, is_flight_phase_en
 
 ## Chart 5
 def connect_database_for_chart5(aircraft_no, equation_id, is_flight_phase_enabled, from_dt, to_dt):
-    if is_flight_phase_enabled == 0: # Flight phase is NOT enabled
-        sql = "SELECT COUNT(Intermittent) AS OccurencesOfIntermittent, Flight_Leg_No FROM Airline_MDC_Data  WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NOT NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Flight_Leg_No"
-    elif is_flight_phase_enabled == 1:
-        sql = "SELECT COUNT(Intermittent) AS OccurencesOfIntermittent, Flight_Leg_No FROM Airline_MDC_Data  WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"' GROUP BY Flight_Leg_No"
+    if is_flight_phase_enabled == 0: # Flight phase is NOT enabled => exclude current message
+        sql = "SELECT Intermittent AS OccurencesOfIntermittent, Flight_Leg_No FROM Airline_MDC_Data  WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Flight_Phase IS NOT NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"'"
+    elif is_flight_phase_enabled == 1: #include current message
+        sql = "SELECT Intermittent AS OccurencesOfIntermittent, Flight_Leg_No FROM Airline_MDC_Data  WHERE Equation_ID='"+equation_id+"' AND aircraftno = '"+str(aircraft_no)+"' AND Intermittent IS NOT NULL AND DateAndTime BETWEEN '"+from_dt+"' AND '"+to_dt+"'"
     print(sql)
     try:
         conn = pyodbc.connect(driver=db_driver, host=hostname, database=db_name,
@@ -1791,6 +1791,7 @@ def connect_database_for_chart5(aircraft_no, equation_id, is_flight_phase_enable
 @app.post("/api/chart_five/{aircraft_no}/{equation_id}/{is_flight_phase_enabled}/{fromDate}/{toDate}")
 async def get_CharFiveData(aircraft_no:int, equation_id:str, is_flight_phase_enabled:int, fromDate: str , toDate: str):
     chart5_sql_df = connect_database_for_chart5(aircraft_no, equation_id, is_flight_phase_enabled, fromDate, toDate)
+    chart5_sql_df.replace({'>':0}, inplace=True) #To replace the error value '>' with 0 in Intermittent Column.
     chart5_sql_df_json = chart5_sql_df.to_json(orient='records')
     return chart5_sql_df_json
 
