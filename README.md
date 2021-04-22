@@ -23,4 +23,7 @@
 
 ## Implementation
 - [x] Daily, History, Flag, PM, Correlation and Raw Data Reports.
-- [x] Report Functionalities: Download, Print, Filter Table, View Columns, Search
+- [x] Report Functionalities: Download, Print, Filter Table, View Columns, Search.
+- [x] Scatter Chart and Stacked chart for Landing page and also functionality to check it with parameters for date.
+- [x] Implemented Message Occurence for Aircraft, Top Aircraft by ATA,Message Trends by Aircraft and Message Intermittency per Aircraft.
+- [x] Save and Hover functionality for all the graphs.
