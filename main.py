@@ -2094,7 +2094,7 @@ def connect_database_for_corelation(from_dt, to_dt, equation_id, ata):
     ata = str(tuple(ata.replace(")","").replace("(","").replace("'","").split(",")))
     sql =""
 
-    sql += "SELECT distinct p_id ,Operator ,Model ,Type ,Serial_No ,N_No ,Date, [Failure Flag] ,[Maint Trans] ,[Maintenance Cancellations] ,[Maintenance Delays] ,Inspection,CampType ,MRB ,Discrepancy ,[Corrective Action] ,[AC Total Hours] ,[AC Total Cycles],[Squawk Source] ,ATA ,Station ,ATA_SUB ,ATA_Main FROM dbo.sample_corelation WHERE CONVERT(date,Date) between '" + from_dt + "'  AND '" + to_dt + "'"
+    sql += "SELECT distinct p_id ,Operator ,Model ,Type ,Serial_No ,N_No ,Date, Failure_Flag ,Maint_Trans ,Maintenance_Cancellations ,Maintenance_Delays ,Inspection,CampType ,MRB ,Discrepancy ,Corrective_Action , AC_Total_Hours ,AC_Total_Cycles,Squawk_Source ,ATA ,Station ,ATA_SUB ,ATA_Main, Status FROM dbo.sample_corelation WHERE CONVERT(date,Date) between '" + from_dt + "'  AND '" + to_dt + "'"
 
 
     if equation_id:
