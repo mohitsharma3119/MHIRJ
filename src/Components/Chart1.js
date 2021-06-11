@@ -51,7 +51,7 @@ export default function Chart1() {
     let messageOcc = [];
 
     //const path = 'http://localhost:8000/chart_one/' + data_chart1.top_value + '/' + data_chart1.aircraft_no + '/' + data_chart1.from_date + '/' + data_chart1.to_date;
-    const path = 'http://40.82.160.131/api/chart_one/' + data_chart1.top_value + '/' + data_chart1.aircraft_no + '/' + data_chart1.from_date + '/' + data_chart1.to_date;
+    const path = 'http://20.85.211.143:8080/api/chart_one/' + data_chart1.top_value + '/' + data_chart1.aircraft_no + '/' + data_chart1.from_date + '/' + data_chart1.to_date;
     
     axios.post(path)
       .then(res => {
