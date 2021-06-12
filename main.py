@@ -32,7 +32,6 @@ app = FastAPI()
 #]
 origins = [
 	"*",
-	"http://localhost:8080"
 ]
 
 """Create a list of allowed origins ( as strings)
