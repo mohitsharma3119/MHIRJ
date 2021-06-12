@@ -23,13 +23,18 @@ from typing import Optional
 templates = Jinja2Templates(directory="templates")
 
 app = FastAPI()
+#origins = [
+
+#    "https://GenerateReport/{analysisType}/{occurences}/{legs}/{intermittent}/{consecutiveDays}/{airlineOperator}/{ata}/{messages}/{fromDate}/{toDate}",
+
+#    "http://localhost",
+#    "http://localhost:8000",
+#]
 origins = [
-
-    "https://GenerateReport/{analysisType}/{occurences}/{legs}/{intermittent}/{consecutiveDays}/{airlineOperator}/{ata}/{messages}/{fromDate}/{toDate}",
-
-    "http://localhost",
-    "http://localhost:8000",
+	"*",
+	"http://localhost:8080"
 ]
+
 """Create a list of allowed origins ( as strings)
 """
 app.add_middleware(
